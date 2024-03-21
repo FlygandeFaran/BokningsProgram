@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace BokningsProgram
 {
-    public class Rum
+    public enum RoomCategory
     {
-        public Rum()
-        {
-
-        }
+        Enkel,
+        Dubbel,
+        Quad,
+        PicclineIn,
+        PicclineOm
     }
 }

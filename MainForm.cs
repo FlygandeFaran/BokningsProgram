@@ -14,6 +14,7 @@ namespace BokningsProgram
 {
     public partial class MainForm : Form
     {
+        RoomManager rm;
         private List<string> names;
         public MainForm()
         {
@@ -29,11 +30,27 @@ namespace BokningsProgram
             DateTime dt = new DateTime(idag.Year, idag.Month, idag.Day, 1, 0, 0);
             dtpBehTid.Value = dt;
 
+            InitializeRooms();
             InitializeChart();
         }
-        private void InitializeChartTest()
+        private void InitializeRooms()
         {
+            rm = new RoomManager();
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Quad, 7));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 8));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 9));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 12));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 13));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 14));
 
+            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 16));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 17));
+            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 23));
+
+            rm.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1));
+            rm.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
         }
 
         private void InitializeChart()

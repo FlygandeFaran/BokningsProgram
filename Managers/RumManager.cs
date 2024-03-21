@@ -8,9 +8,9 @@ namespace BokningsProgram
 {
     public class RumManager
     {
-        private List<Rum> _listOfRum;
+        private List<Room> _listOfRum;
 
-        public List<Rum> ListOfRum
+        public List<Room> ListOfRum
         {
             get { return _listOfRum; }
             set { _listOfRum = value; }
