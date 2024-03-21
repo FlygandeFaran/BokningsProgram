@@ -4,16 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace BokningsProgram
 {
     public class SSK
     {
-		private KompetensLevel _kompetens;
-        private bool _isBooked;
+        private DailySchedule _schedule;
 		private string _name;
 		private string _HSAid;
+        [XmlAttribute] // Include the enum value in the XML output
+        private KompetensLevel _kompetens;
+        private bool _isBooked;
 
+        public DailySchedule Schedule
+		{
+			get { return _schedule; }
+			set { _schedule = value; }
+		}
 		public string HSAID
 		{
 			get { return _HSAid; }
@@ -23,28 +31,45 @@ namespace BokningsProgram
 		{
             get { return _name; }
 			set { _name = value; }
-		}
-		public KompetensLevel Kompetens
+        }
+        [XmlAttribute] // Include the enum value in the XML output
+        public KompetensLevel Kompetens
 		{
 			get { return _kompetens; }
 		}
 		public bool IsBokad
 		{
 			get { return _isBooked; }
-		}
-		public SSK(string name, string HSAid, KompetensLevel kompetens)
-		{
+        }
+        public SSK() { }
+        public SSK(string name, string HSAid, KompetensLevel kompetens)
+        {
 			_name = name;
 			_HSAid = HSAid;
 			_kompetens = kompetens;
 		}
-		private void IsTheyBooked() //bra engelska...
+		public bool IsTheyBooked(Booking newBooking) //bra engelska...
 		{
+			bool ok = false;
+			for (int i = 0; i < _schedule.ListOfBookings.Count - 1; i++)
+			{
+				Booking firstBooking = _schedule.ListOfBookings[i];
+				Booking secondBooking = _schedule.ListOfBookings[i + 1];
 
+				if (firstBooking.EndTime < newBooking.StartTime && secondBooking.StartTime > newBooking.EndTime)
+				{
+					ok = true;
+				}
+            }
+			return ok;
+		}
+		public void AddBooking(Booking booking)
+		{
+			_schedule.AddBooking(booking);
 		}
         public override string ToString()
         {
-			string strOut = $"{_name}, {_HSAid}";
+			string strOut = $"{_name}, {_HSAid}, {_kompetens}";
 			return strOut;
         }
     }
