@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace BokningsProgram
 {
-    public class BokadeDagar
+    public class ScheduledDays
     {
-		private List<Dagsschema> _dagar;
+		private List<DailySchedule> _dagar;
 
-		public List<Dagsschema> Dagar
+		public List<DailySchedule> Dagar
 		{
 			get { return _dagar; }
 			//set { _dagar = value; }
 		}
-
 	}
 }

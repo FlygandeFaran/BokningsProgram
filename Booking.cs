@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace BokningsProgram
 {
-    public enum RumsTyp
+    public class Booking
     {
-        Pickline,
-        Vanligt
     }
 }

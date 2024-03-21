@@ -17,7 +17,7 @@ namespace BokningsProgram
 
         public SSKmanager()
         {
-
+            _listOfSSK = new List<SSK>();
         }
     }
 }

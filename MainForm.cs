@@ -14,7 +14,8 @@ namespace BokningsProgram
 {
     public partial class MainForm : Form
     {
-        RoomManager rm;
+        RoomManager _rm;
+        SSKmanager _sskm;
         private List<string> names;
         public MainForm()
         {
@@ -23,7 +24,6 @@ namespace BokningsProgram
         }
         private void InitializeGUI()
         {
-            names = new List<string> { "Erik", "Linnea", "Thomas", "Edita" };
             dtpBehTid.CustomFormat = "HH:mm";
             dtpBehTid.ShowUpDown = true;
             DateTime idag = DateTime.Now;
@@ -31,26 +31,36 @@ namespace BokningsProgram
             dtpBehTid.Value = dt;
 
             InitializeRooms();
+            InitializeStaff();
+
             InitializeChart();
         }
         private void InitializeRooms()
         {
-            rm = new RoomManager();
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Quad, 7));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 8));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 9));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 12));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 13));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 14));
+            _rm = new RoomManager();
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Quad, 7));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 8));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 9));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 12));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 13));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 14));
 
-            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 16));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 17));
-            rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 23));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 16));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 17));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.Enkel, 23));
 
-            rm.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1));
-            rm.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1));
+            _rm.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
+        }
+        private void InitializeStaff()
+        {
+            _sskm = new SSKmanager();
+            _sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
+            _sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
+            names = new List<string> { "Erik", "Linnea", "Thomas", "Edita" };
+
         }
 
         private void InitializeChart()
@@ -101,7 +111,6 @@ namespace BokningsProgram
                 XValueType = ChartValueType.Auto,
                 IsXValueIndexed = false,
                 YValuesPerPoint = 2
-
             };
         }
 
@@ -139,8 +148,9 @@ namespace BokningsProgram
 
         private void NySSKToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SSKform sSKform = new SSKform();
+            SSKform sSKform = new SSKform(_sskm);
             sSKform.ShowDialog();
+            _sskm = sSKform.sskm;
         }
 
         private void NyttRumToolStripMenuItem_Click(object sender, EventArgs e)

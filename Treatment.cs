@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BokningsProgram
 {
-    public class Behandling
+    public class Treatment
     {
-        Behandling()
+        Treatment()
         {
 
         }

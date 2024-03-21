@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behandling.cs" />
-    <Compile Include="Bokning.cs" />
-    <Compile Include="Dagsschema.cs" />
+    <Compile Include="Treatment.cs" />
+    <Compile Include="Booking.cs" />
+    <Compile Include="DailySchedule.cs" />
     <Compile Include="Enums\KompetensLevel.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -60,13 +60,11 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomCategory.cs" />
-    <Compile Include="RoomManager.cs" />
+    <Compile Include="Enums\RoomCategory.cs" />
+    <Compile Include="Managers\RoomManager.cs" />
     <Compile Include="Room.cs" />
-    <Compile Include="Managers\RumManager.cs" />
-    <Compile Include="Enums\RumsTyp.cs" />
     <Compile Include="SSK.cs" />
-    <Compile Include="Managers\BokadeDagar.cs" />
+    <Compile Include="Managers\ScheduledDays.cs" />
     <Compile Include="Managers\SSKmanager.cs" />
     <Compile Include="SSKform.cs">
       <SubType>Form</SubType>

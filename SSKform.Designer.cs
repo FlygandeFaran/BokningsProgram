@@ -28,63 +28,112 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.rbHighKompetens = new System.Windows.Forms.RadioButton();
-            this.rbLowKompetens = new System.Windows.Forms.RadioButton();
-            this.btnAddSSK = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.btnChange = new System.Windows.Forms.Button();
-            this.btnTaBort = new System.Windows.Forms.Button();
+            this.btnAddSSK = new System.Windows.Forms.Button();
+            this.rbLowKompetens = new System.Windows.Forms.RadioButton();
+            this.rbHighKompetens = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtName = new System.Windows.Forms.TextBox();
+            this.lbCurrentSSK = new System.Windows.Forms.ListBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtHSAid = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
-            // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(6, 19);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(121, 204);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.listView1);
+            this.groupBox1.Controls.Add(this.lbCurrentSSK);
             this.groupBox1.Location = new System.Drawing.Point(143, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(143, 240);
+            this.groupBox1.Size = new System.Drawing.Size(143, 264);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Befintliga sköterskor";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnTaBort);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.txtHSAid);
+            this.groupBox2.Controls.Add(this.btnRemove);
             this.groupBox2.Controls.Add(this.btnChange);
             this.groupBox2.Controls.Add(this.btnAddSSK);
             this.groupBox2.Controls.Add(this.rbLowKompetens);
             this.groupBox2.Controls.Add(this.rbHighKompetens);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.txtName);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(125, 240);
+            this.groupBox2.Size = new System.Drawing.Size(125, 265);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Lägg till ny sköterska";
             // 
-            // textBox1
+            // btnRemove
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 45);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 0;
+            this.btnRemove.Location = new System.Drawing.Point(6, 231);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(75, 23);
+            this.btnRemove.TabIndex = 7;
+            this.btnRemove.Text = "Ta bort";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // btnChange
+            // 
+            this.btnChange.Location = new System.Drawing.Point(6, 202);
+            this.btnChange.Name = "btnChange";
+            this.btnChange.Size = new System.Drawing.Size(75, 23);
+            this.btnChange.TabIndex = 6;
+            this.btnChange.Text = "Ändra";
+            this.btnChange.UseVisualStyleBackColor = true;
+            this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
+            // 
+            // btnAddSSK
+            // 
+            this.btnAddSSK.Location = new System.Drawing.Point(6, 173);
+            this.btnAddSSK.Name = "btnAddSSK";
+            this.btnAddSSK.Size = new System.Drawing.Size(75, 23);
+            this.btnAddSSK.TabIndex = 5;
+            this.btnAddSSK.Text = "Lägg till";
+            this.btnAddSSK.UseVisualStyleBackColor = true;
+            this.btnAddSSK.Click += new System.EventHandler(this.btnAddSSK_Click);
+            // 
+            // rbLowKompetens
+            // 
+            this.rbLowKompetens.AutoSize = true;
+            this.rbLowKompetens.Checked = true;
+            this.rbLowKompetens.Location = new System.Drawing.Point(6, 150);
+            this.rbLowKompetens.Name = "rbLowKompetens";
+            this.rbLowKompetens.Size = new System.Drawing.Size(98, 17);
+            this.rbLowKompetens.TabIndex = 4;
+            this.rbLowKompetens.TabStop = true;
+            this.rbLowKompetens.Text = "Låg kompetens";
+            this.rbLowKompetens.UseVisualStyleBackColor = true;
+            // 
+            // rbHighKompetens
+            // 
+            this.rbHighKompetens.AutoSize = true;
+            this.rbHighKompetens.Location = new System.Drawing.Point(6, 127);
+            this.rbHighKompetens.Name = "rbHighKompetens";
+            this.rbHighKompetens.Size = new System.Drawing.Size(100, 17);
+            this.rbHighKompetens.TabIndex = 3;
+            this.rbHighKompetens.Text = "Hög kompetens";
+            this.rbHighKompetens.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 110);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Kompetens";
             // 
             // label1
             // 
@@ -95,72 +144,43 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Namn";
             // 
-            // label2
+            // txtName
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 82);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Kompetens";
+            this.txtName.Location = new System.Drawing.Point(6, 45);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(100, 20);
+            this.txtName.TabIndex = 0;
             // 
-            // rbHighKompetens
+            // lbCurrentSSK
             // 
-            this.rbHighKompetens.AutoSize = true;
-            this.rbHighKompetens.Location = new System.Drawing.Point(9, 99);
-            this.rbHighKompetens.Name = "rbHighKompetens";
-            this.rbHighKompetens.Size = new System.Drawing.Size(100, 17);
-            this.rbHighKompetens.TabIndex = 3;
-            this.rbHighKompetens.Text = "Hög kompetens";
-            this.rbHighKompetens.UseVisualStyleBackColor = true;
+            this.lbCurrentSSK.FormattingEnabled = true;
+            this.lbCurrentSSK.Location = new System.Drawing.Point(7, 20);
+            this.lbCurrentSSK.Name = "lbCurrentSSK";
+            this.lbCurrentSSK.Size = new System.Drawing.Size(120, 238);
+            this.lbCurrentSSK.TabIndex = 0;
+            this.lbCurrentSSK.SelectedIndexChanged += new System.EventHandler(this.lbCurrentSSK_SelectedIndexChanged);
             // 
-            // rbLowKompetens
+            // label3
             // 
-            this.rbLowKompetens.AutoSize = true;
-            this.rbLowKompetens.Checked = true;
-            this.rbLowKompetens.Location = new System.Drawing.Point(9, 122);
-            this.rbLowKompetens.Name = "rbLowKompetens";
-            this.rbLowKompetens.Size = new System.Drawing.Size(98, 17);
-            this.rbLowKompetens.TabIndex = 4;
-            this.rbLowKompetens.TabStop = true;
-            this.rbLowKompetens.Text = "Låg kompetens";
-            this.rbLowKompetens.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "HSA-ID";
             // 
-            // btnAddSSK
+            // txtHSAid
             // 
-            this.btnAddSSK.Location = new System.Drawing.Point(9, 145);
-            this.btnAddSSK.Name = "btnAddSSK";
-            this.btnAddSSK.Size = new System.Drawing.Size(75, 23);
-            this.btnAddSSK.TabIndex = 5;
-            this.btnAddSSK.Text = "Lägg till";
-            this.btnAddSSK.UseVisualStyleBackColor = true;
-            this.btnAddSSK.Click += new System.EventHandler(this.btnAddSSK_Click);
-            // 
-            // btnChange
-            // 
-            this.btnChange.Location = new System.Drawing.Point(9, 174);
-            this.btnChange.Name = "btnChange";
-            this.btnChange.Size = new System.Drawing.Size(75, 23);
-            this.btnChange.TabIndex = 6;
-            this.btnChange.Text = "Ändra";
-            this.btnChange.UseVisualStyleBackColor = true;
-            this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
-            // 
-            // btnTaBort
-            // 
-            this.btnTaBort.Location = new System.Drawing.Point(9, 203);
-            this.btnTaBort.Name = "btnTaBort";
-            this.btnTaBort.Size = new System.Drawing.Size(75, 23);
-            this.btnTaBort.TabIndex = 7;
-            this.btnTaBort.Text = "Ta bort";
-            this.btnTaBort.UseVisualStyleBackColor = true;
-            this.btnTaBort.Click += new System.EventHandler(this.btnTaBort_Click);
+            this.txtHSAid.Location = new System.Drawing.Point(6, 84);
+            this.txtHSAid.Name = "txtHSAid";
+            this.txtHSAid.Size = new System.Drawing.Size(100, 20);
+            this.txtHSAid.TabIndex = 8;
             // 
             // SSKform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(307, 268);
+            this.ClientSize = new System.Drawing.Size(307, 288);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
@@ -176,17 +196,18 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button btnTaBort;
+        private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.Button btnAddSSK;
         private System.Windows.Forms.RadioButton rbLowKompetens;
         private System.Windows.Forms.RadioButton rbHighKompetens;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox lbCurrentSSK;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtHSAid;
     }
 }

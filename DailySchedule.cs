@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BokningsProgram
 {
-    public class Bokning
+    public class DailySchedule
     {
+
     }
 }
