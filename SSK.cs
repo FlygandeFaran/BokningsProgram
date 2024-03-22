@@ -13,7 +13,6 @@ namespace BokningsProgram
         private DailySchedule _schedule;
 		private string _name;
 		private string _HSAid;
-        [XmlAttribute] // Include the enum value in the XML output
         private KompetensLevel _kompetens;
         private bool _isBooked;
 
@@ -35,7 +34,8 @@ namespace BokningsProgram
         [XmlAttribute] // Include the enum value in the XML output
         public KompetensLevel Kompetens
 		{
-			get { return _kompetens; }
+			get { return _kompetens; } 
+			set { _kompetens = value; } 
 		}
 		public bool IsBokad
 		{
