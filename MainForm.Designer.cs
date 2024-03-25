@@ -34,6 +34,7 @@
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
             this.lblSlut = new System.Windows.Forms.Label();
             this.lblStart = new System.Windows.Forms.Label();
@@ -48,7 +49,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lbAvailableSSK = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -56,7 +57,6 @@
             this.NySSKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NyttRumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -105,6 +105,16 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(274, 38);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(59, 17);
+            this.checkBox2.TabIndex = 22;
+            this.checkBox2.Text = "Nystart";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // cbEntireDayBooking
             // 
@@ -228,7 +238,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBox1);
-            this.groupBox2.Controls.Add(this.listBox1);
+            this.groupBox2.Controls.Add(this.lbAvailableSSK);
             this.groupBox2.Location = new System.Drawing.Point(495, 41);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(140, 179);
@@ -246,13 +256,13 @@
             this.checkBox1.Text = "Två spår";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // listBox1
+            // lbAvailableSSK
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 41);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 121);
-            this.listBox1.TabIndex = 0;
+            this.lbAvailableSSK.FormattingEnabled = true;
+            this.lbAvailableSSK.Location = new System.Drawing.Point(6, 41);
+            this.lbAvailableSSK.Name = "lbAvailableSSK";
+            this.lbAvailableSSK.Size = new System.Drawing.Size(120, 121);
+            this.lbAvailableSSK.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -324,16 +334,6 @@
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
             // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(274, 38);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(59, 17);
-            this.checkBox2.TabIndex = 22;
-            this.checkBox2.Text = "Nystart";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,7 +377,7 @@
         private System.Windows.Forms.Label lblStart;
         private System.Windows.Forms.DateTimePicker dtpSlutar;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lbAvailableSSK;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.CheckBox checkBox1;

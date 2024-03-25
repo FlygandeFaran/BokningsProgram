@@ -9,11 +9,17 @@ namespace BokningsProgram
 {
     public class Booking
     {
+        private RoomCategory _roomRequired;
         private Color _taskColor;
         private string _description;
         private DateTime _startTime;
         private DateTime _endTime;
 
+        public RoomCategory RoomRequired
+        {
+            get { return _roomRequired; }
+            set { _roomRequired = value; }
+        }
         public Color TaskColor
         {
             get { return _taskColor; }
@@ -36,8 +42,9 @@ namespace BokningsProgram
         }
 
         public Booking() { }
-        public Booking(DateTime start, DateTime end, string description)
+        public Booking(DateTime start, DateTime end, string description, RoomCategory roomRequired)
         {
+            _roomRequired = roomRequired;
             _startTime = start;
             _endTime = end;
             _description = description;
@@ -47,8 +54,14 @@ namespace BokningsProgram
         {
             switch (_description)
             {
-                default:
+                case "Piccline":
                     _taskColor = Color.Green;
+                    break;
+                case "Cytostatika":
+                    _taskColor = Color.Blue;
+                    break;
+                default:
+                    _taskColor = Color.Yellow;
                     break;
             }
         }

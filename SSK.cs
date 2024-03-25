@@ -37,29 +37,39 @@ namespace BokningsProgram
 			get { return _kompetens; } 
 			set { _kompetens = value; } 
 		}
-		public bool IsBokad
-		{
-			get { return _isBooked; }
-        }
+		//public bool IsBokad
+		//{
+		//	get { return _isBooked; }
+  //      }
         public SSK() { }
         public SSK(string name, string HSAid, KompetensLevel kompetens)
         {
 			_name = name;
 			_HSAid = HSAid;
 			_kompetens = kompetens;
+			_schedule = new DailySchedule();
 		}
 		public bool IsTheyBooked(Booking newBooking) //bra engelska...
 		{
 			bool ok = false;
-			for (int i = 0; i < _schedule.ListOfBookings.Count - 1; i++)
+			int NoOfBookings = _schedule.ListOfBookings.Count;
+
+            for (int i = 0; i < NoOfBookings; i++)
 			{
 				Booking firstBooking = _schedule.ListOfBookings[i];
-				Booking secondBooking = _schedule.ListOfBookings[i + 1];
 
-				if (firstBooking.EndTime < newBooking.StartTime && secondBooking.StartTime > newBooking.EndTime)
+				if (newBooking.EndTime < firstBooking.StartTime)
 				{
 					ok = true;
 				}
+				if (NoOfBookings > 0 && NoOfBookings - 1 > i)
+				{
+                    Booking secondBooking = _schedule.ListOfBookings[i + 1];
+                    if (firstBooking.EndTime < newBooking.StartTime || secondBooking.StartTime > newBooking.EndTime)
+                    {
+                        ok = true;
+                    }
+                }
             }
 			return ok;
 		}
@@ -69,7 +79,7 @@ namespace BokningsProgram
 		}
         public override string ToString()
         {
-			string strOut = $"{_name}, {_HSAid}, {_kompetens}";
+			string strOut = $"{_name}, {_HSAid}, {_kompetens}";//Ta bort kompetens när QA är klar
 			return strOut;
         }
     }
