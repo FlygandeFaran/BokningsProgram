@@ -56,9 +56,12 @@ namespace BokningsProgram
         }
         private void InitializeStaff()
         {
+
             _sskm = new SSKmanager();
-            _sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
-            _sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
+            _sskm.ImportFromXml();
+            //_sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
+            //_sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
+            _sskm.ExportToXml();
             names = new List<string> { "Erik", "Linnea", "Thomas", "Edita" };
 
         }
@@ -148,9 +151,9 @@ namespace BokningsProgram
 
         private void NySSKToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SSKform sSKform = new SSKform(_sskm);
+            SSKform sSKform = new SSKform();
             sSKform.ShowDialog();
-            _sskm = sSKform.sskm;
+            _sskm.ImportFromXml();
         }
 
         private void NyttRumToolStripMenuItem_Click(object sender, EventArgs e)
