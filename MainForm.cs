@@ -69,11 +69,13 @@ namespace BokningsProgram
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
-            Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.PicclineIn);
+            Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
 
-            addTask(series, 0, newBooking);
-            addTask(series, 1, newBooking);
+            addTaskSSK(series, 0, newBooking);
+            addTaskSSK(series, 1, newBooking);
 
+            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
+                _sskm.RoomManager.AddBooking(newBooking, out bool ok);
 
             starttime = 10;
             duration = 1;
@@ -82,21 +84,6 @@ namespace BokningsProgram
 
             newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn);
             _sskm.AddBooking(newBooking);
-
-
-            //start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            //end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-
-            //newBooking = new Booking(start, end, "Cytostatika");
-            //_sskm.AddBooking(newBooking);
-
-            //starttime = 9;
-            //duration = 2;
-            //start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            //end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-
-            //newBooking = new Booking(start, end, "Cytostatika");
-            //_sskm.AddBooking(newBooking);
 
             starttime = 15;
             duration = 1;
@@ -113,7 +100,7 @@ namespace BokningsProgram
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel);
             _sskm.AddBooking(newBooking);
 
-            UpdateBookings();
+            UpdateBookingsSSK();
         }
 
         private void InitializeChart()
@@ -145,21 +132,9 @@ namespace BokningsProgram
             for (int i = 0; i < _sskm.ListOfSSK.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
-                addTask(serie, i, newBooking);
+                addTaskSSK(serie, i, newBooking);
             }
 
-            //Series serie2 = CreateNewSeries();
-
-            //addTask(serie, 0, start, end, Color.Aqua, "Piccline");
-            //addTask(serie2, 0, start, end, Color.Yellow, "Piccline");
-            //addTask(serie, 1, start, end, Color.Aqua, "Piccline");
-            //addTask(serie, 2, start, end, Color.Aqua, "Piccline");
-            //addTask(serie, 3, start, end, Color.Aqua, "Piccline");
-
-            //chart1.Series.Add(serie2);
-            //chart1.Series.Add(series3);
-            //chart1.Series.Add(series4);
-            //chart1.Series.Add(series5);
         }
 
         private static Series CreateNewSeries()
@@ -175,14 +150,21 @@ namespace BokningsProgram
             };
         }
 
-        private void addTask(Series s, int who, Booking booking)
+        private void addTaskSSK(Series s, int who, Booking booking)
         {
             int pt = s.Points.AddXY(who, booking.StartTime, booking.EndTime);
             s.Points[pt].AxisLabel = _sskm.ListOfSSK[who].Name;
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
         }
-        private void UpdateBookings()
+        private void addTaskRoom(Series s, int index, Booking booking)
+        {
+            int pt = s.Points.AddXY(index, booking.StartTime, booking.EndTime);
+            s.Points[pt].AxisLabel = _sskm.RoomManager.ListOfRooms[index].RoomNumber.ToString();
+            s.Points[pt].Label = booking.Description;
+            s.Points[pt].Color = booking.TaskColor;
+        }
+        private void UpdateBookingsSSK()
         {
             InitializeChart();
             var serie = chart1.Series[0];
@@ -193,14 +175,54 @@ namespace BokningsProgram
                 for (int j = 0; j < tempSSK.Schedule.ListOfBookings.Count; j++)
                 {
                     Booking tempBooking = tempSSK.Schedule.ListOfBookings[j];
-                    addTask(serie, i, tempBooking);
+                    addTaskSSK(serie, i, tempBooking);
+                }
+            }
+        }
+        private void UpdateBookingsRoom()
+        {
+            InitializeChart();
+            var serie = chart1.Series[0];
+            serie.Points.Clear();
+            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
+            {
+                Room tempRoom = _sskm.RoomManager.ListOfRooms[i];
+                for (int j = 0; j < tempRoom.Schedule.ListOfBookings.Count; j++)
+                {
+                    Booking tempBooking = tempRoom.Schedule.ListOfBookings[j];
+                    addTaskRoom(serie, i, tempBooking);
                 }
             }
         }
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Bokning har skapats för rum  med SSK ");
+            int starttime = 7;
+            int duration = DateTime.Parse(dtpBehTid.Text).Hour;
+            DateTime today = DateTime.Now;
+            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
+            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+
+            RoomCategory roomRequired = GetRequiredRoom();
+
+            Booking newBooking = new Booking(start, end, txtDescription.Text, roomRequired);
+            _sskm.SuggestBooking(newBooking);
+
+            UpdateBookingsSSK();
+            //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
+        }
+
+        private RoomCategory GetRequiredRoom()
+        {
+            RoomCategory roomRequired;
+
+            if (cbNystart.Checked)
+                roomRequired = RoomCategory.Enkel;
+            else if (cbPiccline.Checked)
+                roomRequired = RoomCategory.PicclineIn;
+            else
+                roomRequired = RoomCategory.Dubbel;
+            return roomRequired;
         }
 
         private void cbFlerdagsbeh_CheckedChanged(object sender, EventArgs e)
@@ -235,15 +257,32 @@ namespace BokningsProgram
 
         private void rbHighKompetens_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbHighKompetens.Checked)
-            {
 
-            }
         }
 
         private void rbLowKompetens_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cbEntireDayBooking_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbEntireDayBooking.Checked)
+                dtpBehTid.Enabled = false;
+            else
+                dtpBehTid.Enabled = true;
+        }
+
+        private void rbChartRoom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbChartRoom.Checked)
+            {
+                UpdateBookingsRoom();
+            }
+            else
+            {
+                UpdateBookingsSSK();
+            }
         }
     }
 }

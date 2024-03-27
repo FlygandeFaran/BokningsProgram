@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BokningsProgram
 {
@@ -40,6 +41,8 @@ namespace BokningsProgram
             get { return _endTime; }
             set { _endTime = value; }
         }
+        //public SSK bookingSSK { get; set; }
+        //public Room bookingRoom { get; set; }
 
         public Booking() { }
         public Booking(DateTime start, DateTime end, string description, RoomCategory roomRequired)
@@ -50,18 +53,24 @@ namespace BokningsProgram
             _description = description;
             SetColorToTask();
         }
+        public Booking GenerateBookingSuggestion(Booking booking)
+        {
+            booking.StartTime = booking.StartTime.AddHours(1);
+            booking.EndTime = booking.EndTime.AddHours(1);
+            return booking;
+        }
         private void SetColorToTask()
         {
             switch (_description)
             {
                 case "Piccline":
-                    _taskColor = Color.Green;
+                    _taskColor = Color.LightGreen;
                     break;
                 case "Cytostatika":
-                    _taskColor = Color.Blue;
+                    _taskColor = Color.LightCyan;
                     break;
                 default:
-                    _taskColor = Color.Yellow;
+                    _taskColor = Color.LightCoral;
                     break;
             }
         }
