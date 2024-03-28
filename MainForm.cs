@@ -15,7 +15,6 @@ namespace BokningsProgram
 {
     public partial class MainForm : Form
     {
-        RoomManager _rm;
         SSKmanager _sskm;
         //private List<string> names;
         public MainForm()
@@ -31,14 +30,17 @@ namespace BokningsProgram
             DateTime dt = new DateTime(idag.Year, idag.Month, idag.Day, 1, 0, 0);
             dtpBehTid.Value = dt;
 
+            cbDescription.Items.Add("Piccline");
+            cbDescription.Items.Add("Cytostatika");
+            cbDescription.Items.Add("Vanlig");
+
             InitializeStaff();
             InitializeListBoxes();
 
             CreateFakeBookings();
 
             //InitializeBookings();
-
-            InitializeChart();
+            InitializeSSKaxis();
         }
         private void InitializeStaff()
         {
@@ -62,7 +64,6 @@ namespace BokningsProgram
         }
         private void CreateFakeBookings()
         {
-            var series = chart1.Series[0];
             int starttime = 2;
             int duration = 1;
             DateTime today = DateTime.Now;
@@ -70,12 +71,6 @@ namespace BokningsProgram
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
-
-            addTaskSSK(series, 0, newBooking);
-            addTaskSSK(series, 1, newBooking);
-
-            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
-                _sskm.RoomManager.AddBooking(newBooking, out bool ok);
 
             starttime = 10;
             duration = 1;
@@ -106,7 +101,6 @@ namespace BokningsProgram
         private void InitializeChart()
         {
             var ca = chart1.ChartAreas[0];
-            var serie = chart1.Series[0];
 
             //X axis settings
             ca.AxisX.Interval = 1;
@@ -122,19 +116,41 @@ namespace BokningsProgram
             ca.AxisY.Maximum = EndOfDay.ToOADate();
             ca.AxisY.Minimum = StartOfDay.ToOADate();
 
+
+            //Behövs för att skapa rader för varje SSK i bilden
+
+        }
+
+        private void InitializeRoomAxis()
+        {
+            InitializeChart();
+            var serie = chart1.Series[0];
             int starttime = 2;
             int duration = 1;
             DateTime today = DateTime.Now;
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
+            {
+                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
+                addTaskRoom(serie, i, newBooking);
+            }
+        }
 
-            //Behövs för att skapa rader för varje SSK i bilden
+        private void InitializeSSKaxis()
+        {
+            InitializeChart();
+            var serie = chart1.Series[0];
+            int starttime = 2;
+            int duration = 1;
+            DateTime today = DateTime.Now;
+            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
+            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _sskm.ListOfSSK.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
                 addTaskSSK(serie, i, newBooking);
             }
-
         }
 
         private static Series CreateNewSeries()
@@ -166,9 +182,9 @@ namespace BokningsProgram
         }
         private void UpdateBookingsSSK()
         {
-            InitializeChart();
             var serie = chart1.Series[0];
             serie.Points.Clear();
+            InitializeSSKaxis();
             for (int i = 0; i < _sskm.ListOfSSK.Count; i++)
             {
                 SSK tempSSK = _sskm.ListOfSSK[i];
@@ -181,9 +197,9 @@ namespace BokningsProgram
         }
         private void UpdateBookingsRoom()
         {
-            InitializeChart();
             var serie = chart1.Series[0];
             serie.Points.Clear();
+            InitializeRoomAxis();
             for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
             {
                 Room tempRoom = _sskm.RoomManager.ListOfRooms[i];
@@ -197,19 +213,38 @@ namespace BokningsProgram
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            int starttime = 7;
-            int duration = DateTime.Parse(dtpBehTid.Text).Hour;
-            DateTime today = DateTime.Now;
-            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+            DateTime start, end;
+            GetBookingTime(out start, out end);
+
+            string strOut = cbDescription.Text;
 
             RoomCategory roomRequired = GetRequiredRoom();
 
-            Booking newBooking = new Booking(start, end, txtDescription.Text, roomRequired);
+            Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired);
             _sskm.SuggestBooking(newBooking);
 
-            UpdateBookingsSSK();
+            if (rbChartSSK.Checked)
+                UpdateBookingsSSK();
+            else
+                UpdateBookingsRoom();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
+        }
+
+        private void GetBookingTime(out DateTime start, out DateTime end)
+        {
+            int starttime = 7;
+            int duration = DateTime.Parse(dtpBehTid.Text).Hour;
+            DateTime today = DateTime.Now;
+            if (cbEntireDayBooking.Checked)
+            {
+                start = new DateTime(today.Year, today.Month, today.Day, 7, 0, 0);
+                end = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
+            }
+            else
+            {
+                start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
+                end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+            }
         }
 
         private RoomCategory GetRequiredRoom()

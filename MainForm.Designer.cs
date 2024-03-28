@@ -28,21 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbFlerdagsbeh = new System.Windows.Forms.CheckBox();
+            this.dtpStartar = new System.Windows.Forms.DateTimePicker();
+            this.lblSlut = new System.Windows.Forms.Label();
+            this.dtpSlutar = new System.Windows.Forms.DateTimePicker();
+            this.lblStart = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.cbPiccline = new System.Windows.Forms.CheckBox();
             this.cbNystart = new System.Windows.Forms.CheckBox();
             this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
-            this.lblSlut = new System.Windows.Forms.Label();
-            this.lblStart = new System.Windows.Forms.Label();
-            this.dtpSlutar = new System.Windows.Forms.DateTimePicker();
-            this.dtpStartar = new System.Windows.Forms.DateTimePicker();
-            this.cbFlerdagsbeh = new System.Windows.Forms.CheckBox();
-            this.txtDescription = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
@@ -53,19 +56,17 @@
             this.NySSKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NyttRumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.rbChartSSK = new System.Windows.Forms.RadioButton();
             this.rbChartRoom = new System.Windows.Forms.RadioButton();
+            this.cbDescription = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnExecute
@@ -99,6 +100,102 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.cbDescription);
+            this.groupBox6.Location = new System.Drawing.Point(275, 20);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(112, 135);
+            this.groupBox6.TabIndex = 26;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Beskrivning";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.cbFlerdagsbeh);
+            this.groupBox5.Controls.Add(this.dtpStartar);
+            this.groupBox5.Controls.Add(this.lblSlut);
+            this.groupBox5.Controls.Add(this.dtpSlutar);
+            this.groupBox5.Controls.Add(this.lblStart);
+            this.groupBox5.Location = new System.Drawing.Point(138, 20);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(130, 135);
+            this.groupBox5.TabIndex = 25;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Flerdagsbehandling";
+            // 
+            // cbFlerdagsbeh
+            // 
+            this.cbFlerdagsbeh.AutoSize = true;
+            this.cbFlerdagsbeh.Location = new System.Drawing.Point(6, 19);
+            this.cbFlerdagsbeh.Name = "cbFlerdagsbeh";
+            this.cbFlerdagsbeh.Size = new System.Drawing.Size(34, 17);
+            this.cbFlerdagsbeh.TabIndex = 16;
+            this.cbFlerdagsbeh.Text = "ja";
+            this.cbFlerdagsbeh.UseVisualStyleBackColor = true;
+            this.cbFlerdagsbeh.CheckedChanged += new System.EventHandler(this.cbFlerdagsbeh_CheckedChanged);
+            // 
+            // dtpStartar
+            // 
+            this.dtpStartar.Enabled = false;
+            this.dtpStartar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpStartar.Location = new System.Drawing.Point(6, 102);
+            this.dtpStartar.Name = "dtpStartar";
+            this.dtpStartar.Size = new System.Drawing.Size(76, 20);
+            this.dtpStartar.TabIndex = 17;
+            // 
+            // lblSlut
+            // 
+            this.lblSlut.AutoSize = true;
+            this.lblSlut.Enabled = false;
+            this.lblSlut.Location = new System.Drawing.Point(6, 44);
+            this.lblSlut.Name = "lblSlut";
+            this.lblSlut.Size = new System.Drawing.Size(34, 13);
+            this.lblSlut.TabIndex = 20;
+            this.lblSlut.Text = "Slutar";
+            // 
+            // dtpSlutar
+            // 
+            this.dtpSlutar.Enabled = false;
+            this.dtpSlutar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpSlutar.Location = new System.Drawing.Point(6, 60);
+            this.dtpSlutar.Name = "dtpSlutar";
+            this.dtpSlutar.Size = new System.Drawing.Size(76, 20);
+            this.dtpSlutar.TabIndex = 18;
+            // 
+            // lblStart
+            // 
+            this.lblStart.AutoSize = true;
+            this.lblStart.Enabled = false;
+            this.lblStart.Location = new System.Drawing.Point(6, 86);
+            this.lblStart.Name = "lblStart";
+            this.lblStart.Size = new System.Drawing.Size(34, 13);
+            this.lblStart.TabIndex = 19;
+            this.lblStart.Text = "Börjar";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label1);
+            this.groupBox4.Controls.Add(this.dtpBehTid);
+            this.groupBox4.Controls.Add(this.cbPiccline);
+            this.groupBox4.Controls.Add(this.cbNystart);
+            this.groupBox4.Controls.Add(this.cbEntireDayBooking);
+            this.groupBox4.Location = new System.Drawing.Point(6, 20);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(126, 135);
+            this.groupBox4.TabIndex = 24;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Behandlingstid";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(62, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "timmar";
+            // 
             // cbPiccline
             // 
             this.cbPiccline.AutoSize = true;
@@ -129,63 +226,6 @@
             this.cbEntireDayBooking.Text = "Heldag";
             this.cbEntireDayBooking.UseVisualStyleBackColor = true;
             this.cbEntireDayBooking.CheckedChanged += new System.EventHandler(this.cbEntireDayBooking_CheckedChanged);
-            // 
-            // lblSlut
-            // 
-            this.lblSlut.AutoSize = true;
-            this.lblSlut.Enabled = false;
-            this.lblSlut.Location = new System.Drawing.Point(6, 44);
-            this.lblSlut.Name = "lblSlut";
-            this.lblSlut.Size = new System.Drawing.Size(34, 13);
-            this.lblSlut.TabIndex = 20;
-            this.lblSlut.Text = "Slutar";
-            // 
-            // lblStart
-            // 
-            this.lblStart.AutoSize = true;
-            this.lblStart.Enabled = false;
-            this.lblStart.Location = new System.Drawing.Point(6, 86);
-            this.lblStart.Name = "lblStart";
-            this.lblStart.Size = new System.Drawing.Size(34, 13);
-            this.lblStart.TabIndex = 19;
-            this.lblStart.Text = "Börjar";
-            // 
-            // dtpSlutar
-            // 
-            this.dtpSlutar.Enabled = false;
-            this.dtpSlutar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpSlutar.Location = new System.Drawing.Point(6, 60);
-            this.dtpSlutar.Name = "dtpSlutar";
-            this.dtpSlutar.Size = new System.Drawing.Size(76, 20);
-            this.dtpSlutar.TabIndex = 18;
-            // 
-            // dtpStartar
-            // 
-            this.dtpStartar.Enabled = false;
-            this.dtpStartar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpStartar.Location = new System.Drawing.Point(6, 102);
-            this.dtpStartar.Name = "dtpStartar";
-            this.dtpStartar.Size = new System.Drawing.Size(76, 20);
-            this.dtpStartar.TabIndex = 17;
-            // 
-            // cbFlerdagsbeh
-            // 
-            this.cbFlerdagsbeh.AutoSize = true;
-            this.cbFlerdagsbeh.Location = new System.Drawing.Point(6, 19);
-            this.cbFlerdagsbeh.Name = "cbFlerdagsbeh";
-            this.cbFlerdagsbeh.Size = new System.Drawing.Size(34, 17);
-            this.cbFlerdagsbeh.TabIndex = 16;
-            this.cbFlerdagsbeh.Text = "ja";
-            this.cbFlerdagsbeh.UseVisualStyleBackColor = true;
-            this.cbFlerdagsbeh.CheckedChanged += new System.EventHandler(this.cbFlerdagsbeh_CheckedChanged);
-            // 
-            // txtDescription
-            // 
-            this.txtDescription.Location = new System.Drawing.Point(6, 19);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(100, 110);
-            this.txtDescription.TabIndex = 11;
             // 
             // groupBox2
             // 
@@ -273,59 +313,25 @@
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
             this.chart1.Location = new System.Drawing.Point(12, 195);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series1.IsVisibleInLegend = false;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series1.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series1);
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            series4.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(1142, 441);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.dtpBehTid);
-            this.groupBox4.Controls.Add(this.cbPiccline);
-            this.groupBox4.Controls.Add(this.cbNystart);
-            this.groupBox4.Controls.Add(this.cbEntireDayBooking);
-            this.groupBox4.Location = new System.Drawing.Point(6, 20);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(126, 135);
-            this.groupBox4.TabIndex = 24;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Behandlingstid";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.cbFlerdagsbeh);
-            this.groupBox5.Controls.Add(this.dtpStartar);
-            this.groupBox5.Controls.Add(this.lblSlut);
-            this.groupBox5.Controls.Add(this.dtpSlutar);
-            this.groupBox5.Controls.Add(this.lblStart);
-            this.groupBox5.Location = new System.Drawing.Point(138, 20);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(130, 135);
-            this.groupBox5.TabIndex = 25;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Flerdagsbehandling";
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.txtDescription);
-            this.groupBox6.Location = new System.Drawing.Point(275, 20);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(112, 135);
-            this.groupBox6.TabIndex = 26;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Beskrivning";
             // 
             // rbChartSSK
             // 
@@ -335,6 +341,7 @@
             this.rbChartSSK.Name = "rbChartSSK";
             this.rbChartSSK.Size = new System.Drawing.Size(46, 17);
             this.rbChartSSK.TabIndex = 16;
+            this.rbChartSSK.TabStop = true;
             this.rbChartSSK.Text = "SSK";
             this.rbChartSSK.UseVisualStyleBackColor = true;
             // 
@@ -348,6 +355,15 @@
             this.rbChartRoom.Text = "Rum";
             this.rbChartRoom.UseVisualStyleBackColor = true;
             this.rbChartRoom.CheckedChanged += new System.EventHandler(this.rbChartRoom_CheckedChanged);
+            // 
+            // cbDescription
+            // 
+            this.cbDescription.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
+            this.cbDescription.FormattingEnabled = true;
+            this.cbDescription.Location = new System.Drawing.Point(6, 19);
+            this.cbDescription.Name = "cbDescription";
+            this.cbDescription.Size = new System.Drawing.Size(100, 111);
+            this.cbDescription.TabIndex = 18;
             // 
             // MainForm
             // 
@@ -366,18 +382,17 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bokningssystem Dagvård av Erik Fura";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -387,7 +402,6 @@
         private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.DateTimePicker dtpBehTid;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.CheckBox cbFlerdagsbeh;
         private System.Windows.Forms.DateTimePicker dtpStartar;
         private System.Windows.Forms.Label lblSlut;
@@ -411,6 +425,8 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.RadioButton rbChartSSK;
         private System.Windows.Forms.RadioButton rbChartRoom;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbDescription;
     }
 }
 
