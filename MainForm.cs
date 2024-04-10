@@ -29,11 +29,13 @@ namespace BokningsProgram
         {
             dtpBehTid.CustomFormat = "HH:mm";
             dtpBehTid.ShowUpDown = true;
+            dtpStartTime.CustomFormat = "HH:mm";
+            dtpStartTime.ShowUpDown = true;
             DateTime idag = DateTime.Now;
             DateTime dt = new DateTime(idag.Year, idag.Month, idag.Day, 1, 0, 0);
             dtpBehTid.Value = dt;
 
-            cbDescription.Items.Add("Piccline");
+            //cbDescription.Items.Add("Piccline");
             cbDescription.Items.Add("Cytostatika");
             cbDescription.Items.Add("Vanlig");
 
@@ -192,9 +194,9 @@ namespace BokningsProgram
             var serie = chart1.Series[0];
             serie.Points.Clear();
             InitializeRoomAxis();
-            for (int i = 0; i < _cm.SskManager.RoomManager.ListOfRooms.Count; i++)
+            for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
-                Room tempRoom = _cm.SskManager.RoomManager.ListOfRooms[i];
+                Room tempRoom = _cm.RoomManager.ListOfRooms[i];
                 for (int j = 0; j < tempRoom.Schedule.ListOfBookings.Count; j++)
                 {
                     Booking tempBooking = tempRoom.Schedule.ListOfBookings[j];
@@ -225,7 +227,8 @@ namespace BokningsProgram
         private void GetBookingTime(out DateTime start, out DateTime end)
         {
             int starttime = 7;
-            int duration = DateTime.Parse(dtpBehTid.Text).Hour;
+            int durationHour = DateTime.Parse(dtpBehTid.Text).Hour;
+            int durationMinute = DateTime.Parse(dtpBehTid.Text).Minute;
             DateTime today = DateTime.Now;
             if (cbEntireDayBooking.Checked)
             {
@@ -235,7 +238,7 @@ namespace BokningsProgram
             else
             {
                 start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-                end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+                end = new DateTime(today.Year, today.Month, today.Day, starttime + durationHour, durationMinute, 0);
             }
         }
 
@@ -256,17 +259,17 @@ namespace BokningsProgram
         {
             if (cbFlerdagsbeh.Checked)
             {
-                lblStart.Enabled = true;
-                lblSlut.Enabled = true;
-                dtpSlutar.Enabled = true;
-                dtpStartar.Enabled = true;
+                lblEndDate.Enabled = true;
+                lblStartDate.Enabled = true;
+                dtpStartDate.Enabled = true;
+                dtpEndDate.Enabled = true;
             }
             else if (!cbFlerdagsbeh.Checked)
             {
-                lblStart.Enabled = false;
-                lblSlut.Enabled = false;
-                dtpSlutar.Enabled = false;
-                dtpStartar.Enabled = false;
+                lblEndDate.Enabled = false;
+                lblStartDate.Enabled = false;
+                dtpStartDate.Enabled = false;
+                dtpEndDate.Enabled = false;
             }
         }
 
@@ -310,6 +313,29 @@ namespace BokningsProgram
             {
                 UpdateBookingsSSK();
             }
+        }
+
+        private void cbPiccline_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbPiccline.Checked)
+            {
+                cbDescription.Text = "Piccline";
+                cbDescription.Enabled = false;
+            }
+            else 
+            { 
+                cbDescription.Enabled = true; 
+            }
+        }
+
+        private void btnPrevDay_Click(object sender, EventArgs e)
+        {
+            dtpScheduleDay.Value.AddDays(-1);
+        }
+
+        private void btnNextDay_Click(object sender, EventArgs e)
+        {
+            dtpScheduleDay.Value.AddDays(1);
         }
     }
 }

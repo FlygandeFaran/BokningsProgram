@@ -57,7 +57,7 @@ namespace BokningsProgram
                     ok = true;
                 else if (CheckAvailabilityBetweenBookings(newBooking, NoOfBookings, i, booking))//False om det finns tid mellan två bokningar
                     ok = true;
-                else if (ok = CheckAvailabilityAfterLastBooking(newBooking, booking, i, NoOfBookings))//False om det finns tid efter sista bokningen
+                else if (ok = CheckAvailabilityAfterLastBooking(newBooking, i, NoOfBookings))//False om det finns tid efter sista bokningen
                     ok = true;
 
                 i++;
@@ -103,11 +103,11 @@ namespace BokningsProgram
 
             return false;
         }
-        private bool CheckAvailabilityAfterLastBooking(Booking newBooking, Booking lastBooking, int i, int NoOfBookings)
+        private bool CheckAvailabilityAfterLastBooking(Booking newBooking, int i, int NoOfBookings)
         {
             if (NoOfBookings > 0)
             {
-                lastBooking = _schedule.ListOfBookings[NoOfBookings - 1];
+                Booking lastBooking = _schedule.ListOfBookings[NoOfBookings - 1];
                 if (i == NoOfBookings - 1 && newBooking.StartTime >= lastBooking.EndTime)
                 {
                     return true;
