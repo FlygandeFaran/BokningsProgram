@@ -53,7 +53,7 @@ namespace BokningsProgram
             _description = description;
             SetColorToTask();
         }
-        public Booking GenerateBookingSuggestion(Booking booking)
+        public Booking GenerateNewBookingSuggestion(Booking booking)
         {
             booking.StartTime = booking.StartTime.AddHours(1);
             booking.EndTime = booking.EndTime.AddHours(1);

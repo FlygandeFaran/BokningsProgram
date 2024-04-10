@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace BokningsProgram
 {
     public class SSKmanager
     {
+        private DateTime _endOfDay;
         private string filename;
         private List<SSK> _listOfSSK;
         private RoomManager _roomManager;
@@ -30,6 +32,9 @@ namespace BokningsProgram
             _listOfSSK = new List<SSK>();
             _roomManager = new RoomManager();
             filename = "SSK.xml"; //Updatera efter dagvårdens IT-miljö
+
+            DateTime today = DateTime.Now;
+            _endOfDay = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
         }
         public void ImportFromXml()
         {
@@ -47,50 +52,33 @@ namespace BokningsProgram
                 serializer.Serialize(writer, _listOfSSK);
             }
         }
-        public void SuggestBooking(Booking booking)
+        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out SSK availableSSK)
         {
             bool ok = true;
-            DateTime today = DateTime.Now;
-            DateTime endOfDay = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
+            newBooking = booking;
+            bool sskOK = false;
+            availableSSK = new SSK();
 
             while (ok)
             {
-                CheckBookingForSSK(booking, out bool sskOK);
-                _roomManager.AddBooking(booking, out bool roomOK);
+                availableSSK = CheckBookingForSSK(newBooking, out sskOK);
 
-                if (sskOK && roomOK)
+                if (sskOK)
                     ok = false;
                 else
-                    booking = booking.GenerateBookingSuggestion(booking);
+                    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                if (booking.EndTime > endOfDay)
+                if (booking.EndTime > _endOfDay)
                 {
                     MessageBox.Show("Hittade ingen ledig tid för bokningen");
                     break;
                 }
             }
-            if (!ok)
-                AddBooking(booking);
+            return sskOK;
         }
-        public void AddBooking(Booking booking)
+        public void AddBooking(Booking booking, SSK newSSK)
         {
-            bool ok = false;
-            SSK availableSSK = new SSK();
-            Room availableRoom;
-
-            availableSSK = CheckBookingForSSK(booking, out bool sskOK);
-            availableRoom = _roomManager.AddBooking(booking, out bool roomOK);
-
-            if (sskOK && roomOK)
-                ok = true;
-
-            if (ok)
-            {
-                _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(availableSSK.HSAID)).AddBooking(booking);//bokar SSK
-                _roomManager.ListOfRooms.FirstOrDefault(r => r.Equals(availableRoom)).AddBooking(booking);//bokar rummet
-                //booking.bookingSSK = availableSSK;
-                //booking.bookingRoom = availableRoom;
-            }
+            _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking);//bokar SSK
         }
         private SSK CheckBookingForSSK(Booking booking, out bool sskOK)
         {

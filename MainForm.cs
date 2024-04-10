@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BokningsProgram.Managers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,11 +16,13 @@ namespace BokningsProgram
 {
     public partial class MainForm : Form
     {
-        SSKmanager _sskm;
+        //SSKmanager _sskm;
+        ClinicalManager _cm;
         //private List<string> names;
         public MainForm()
         {
             InitializeComponent();
+            _cm = new ClinicalManager();
             InitializeGUI();
         }
         private void InitializeGUI()
@@ -34,7 +37,6 @@ namespace BokningsProgram
             cbDescription.Items.Add("Cytostatika");
             cbDescription.Items.Add("Vanlig");
 
-            InitializeStaff();
             InitializeListBoxes();
 
             CreateFakeBookings();
@@ -42,18 +44,9 @@ namespace BokningsProgram
             //InitializeBookings();
             InitializeSSKaxis();
         }
-        private void InitializeStaff()
-        {
-            _sskm = new SSKmanager();
-            _sskm.ImportFromXml();
-            //_sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
-            //_sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
-            _sskm.ExportToXml();
-
-        }
         private void InitializeListBoxes()
         {
-            foreach (var item in _sskm.ListOfSSK)
+            foreach (var item in _cm.SskManager.ListOfSSK)
             {
                 lbAvailableSSK.Items.Add(item);
             }
@@ -78,7 +71,7 @@ namespace BokningsProgram
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn);
-            _sskm.AddBooking(newBooking);
+            _cm.SuggestBooking(newBooking);
 
             starttime = 15;
             duration = 1;
@@ -86,14 +79,14 @@ namespace BokningsProgram
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel);
-            _sskm.AddBooking(newBooking);
+            _cm.SuggestBooking(newBooking);
 
             starttime = 14;
             duration = 2;
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel);
-            _sskm.AddBooking(newBooking);
+            _cm.SuggestBooking(newBooking);
 
             UpdateBookingsSSK();
         }
@@ -130,7 +123,7 @@ namespace BokningsProgram
             DateTime today = DateTime.Now;
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
+            for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
                 addTaskRoom(serie, i, newBooking);
@@ -146,7 +139,7 @@ namespace BokningsProgram
             DateTime today = DateTime.Now;
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-            for (int i = 0; i < _sskm.ListOfSSK.Count; i++)
+            for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
                 addTaskSSK(serie, i, newBooking);
@@ -168,14 +161,14 @@ namespace BokningsProgram
         private void addTaskSSK(Series s, int who, Booking booking)
         {
             int pt = s.Points.AddXY(who, booking.StartTime, booking.EndTime);
-            s.Points[pt].AxisLabel = _sskm.ListOfSSK[who].Name;
+            s.Points[pt].AxisLabel = _cm.SskManager.ListOfSSK[who].Name;
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
         }
         private void addTaskRoom(Series s, int index, Booking booking)
         {
             int pt = s.Points.AddXY(index, booking.StartTime, booking.EndTime);
-            s.Points[pt].AxisLabel = _sskm.RoomManager.ListOfRooms[index].RoomNumber.ToString();
+            s.Points[pt].AxisLabel = _cm.SskManager.RoomManager.ListOfRooms[index].RoomNumber.ToString();
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
         }
@@ -184,9 +177,9 @@ namespace BokningsProgram
             var serie = chart1.Series[0];
             serie.Points.Clear();
             InitializeSSKaxis();
-            for (int i = 0; i < _sskm.ListOfSSK.Count; i++)
+            for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
-                SSK tempSSK = _sskm.ListOfSSK[i];
+                SSK tempSSK = _cm.SskManager.ListOfSSK[i];
                 for (int j = 0; j < tempSSK.Schedule.ListOfBookings.Count; j++)
                 {
                     Booking tempBooking = tempSSK.Schedule.ListOfBookings[j];
@@ -199,9 +192,9 @@ namespace BokningsProgram
             var serie = chart1.Series[0];
             serie.Points.Clear();
             InitializeRoomAxis();
-            for (int i = 0; i < _sskm.RoomManager.ListOfRooms.Count; i++)
+            for (int i = 0; i < _cm.SskManager.RoomManager.ListOfRooms.Count; i++)
             {
-                Room tempRoom = _sskm.RoomManager.ListOfRooms[i];
+                Room tempRoom = _cm.SskManager.RoomManager.ListOfRooms[i];
                 for (int j = 0; j < tempRoom.Schedule.ListOfBookings.Count; j++)
                 {
                     Booking tempBooking = tempRoom.Schedule.ListOfBookings[j];
@@ -220,7 +213,7 @@ namespace BokningsProgram
             RoomCategory roomRequired = GetRequiredRoom();
 
             Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired);
-            _sskm.SuggestBooking(newBooking);
+            _cm.SuggestBooking(newBooking);
 
             if (rbChartSSK.Checked)
                 UpdateBookingsSSK();
@@ -281,7 +274,7 @@ namespace BokningsProgram
         {
             SSKform sSKform = new SSKform();
             sSKform.ShowDialog();
-            _sskm.ImportFromXml();
+            _cm.SskManager.ImportFromXml();
         }
 
         private void NyttRumToolStripMenuItem_Click(object sender, EventArgs e)

@@ -40,7 +40,7 @@ namespace BokningsProgram
 		//public bool IsBokad
 		//{
 		//	get { return _isBooked; }
-  //      }
+        //}
         public SSK() { }
         public SSK(string name, string HSAid, KompetensLevel kompetens)
         {
@@ -49,6 +49,22 @@ namespace BokningsProgram
 			_kompetens = kompetens;
 			_schedule = new DailySchedule();
 		}
+        public bool IsCompetentEnough(Booking booking)
+        {
+            bool sskOK = false;
+
+            if (booking.RoomRequired == RoomCategory.PicclineIn && _kompetens == KompetensLevel.Pickline)
+            {
+                sskOK = true;
+            }
+            else if (booking.RoomRequired != RoomCategory.PicclineIn)
+            {
+                sskOK = true;
+            }
+                
+            return sskOK;
+            
+        }
 		public bool IsTheyBooked(Booking newBooking) //bra engelska...
         {
             int NoOfBookings = _schedule.ListOfBookings.Count;

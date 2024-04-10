@@ -34,6 +34,7 @@ namespace BokningsProgram
             _roomNumber = roomNumber;
             _schedule = new DailySchedule();
         }
+        public Room() { }
         public void AddBooking(Booking booking)
         {
             _schedule.AddBooking(booking);

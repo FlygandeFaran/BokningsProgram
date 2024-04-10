@@ -10,6 +10,7 @@ namespace BokningsProgram
 {
     public class RoomManager
     {
+        private DateTime _endOfDay;
         private List<Room> _listOfRooms;
         private List<Room> _singleRoomList;
         private List<Room> _doubleRoomList;
@@ -44,6 +45,9 @@ namespace BokningsProgram
 
         public RoomManager()
         {
+            DateTime today = DateTime.Now;
+            _endOfDay = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
+
             _listOfRooms = new List<Room>();
 
             ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
@@ -92,7 +96,32 @@ namespace BokningsProgram
                 }
             }
         }
-        public Room AddBooking(Booking booking, out bool roomOK)
+        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
+        {
+            bool ok = true;
+            newBooking = booking;
+            bool roomOK = false;
+            availableRoom = new Room();
+
+            while (ok)
+            {
+                availableRoom = CheckBookingForRoom(newBooking, out roomOK);
+
+                if (roomOK)
+                    ok = false;
+                else
+                    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
+
+                if (booking.EndTime > _endOfDay)
+                {
+                    MessageBox.Show("Hittade ingen ledig tid för bokningen");
+                    break;
+                }
+            }
+
+            return roomOK;
+        }
+        public Room CheckBookingForRoom(Booking booking, out bool roomOK)
         {
             roomOK = false;
             int j = 0;
@@ -128,6 +157,10 @@ namespace BokningsProgram
                 }
             }
             return tempRoom;
+        }
+        public void AddBooking(Booking booking, Room newRoom)
+        {
+            _listOfRooms.FirstOrDefault(r => r.RoomNumber.Equals(newRoom.RoomNumber)).AddBooking(booking);//bokar SSK
         }
 
         private Booking SingleRoomQueue(Booking booking)
