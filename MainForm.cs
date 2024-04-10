@@ -152,7 +152,6 @@ namespace BokningsProgram
                 addTaskSSK(serie, i, newBooking);
             }
         }
-
         private static Series CreateNewSeries()
         {
             return new Series
@@ -321,3 +320,5 @@ namespace BokningsProgram
         }
     }
 }
+//Written by:schemal
+//Lord Erik III of house Fura, Opressor of Dmax, Delineator Supreme, Warrior of RBE

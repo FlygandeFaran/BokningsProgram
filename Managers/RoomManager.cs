@@ -101,9 +101,9 @@ namespace BokningsProgram
             while (!roomOK)
             {
                 tempRoom = _listOfRooms[j];
-                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking))
+                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking)) //fortsätt här
                 {
-                    tempRoom.AddBooking(booking);
+                    //tempRoom.AddBooking(booking); //bokas redan i SSKmanager
                     roomOK = true;
                     return tempRoom;
                 }
@@ -114,13 +114,13 @@ namespace BokningsProgram
                     roomOK = true;
                     MessageBox.Show("Hittade inget ledigt rum vid den här tiden. Vänligen välj ny tid");
                 }
-                else if (j == _listOfRooms.Count && roomOK)
+                else if (j == _listOfRooms.Count && !roomOK)
                 {
-                    if (originalRoomCategory == RoomCategory.Enkel)
+                    if (originalRoomCategory == RoomCategory.Enkel || originalRoomCategory == RoomCategory.PicclineIn)
                     {
                         booking = SingleRoomQueue(booking);
                     }
-                    else if (originalRoomCategory != RoomCategory.Dubbel)
+                    else if (originalRoomCategory == RoomCategory.Dubbel || originalRoomCategory == RoomCategory.Quad)
                     {
                         booking = DoubleRoomQueue(booking);
                     }
