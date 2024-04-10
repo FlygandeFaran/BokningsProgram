@@ -44,7 +44,7 @@ namespace BokningsProgram
             CreateFakeBookings();
 
             //InitializeBookings();
-            InitializeSSKaxis();
+            UpdateSSKaxis();
         }
         private void InitializeListBoxes()
         {
@@ -93,7 +93,7 @@ namespace BokningsProgram
             UpdateBookingsSSK();
         }
 
-        private void InitializeChart()
+        private void UpdateChart()
         {
             var ca = chart1.ChartAreas[0];
 
@@ -101,10 +101,12 @@ namespace BokningsProgram
             ca.AxisX.Interval = 1;
             //ca.AxisX.IsLabelAutoFit = true;
             //ca.AxisX.ScaleView.Size = 5;
-
+            DateTime date = dtpScheduleDay.Value;
             //Y axis settings
-            DateTime StartOfDay = DateTime.Now.AddHours(6 - DateTime.Now.Hour);
-            DateTime EndOfDay = DateTime.Now.AddHours(17 - DateTime.Now.Hour);
+            DateTime StartOfDay = date.AddHours(6 - date.Hour);
+            StartOfDay = StartOfDay.AddMinutes(-date.Minute);
+            DateTime EndOfDay = date.AddHours(17 - date.Hour);
+            EndOfDay = EndOfDay.AddMinutes(-date.Minute);
             ca.AxisY.LabelStyle.Format = "HH:mm";
             ca.AxisY.IntervalType = DateTimeIntervalType.Minutes;
             ca.AxisY.Interval = 30;
@@ -116,15 +118,16 @@ namespace BokningsProgram
 
         }
 
-        private void InitializeRoomAxis()
+        private void UpdateRoomAxis()
         {
-            InitializeChart();
+            UpdateChart();
             var serie = chart1.Series[0];
             int starttime = 2;
             int duration = 1;
-            DateTime today = DateTime.Now;
-            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+            //DateTime today = DateTime.Now;
+            DateTime date = dtpScheduleDay.Value;
+            DateTime start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
+            DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
@@ -132,15 +135,15 @@ namespace BokningsProgram
             }
         }
 
-        private void InitializeSSKaxis()
+        private void UpdateSSKaxis()
         {
-            InitializeChart();
+            UpdateChart();
             var serie = chart1.Series[0];
             int starttime = 2;
             int duration = 1;
-            DateTime today = DateTime.Now;
-            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
+            DateTime date = dtpScheduleDay.Value;
+            DateTime start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
+            DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
@@ -178,7 +181,7 @@ namespace BokningsProgram
         {
             var serie = chart1.Series[0];
             serie.Points.Clear();
-            InitializeSSKaxis();
+            UpdateSSKaxis();
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 SSK tempSSK = _cm.SskManager.ListOfSSK[i];
@@ -193,7 +196,7 @@ namespace BokningsProgram
         {
             var serie = chart1.Series[0];
             serie.Points.Clear();
-            InitializeRoomAxis();
+            UpdateRoomAxis();
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Room tempRoom = _cm.RoomManager.ListOfRooms[i];
@@ -207,14 +210,13 @@ namespace BokningsProgram
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            DateTime start, end;
-            GetBookingTime(out start, out end);
+            GetBookingTime(out DateTime start, out DateTime end);
 
             string strOut = cbDescription.Text;
 
             RoomCategory roomRequired = GetRequiredRoom();
 
-            Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired);
+            Booking newBooking = new Booking(start, end, strOut, roomRequired);
             _cm.SuggestBooking(newBooking);
 
             if (rbChartSSK.Checked)
@@ -227,18 +229,22 @@ namespace BokningsProgram
         private void GetBookingTime(out DateTime start, out DateTime end)
         {
             int starttime = 7;
+            //int startHour = dtpStartTime.Value.Hour;
+            //int startMinute = dtpStartTime.Value.Minute;
             int durationHour = DateTime.Parse(dtpBehTid.Text).Hour;
             int durationMinute = DateTime.Parse(dtpBehTid.Text).Minute;
-            DateTime today = DateTime.Now;
+            DateTime date = dtpScheduleDay.Value;
             if (cbEntireDayBooking.Checked)
             {
-                start = new DateTime(today.Year, today.Month, today.Day, 7, 0, 0);
-                end = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
+                start = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0);
+                end = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
             }
             else
             {
-                start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-                end = new DateTime(today.Year, today.Month, today.Day, starttime + durationHour, durationMinute, 0);
+                start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
+                end = new DateTime(date.Year, date.Month, date.Day, starttime + durationHour, durationMinute, 0);
+                //start = new DateTime(date.Year, date.Month, date.Day, startHour, startMinute, 0);
+                //end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, startMinute + durationMinute, 0);
             }
         }
 
@@ -330,14 +336,50 @@ namespace BokningsProgram
 
         private void btnPrevDay_Click(object sender, EventArgs e)
         {
-            dtpScheduleDay.Value.AddDays(-1);
+            dtpScheduleDay.Value = dtpScheduleDay.Value.AddDays(-1);
         }
 
         private void btnNextDay_Click(object sender, EventArgs e)
         {
-            dtpScheduleDay.Value.AddDays(1);
+            dtpScheduleDay.Value = dtpScheduleDay.Value.AddDays(1);
+        }
+
+        private void dtpScheduleDay_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateChart();
+        }
+
+        // Round a DateTime value to the nearest 30 minutes
+        private DateTime RoundToNearest30Minutes(DateTime dateTime)
+        {
+            int minutes = dateTime.Minute;
+            int roundedMinutes = ((minutes + 15) / 30) * 30 % 60; // Adjusted rounding to handle cases where the rounded minutes exceed 59
+            int hoursToAdd = ((minutes + 15) / 30) == 2 ? 1 : 0; // Adjusted hours to add based on rounded minutes
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour + hoursToAdd, roundedMinutes, 0);
+        }
+
+        private void dtpStartTime_ValueChanged(object sender, EventArgs e)
+        {
+            // When the value changes, round it to the nearest 30 minutes
+            dtpStartTime.Value = RoundToNearest30Minutes(dtpStartTime.Value);
+        }
+
+        private void chart1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var result = chart1.HitTest(e.X, e.Y);
+
+            if (result.ChartElementType == ChartElementType.DataPoint)
+            {
+                double X = result.Series.Points[result.PointIndex].XValue;
+                double Y = result.Series.Points[result.PointIndex].YValues[0];
+
+                var ssk = _cm.SskManager.ListOfSSK[(int)X];
+                var klockslag = DateTime.FromOADate(Y);
+
+                MessageBox.Show(ssk.Name + " " + klockslag.ToString());
+            }
         }
     }
 }
-//Written by:schemal
+//Written by:
 //Lord Erik III of house Fura, Opressor of Dmax, Delineator Supreme, Warrior of RBE

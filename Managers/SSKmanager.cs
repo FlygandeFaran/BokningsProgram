@@ -13,7 +13,7 @@ namespace BokningsProgram
 {
     public class SSKmanager
     {
-        private DateTime _endOfDay;
+        private double _endOfDay;
         private string filename;
         private List<SSK> _listOfSSK;
         private RoomManager _roomManager;
@@ -34,7 +34,7 @@ namespace BokningsProgram
             filename = "SSK.xml"; //Updatera efter dagvårdens IT-miljö
 
             DateTime today = DateTime.Now;
-            _endOfDay = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
+            _endOfDay = 16;
         }
         public void ImportFromXml()
         {
@@ -68,7 +68,7 @@ namespace BokningsProgram
                 else
                     newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                if (booking.EndTime > _endOfDay)
+                if (booking.EndTime.Hour > _endOfDay)
                 {
                     MessageBox.Show("Hittade ingen ledig tid för bokningen");
                     break;

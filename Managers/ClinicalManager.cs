@@ -39,7 +39,7 @@ namespace BokningsProgram.Managers
             _sskManager.ImportFromXml();
             //_sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
             //_sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
-            _sskManager.ExportToXml();
+            //_sskManager.ExportToXml();
         }
 
         public void SuggestBooking(Booking booking)
