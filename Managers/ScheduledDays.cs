@@ -30,6 +30,18 @@ namespace BokningsProgram
             _dagar = new List<DailySchedule>();
             GenerateSCheduleDays();
         }
+        public static Booking GetBooking(DateTime start, DateTime end, SSK ssk)
+        {
+            DailySchedule schedule = ssk.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(start.DayOfYear));
+            Booking booking = schedule.ListOfBookings.FirstOrDefault(b => { return b.StartTime.Equals(start) && b.EndTime.Equals(end); });
+            return booking;
+        }
+        public static Booking GetBooking(DateTime start, DateTime end, Room room)
+        {
+            DailySchedule schedule = room.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(start.DayOfYear));
+            Booking booking = schedule.ListOfBookings.FirstOrDefault(b => { return b.StartTime.Equals(start) && b.EndTime.Equals(end) && b.RoomRequired.Equals(room.RoomType); });
+            return booking;
+        }
         private void GenerateSCheduleDays()
 		{
 			DateTime date = DateTime.Now;

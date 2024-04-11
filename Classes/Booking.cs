@@ -86,7 +86,7 @@ namespace BokningsProgram
                 case "Cytostatika":
                     _taskColor = Color.LightCyan;
                     break;
-                case "Ledig":
+                case "Stängt":
                     _taskColor = Color.LightGray;
                     break;
                 case "Lunch":

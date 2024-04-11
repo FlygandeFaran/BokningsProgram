@@ -102,6 +102,8 @@ namespace BokningsProgram
                 sskOK = ssk.IsCompetentEnough(booking);
                 if (sskOK)
                     return sskOK;
+                else
+                    MessageBox.Show("Sköterska kan inte lägga piccline");
             }
             return sskOK;
         }

@@ -79,20 +79,17 @@ namespace BokningsProgram.Managers
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
             _roomManager.ExportToXml();
         }
-        private Booking GetBooking(DateTime start, DateTime end, SSK ssk)
-        {
-            DailySchedule schedule = ssk.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(start.DayOfYear));
-            Booking booking = schedule.ListOfBookings.FirstOrDefault(b => { return b.StartTime.Equals(start) && b.StartTime.Equals(start); });
-            return booking;
-        }
         //Öppnar en ny ruta med möjlighet att uppdatera bookning genom att ta bort och lägga till uppdaterade bookning
         public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking)
         {
             bool ok = false;
             var ssk = _sskManager.ListOfSSK[index];
-            var room = _roomManager.ListOfRooms[index];
 
-            Booking selectedBooking = GetBooking(startOfBooking, endOfBooking, ssk);
+            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, ssk);
+
+
+            Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
+
             if (selectedBooking is Booking)
             {
                 ChangeBooking changeBooking = new ChangeBooking(selectedBooking, ssk, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
@@ -102,7 +99,7 @@ namespace BokningsProgram.Managers
                     Booking newBooking = selectedBooking.CopyBooking(selectedBooking);
                     DailySchedule ds = ssk.ScheduledDays.GetDailyScheduleOfBooking(selectedBooking);
                     ds.RemoveBooking(newBooking);
-                    ds = room.ScheduledDays.GetDailyScheduleOfBooking(selectedBooking);
+                    ds = selectedRoom.ScheduledDays.GetDailyScheduleOfBooking(selectedBooking);
                     ds.RemoveBooking(newBooking);
 
                     SuggestBooking(newBooking, changeBooking.Ssk);

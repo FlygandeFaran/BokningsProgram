@@ -39,8 +39,8 @@ namespace BokningsProgram
 			_startOfDay = startOfDay;
 			_endOfDay = endOfDay;
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
-            AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Ledig", RoomCategory.Dubbel, false)); //Spärrar starten av dagen
-            AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Ledig", RoomCategory.Dubbel, false)); //Spärrar slutet av dagen
+            AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Stängt", RoomCategory.Dubbel, false)); //Spärrar starten av dagen
+            AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Stängt", RoomCategory.Dubbel, false)); //Spärrar slutet av dagen
             AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false)); //Spärrar lunch
         }
         public bool CheckAvailability(Booking newBooking, int i)

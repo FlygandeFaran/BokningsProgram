@@ -31,6 +31,17 @@ namespace BokningsProgram
             _listOfRooms = new List<Room>();
             filename = "Rooms.xml"; //Updatera efter dagvårdens IT-miljö
         }
+        public Room GetRoomFromBooking(Booking booking)
+        {
+
+            Room bookedRoom = _listOfRooms.FirstOrDefault(room =>
+                                                            room.RoomType == booking.RoomRequired &&
+                                                            room.ScheduledDays.Days.Any(ds =>
+                                                            ds.ListOfBookings.Any(booked =>
+                                                            booked.StartTime == booking.StartTime &&
+                                                            booked.EndTime == booking.EndTime)));
+            return bookedRoom;
+        }
         public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
         {
             bool ok = true;
