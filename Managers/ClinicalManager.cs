@@ -1,10 +1,14 @@
-﻿using System;
+﻿using BokningsProgram.Forms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace BokningsProgram.Managers
@@ -75,8 +79,42 @@ namespace BokningsProgram.Managers
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
             _roomManager.ExportToXml();
         }
+        private Booking GetBooking(DateTime start, DateTime end, SSK ssk)
+        {
+            DailySchedule schedule = ssk.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(start.DayOfYear));
+            Booking booking = schedule.ListOfBookings.FirstOrDefault(b => { return b.StartTime.Equals(start) && b.StartTime.Equals(start); });
+            return booking;
+        }
+        //Öppnar en ny ruta med möjlighet att uppdatera bookning genom att ta bort och lägga till uppdaterade bookning
+        public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking)
+        {
+            bool ok = false;
+            var ssk = _sskManager.ListOfSSK[index];
+            var room = _roomManager.ListOfRooms[index];
 
-        public void SuggestBooking(Booking booking)
+            Booking selectedBooking = GetBooking(startOfBooking, endOfBooking, ssk);
+            if (selectedBooking is Booking)
+            {
+                ChangeBooking changeBooking = new ChangeBooking(selectedBooking, ssk, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
+                DialogResult dlgResult = changeBooking.ShowDialog();
+                if (dlgResult == DialogResult.OK)
+                {
+                    Booking newBooking = selectedBooking.CopyBooking(selectedBooking);
+                    DailySchedule ds = ssk.ScheduledDays.GetDailyScheduleOfBooking(selectedBooking);
+                    ds.RemoveBooking(newBooking);
+                    ds = room.ScheduledDays.GetDailyScheduleOfBooking(selectedBooking);
+                    ds.RemoveBooking(newBooking);
+
+                    SuggestBooking(newBooking, changeBooking.Ssk);
+                    
+                    ok = true;
+                }
+            }
+            else
+                MessageBox.Show("Kunde inte hitta någon bokning", "Hoppsan");
+            return ok;
+        }
+        private void SuggestBooking(Booking booking)
         {
             //Check for ssk
             bool sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out SSK availableSSK);
@@ -89,6 +127,38 @@ namespace BokningsProgram.Managers
                     _sskManager.AddBooking(booking, availableSSK);
                     _roomManager.AddBooking(booking, availableRoom);
                 }
+            }
+        }
+        public void SuggestBooking(Booking booking, SSK ssk)
+        {
+            //Check for ssk
+            bool sskOK = false;
+            if (ssk is SSK)
+            {
+                sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk);
+                if (sskOK)
+                {
+                    bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom);
+                    if (roomOK)
+                    {
+                        //lägg till bekräftelse av användaren
+                        _sskManager.AddBooking(booking, ssk);
+                        _roomManager.AddBooking(booking, availableRoom);
+                    }
+                }
+                else
+                {
+                    ContinueToSearchForSlotDialog continueToSearchForSlotDialog = new ContinueToSearchForSlotDialog();
+                    DialogResult result = continueToSearchForSlotDialog.ShowDialog();
+                    if (result == DialogResult.Yes)
+                    {
+                        SuggestBooking(booking);
+                    }
+                }
+            }
+            else
+            {
+                SuggestBooking(booking);
             }
         }
     }

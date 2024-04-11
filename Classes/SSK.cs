@@ -14,7 +14,6 @@ namespace BokningsProgram
         private string _name;
 		private string _HSAid;
         private KompetensLevel _kompetens;
-        private bool _isBooked;
 
         public ScheduledDays ScheduledDays
         {

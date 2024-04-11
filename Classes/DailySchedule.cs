@@ -104,5 +104,14 @@ namespace BokningsProgram
 			_listOfBookings.Add(booking);
 			_listOfBookings.Sort((x, y) => DateTime.Compare(x.StartTime, y.StartTime));
 		}
+        public void RemoveBooking(Booking booking)
+        {
+            _listOfBookings.Remove(booking);
+            _listOfBookings.Sort((x, y) => DateTime.Compare(x.StartTime, y.StartTime));
+        }
+        public void EditBooking(Booking booking)
+        {
+
+        }
 	}
 }

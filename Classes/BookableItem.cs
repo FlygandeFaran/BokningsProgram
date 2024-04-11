@@ -12,7 +12,7 @@ namespace BokningsProgram
 
         public BookableItem() { }
 
-        public bool IsItBooked(Booking newBooking, ScheduledDays scheduledDays) //bra engelska...
+        public bool IsItBooked(Booking newBooking, ScheduledDays scheduledDays)
         {
             _schedule = scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == newBooking.StartTime.DayOfYear);
             int NoOfBookings = _schedule.ListOfBookings.Count;

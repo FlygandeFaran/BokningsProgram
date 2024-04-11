@@ -60,6 +60,16 @@ namespace BokningsProgram
             _description = description;
             SetColorToTask();
         }
+        public Booking CopyBooking(Booking booking)
+        {
+            booking.RoomRequired = _roomRequired;
+            booking.StartTime = _startTime;
+            booking.EndTime = _endTime;
+            booking.Description = _description;
+            booking.FullDay = _fullDay;
+            booking.TaskColor = _taskColor;
+            return booking;
+        }
         public Booking GenerateNewBookingSuggestion(Booking booking)
         {
             booking.StartTime = booking.StartTime.AddHours(0.5);

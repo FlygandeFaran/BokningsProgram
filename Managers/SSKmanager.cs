@@ -55,17 +55,21 @@ namespace BokningsProgram
             while (ok)
             {
                 availableSSK = CheckBookingForSSK(newBooking, out sskOK);
-
-                if (sskOK)
-                    ok = false;
-                else
-                    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-
-                if (booking.EndTime.Hour > _endOfDay)
+                if (availableSSK is SSK)
                 {
-                    MessageBox.Show("Hittade ingen ledig tid för bokningen");
-                    break;
+                    if (sskOK)
+                        ok = false;
+                    else
+                        newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
+
+                    if (booking.EndTime.Hour > _endOfDay)
+                    {
+                        MessageBox.Show("Hittade ingen ledig tid för bokningen");
+                        break;
+                    }
                 }
+                else { MessageBox.Show("Hittade ingen ssk"); }
+
             }
             return sskOK;
         }
@@ -82,21 +86,24 @@ namespace BokningsProgram
             {
                 if (!ssk.IsItBooked(booking, ssk.ScheduledDays))
                 {
-                    if (booking.RoomRequired == RoomCategory.PicclineIn && ssk.Kompetens == KompetensLevel.Pickline)
-                    {
-                        availableSSK = ssk;
-                        sskOK = true;
-                        return availableSSK;
-                    }
-                    else if (booking.RoomRequired != RoomCategory.PicclineIn)
-                    {
-                        availableSSK = ssk;
-                        sskOK = true;
-                        return availableSSK;
-                    }
+                    sskOK = ssk.IsCompetentEnough(booking);
+                    if (sskOK)
+                        return ssk;
                 }
             }
             return availableSSK;
+        }
+        public bool CheckBookingForSelectedSSK(Booking booking, SSK ssk)
+        {
+            bool sskOK = false;
+
+            if (!ssk.IsItBooked(booking, ssk.ScheduledDays))
+            {
+                sskOK = ssk.IsCompetentEnough(booking);
+                if (sskOK)
+                    return sskOK;
+            }
+            return sskOK;
         }
         //public void RemoveSSK(string HSAid)
         //{

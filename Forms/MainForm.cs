@@ -1,4 +1,5 @@
-﻿using BokningsProgram.Managers;
+﻿using BokningsProgram.Forms;
+using BokningsProgram.Managers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +76,8 @@ namespace BokningsProgram
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
-            _cm.SuggestBooking(newBooking);
+            SSK ssk = lbAvailableSSK.SelectedItem as SSK;
+            _cm.SuggestBooking(newBooking, ssk);
 
             starttime = 15;
             duration = 1;
@@ -83,14 +85,14 @@ namespace BokningsProgram
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking);
+            _cm.SuggestBooking(newBooking, ssk);
 
             starttime = 14;
             duration = 2;
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking);
+            _cm.SuggestBooking(newBooking, ssk);
 
             UpdateBookingsSSK();
         }
@@ -226,7 +228,7 @@ namespace BokningsProgram
 
             RoomCategory roomRequired = GetRequiredRoom();
             Booking newBooking = new Booking(start, end, strOut, roomRequired, cbEntireDayBooking.Checked);
-            _cm.SuggestBooking(newBooking);
+            _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
         }
@@ -388,9 +390,11 @@ namespace BokningsProgram
                 DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
                 DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
 
-                var ssk = _cm.SskManager.ListOfSSK[index];
+                bool ok = _cm.ChangeBooking(index, startOfBooking, endOfBooking);
+                if (ok)
+                    UpdateChartDependingOnTab();
 
-                MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
+                //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
             }
         }
     }

@@ -40,7 +40,12 @@ namespace BokningsProgram
                 _dagar.Add(new DailySchedule(startOfDay, endOfDay));
                 date = date.AddDays(1);
             }
-			//Load excelsheet and create new DailySchedules for each day with an end and start time
-		}
-	}
+            //Load excelsheet and create new DailySchedules for each day with an end and start time
+        }
+        public DailySchedule GetDailyScheduleOfBooking(Booking booking)
+        {
+            DailySchedule ds = _dagar.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(booking.StartTime.DayOfYear));
+            return ds;
+        }
+    }
 }
