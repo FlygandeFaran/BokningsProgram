@@ -16,24 +16,17 @@ namespace BokningsProgram
         private double _endOfDay;
         private string filename;
         private List<SSK> _listOfSSK;
-        private RoomManager _roomManager;
 
         public List<SSK> ListOfSSK
         {
             get { return _listOfSSK; }
         }
-        public RoomManager RoomManager
-        {
-            get { return _roomManager; }
-        }
 
         public SSKmanager()
         {
             _listOfSSK = new List<SSK>();
-            _roomManager = new RoomManager();
             filename = "SSK.xml"; //Updatera efter dagvårdens IT-miljö
 
-            DateTime today = DateTime.Now;
             _endOfDay = 16;
         }
         public void ImportFromXml()

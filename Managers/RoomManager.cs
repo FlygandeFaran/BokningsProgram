@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml.Serialization;
 
 namespace BokningsProgram
 {
     public class RoomManager
     {
+        private string filename;
         private double _endOfDay;
         private List<Room> _listOfRooms;
         //private List<Room> _singleRoomList;
@@ -20,62 +23,14 @@ namespace BokningsProgram
         public List<Room> ListOfRooms
         {
             get { return _listOfRooms; }
-            set { _listOfRooms = value; }
         }
 
         public RoomManager()
         {
-            DateTime today = DateTime.Now;
             _endOfDay = 16; //Dagen slutar kl 16 för rummen
-
             _listOfRooms = new List<Room>();
-
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4));
-            ListOfRooms.Add(new Room(RoomCategory.Quad, 7));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 8));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 9));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 12));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 13));
-            ListOfRooms.Add(new Room(RoomCategory.Dubbel, 14));
-
-            ListOfRooms.Add(new Room(RoomCategory.Enkel, 16));
-            ListOfRooms.Add(new Room(RoomCategory.Enkel, 17));
-            ListOfRooms.Add(new Room(RoomCategory.Enkel, 23));
-
-            ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1));
-            ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
-
-            //CreateListsOfRoomTypes();
+            filename = "Rooms.xml"; //Updatera efter dagvårdens IT-miljö
         }
-
-        //private void CreateListsOfRoomTypes()
-        //{
-        //    _singleRoomList = new List<Room>();
-        //    _doubleRoomList = new List<Room>();
-        //    _quadRoomList = new List<Room>();
-        //    _piccRoomList = new List<Room>();
-
-        //    // Populate the lists
-        //    foreach (Room room in ListOfRooms)
-        //    {
-        //        switch (room.RoomType)
-        //        {
-        //            case RoomCategory.Enkel:
-        //                _singleRoomList.Add(room);
-        //                break;
-        //            case RoomCategory.Dubbel:
-        //                _doubleRoomList.Add(room);
-        //                break;
-        //            case RoomCategory.PicclineIn:
-        //                _piccRoomList.Add(room);
-        //                break;
-        //            case RoomCategory.Quad:
-        //                _quadRoomList.Add(room);
-        //                break;
-        //        }
-        //    }
-        //}
         public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
         {
             bool ok = true;
@@ -180,6 +135,22 @@ namespace BokningsProgram
                     break;
             }
             return booking;
+        }
+        public void ImportFromXml()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Room>));
+            using (FileStream fileStream = new FileStream(filename, FileMode.Open))
+            {
+                _listOfRooms = (List<Room>)serializer.Deserialize(fileStream);
+            }
+        }
+        public void ExportToXml()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Room>));
+            using (TextWriter writer = new StreamWriter(filename))
+            {
+                serializer.Serialize(writer, _listOfRooms);
+            }
         }
     }
 }

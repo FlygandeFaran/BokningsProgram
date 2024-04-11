@@ -103,15 +103,13 @@ namespace BokningsProgram
             //ca.AxisX.ScaleView.Size = 5;
             DateTime date = dtpScheduleDay.Value;
             //Y axis settings
-            DateTime StartOfDay = date.AddHours(6 - date.Hour);
-            StartOfDay = StartOfDay.AddMinutes(-date.Minute);
-            DateTime EndOfDay = date.AddHours(17 - date.Hour);
-            EndOfDay = EndOfDay.AddMinutes(-date.Minute);
+            DateTime startOfDay = new DateTime(date.Year, date.Month, date.Day, 6, 0, 0);
+            DateTime endOfDay = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0);
             ca.AxisY.LabelStyle.Format = "HH:mm";
             ca.AxisY.IntervalType = DateTimeIntervalType.Minutes;
             ca.AxisY.Interval = 30;
-            ca.AxisY.Maximum = EndOfDay.ToOADate();
-            ca.AxisY.Minimum = StartOfDay.ToOADate();
+            ca.AxisY.Maximum = endOfDay.ToOADate();
+            ca.AxisY.Minimum = startOfDay.ToOADate();
 
 
             //Behövs för att skapa rader för varje SSK i bilden
@@ -173,7 +171,7 @@ namespace BokningsProgram
         private void addTaskRoom(Series s, int index, Booking booking)
         {
             int pt = s.Points.AddXY(index, booking.StartTime, booking.EndTime);
-            s.Points[pt].AxisLabel = _cm.SskManager.RoomManager.ListOfRooms[index].RoomNumber.ToString();
+            s.Points[pt].AxisLabel = _cm.RoomManager.ListOfRooms[index].RoomNumber.ToString();
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
         }
@@ -185,9 +183,10 @@ namespace BokningsProgram
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 SSK tempSSK = _cm.SskManager.ListOfSSK[i];
-                for (int j = 0; j < tempSSK.Schedule.ListOfBookings.Count; j++)
+                DailySchedule scheduleOfTheDay = tempSSK.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
+                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
                 {
-                    Booking tempBooking = tempSSK.Schedule.ListOfBookings[j];
+                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
                     addTaskSSK(serie, i, tempBooking);
                 }
             }
@@ -200,9 +199,10 @@ namespace BokningsProgram
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Room tempRoom = _cm.RoomManager.ListOfRooms[i];
-                for (int j = 0; j < tempRoom.Schedule.ListOfBookings.Count; j++)
+                DailySchedule scheduleOfTheDay = tempRoom.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
+                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
                 {
-                    Booking tempBooking = tempRoom.Schedule.ListOfBookings[j];
+                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
                     addTaskRoom(serie, i, tempBooking);
                 }
             }
@@ -370,13 +370,13 @@ namespace BokningsProgram
 
             if (result.ChartElementType == ChartElementType.DataPoint)
             {
-                double X = result.Series.Points[result.PointIndex].XValue;
-                double Y = result.Series.Points[result.PointIndex].YValues[0];
+                int index = (int)result.Series.Points[result.PointIndex].XValue;
+                DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
+                DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
 
-                var ssk = _cm.SskManager.ListOfSSK[(int)X];
-                var klockslag = DateTime.FromOADate(Y);
+                var ssk = _cm.SskManager.ListOfSSK[index];
 
-                MessageBox.Show(ssk.Name + " " + klockslag.ToString());
+                MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
             }
         }
     }

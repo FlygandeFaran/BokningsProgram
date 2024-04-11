@@ -33,13 +33,34 @@ namespace BokningsProgram.Managers
             //_endOfDay = new DateTime(today.Year, today.Month, today.Day, 16, 0, 0);
 
             InitializeStaff();
+            InitializeRooms();
         }
         private void InitializeStaff()
         {
             _sskManager.ImportFromXml();
-            //_sskm.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
-            //_sskm.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
+            //_sskManager.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Pickline));
+            //_sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
             //_sskManager.ExportToXml();
+        }
+        private void InitializeRooms()
+        {
+            _roomManager.ImportFromXml();
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Quad, 7));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 8));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 9));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 12));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 13));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 14));
+
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Enkel, 16));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Enkel, 17));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.Enkel, 23));
+
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1));
+            //_roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2));
+            //_roomManager.ExportToXml();
         }
 
         public void SuggestBooking(Booking booking)

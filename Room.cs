@@ -8,15 +8,21 @@ namespace BokningsProgram
 {
     public class Room
     {
+        private ScheduledDays _scheduledDays;
         private DailySchedule _schedule;
         private RoomCategory _roomType;
         private int _roomNumber;
 
-        public DailySchedule Schedule
+        public ScheduledDays ScheduledDays
         {
-            get { return _schedule; }
-            set { _schedule = value; }
+            get { return _scheduledDays; }
+            set { _scheduledDays = value; }
         }
+        //public DailySchedule Schedule
+        //{
+        //    get { return _schedule; }
+        //    set { _schedule = value; }
+        //}
         public RoomCategory RoomType
         {
             get { return _roomType; }
@@ -32,7 +38,7 @@ namespace BokningsProgram
         {
             _roomType = roomType;
             _roomNumber = roomNumber;
-            _schedule = new DailySchedule();
+            _scheduledDays = new ScheduledDays(_roomNumber);
         }
         public Room() { }
         public void AddBooking(Booking booking)
@@ -41,7 +47,7 @@ namespace BokningsProgram
         }
         public bool IsItBooked(Booking newBooking) //bra engelska...
         {
-
+            _schedule = _scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == newBooking.StartTime.DayOfYear);
             int NoOfBookings = _schedule.ListOfBookings.Count;
             if (NoOfBookings == 0) //Om det inte finns någon bokning är det garanterat ledigt
                 return false;

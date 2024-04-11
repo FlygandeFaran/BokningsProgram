@@ -10,17 +10,23 @@ namespace BokningsProgram
 {
     public class SSK
     {
+        private ScheduledDays _scheduledDays;
         private DailySchedule _schedule;
 		private string _name;
 		private string _HSAid;
         private KompetensLevel _kompetens;
         private bool _isBooked;
 
-        public DailySchedule Schedule
-		{
-			get { return _schedule; }
-			set { _schedule = value; }
-		}
+        public ScheduledDays ScheduledDays
+        {
+            get { return _scheduledDays; }
+            set { _scheduledDays = value; }
+        }
+  //      public DailySchedule Schedule
+		//{
+		//	get { return _schedule; }
+		//	set { _schedule = value; }
+		//}
 		public string HSAID
 		{
 			get { return _HSAid; }
@@ -42,12 +48,12 @@ namespace BokningsProgram
 		//	get { return _isBooked; }
         //}
         public SSK() { }
-        public SSK(string name, string HSAid, KompetensLevel kompetens)
+        public SSK(string name, string hsaID, KompetensLevel kompetens)
         {
 			_name = name;
-			_HSAid = HSAid;
+			_HSAid = hsaID;
 			_kompetens = kompetens;
-			_schedule = new DailySchedule();
+            _scheduledDays = new ScheduledDays(_HSAid);
 		}
         public bool IsCompetentEnough(Booking booking)
         {
@@ -67,6 +73,7 @@ namespace BokningsProgram
         }
 		public bool IsTheyBooked(Booking newBooking) //bra engelska...
         {
+            _schedule = _scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == newBooking.StartTime.DayOfYear);
             int NoOfBookings = _schedule.ListOfBookings.Count;
             if (NoOfBookings == 0) //Om det inte finns någon bokning är det garanterat ledigt
                 return false;
@@ -138,5 +145,6 @@ namespace BokningsProgram
 			string strOut = $"{_name}, {_HSAid}, {_kompetens}";//Ta bort kompetens när QA är klar
 			return strOut;
         }
+
     }
 }
