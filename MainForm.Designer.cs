@@ -43,6 +43,9 @@
             this.dtpStartDate = new System.Windows.Forms.DateTimePicker();
             this.lblEndDate = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.cbPiccline = new System.Windows.Forms.CheckBox();
             this.cbNystart = new System.Windows.Forms.CheckBox();
             this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
@@ -58,12 +61,10 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.rbChartSSK = new System.Windows.Forms.RadioButton();
             this.rbChartRoom = new System.Windows.Forms.RadioButton();
-            this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.dtpScheduleDay = new System.Windows.Forms.DateTimePicker();
             this.btnNextDay = new System.Windows.Forms.Button();
             this.btnPrevDay = new System.Windows.Forms.Button();
+            this.lblWarning = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -202,6 +203,33 @@
             this.groupBox4.TabIndex = 24;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Behandlingstid";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "Starttid";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 72);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Varaktighet (h)";
+            // 
+            // dtpStartTime
+            // 
+            this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpStartTime.Location = new System.Drawing.Point(6, 36);
+            this.dtpStartTime.Name = "dtpStartTime";
+            this.dtpStartTime.Size = new System.Drawing.Size(50, 20);
+            this.dtpStartTime.TabIndex = 25;
+            this.dtpStartTime.ValueChanged += new System.EventHandler(this.dtpStartTime_ValueChanged);
             // 
             // cbPiccline
             // 
@@ -365,33 +393,6 @@
             this.rbChartRoom.UseVisualStyleBackColor = true;
             this.rbChartRoom.CheckedChanged += new System.EventHandler(this.rbChartRoom_CheckedChanged);
             // 
-            // dtpStartTime
-            // 
-            this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpStartTime.Location = new System.Drawing.Point(6, 36);
-            this.dtpStartTime.Name = "dtpStartTime";
-            this.dtpStartTime.Size = new System.Drawing.Size(50, 20);
-            this.dtpStartTime.TabIndex = 25;
-            this.dtpStartTime.ValueChanged += new System.EventHandler(this.dtpStartTime_ValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 72);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
-            this.label2.TabIndex = 26;
-            this.label2.Text = "Varaktighet (h)";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 13);
-            this.label1.TabIndex = 27;
-            this.label1.Text = "Starttid";
-            // 
             // dtpScheduleDay
             // 
             this.dtpScheduleDay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -421,11 +422,22 @@
             this.btnPrevDay.UseVisualStyleBackColor = true;
             this.btnPrevDay.Click += new System.EventHandler(this.btnPrevDay_Click);
             // 
+            // lblWarning
+            // 
+            this.lblWarning.AutoSize = true;
+            this.lblWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblWarning.Location = new System.Drawing.Point(596, 135);
+            this.lblWarning.Name = "lblWarning";
+            this.lblWarning.Size = new System.Drawing.Size(65, 13);
+            this.lblWarning.TabIndex = 30;
+            this.lblWarning.Text = "Varningstext";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 648);
+            this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.btnPrevDay);
             this.Controls.Add(this.btnNextDay);
             this.Controls.Add(this.dtpScheduleDay);
@@ -491,6 +503,7 @@
         private System.Windows.Forms.DateTimePicker dtpScheduleDay;
         private System.Windows.Forms.Button btnNextDay;
         private System.Windows.Forms.Button btnPrevDay;
+        private System.Windows.Forms.Label lblWarning;
     }
 }
 

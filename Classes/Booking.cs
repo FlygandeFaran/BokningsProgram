@@ -10,12 +10,18 @@ namespace BokningsProgram
 {
     public class Booking
     {
+        private bool _fullDay;
         private RoomCategory _roomRequired;
         private Color _taskColor;
         private string _description;
         private DateTime _startTime;
         private DateTime _endTime;
 
+        public bool FullDay
+        {
+            get { return _fullDay; }
+            set { _fullDay = value; }
+        }
         public RoomCategory RoomRequired
         {
             get { return _roomRequired; }
@@ -23,7 +29,7 @@ namespace BokningsProgram
         }
         public Color TaskColor
         {
-            get { return _taskColor; }
+            get { SetColorToTask(); return _taskColor; }
             set { _taskColor = value; }
         }
         public string Description
@@ -45,8 +51,9 @@ namespace BokningsProgram
         //public Room bookingRoom { get; set; }
 
         public Booking() { }
-        public Booking(DateTime start, DateTime end, string description, RoomCategory roomRequired)
+        public Booking(DateTime start, DateTime end, string description, RoomCategory roomRequired, bool fullDay)
         {
+            _fullDay = fullDay;
             _roomRequired = roomRequired;
             _startTime = start;
             _endTime = end;
@@ -69,8 +76,14 @@ namespace BokningsProgram
                 case "Cytostatika":
                     _taskColor = Color.LightCyan;
                     break;
-                default:
+                case "Ledig":
+                    _taskColor = Color.LightGray;
+                    break;
+                case "Lunch":
                     _taskColor = Color.LightCoral;
+                    break;
+                default:
+                    _taskColor = Color.LightPink;
                     break;
             }
         }

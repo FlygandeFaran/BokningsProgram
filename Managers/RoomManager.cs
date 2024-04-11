@@ -65,7 +65,7 @@ namespace BokningsProgram
             while (!roomOK)
             {
                 tempRoom = _listOfRooms[j];
-                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking)) //fortsätt här
+                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking, tempRoom.ScheduledDays)) //fortsätt här
                 {
                     //tempRoom.AddBooking(booking); //bokas redan i SSKmanager
                     roomOK = true;

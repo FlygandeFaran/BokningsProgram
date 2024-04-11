@@ -35,11 +35,11 @@ namespace BokningsProgram
 			DateTime date = DateTime.Now;
             for (int i = 0; i < 10; i++)
             {
-				date = date.AddDays(i);
-                DateTime startOfDay = new DateTime(date.Year, date.Month, date.Day, 6, 0, 0);
-                DateTime endOfDay = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0);
+                DateTime startOfDay = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0);
+                DateTime endOfDay = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
                 _dagar.Add(new DailySchedule(startOfDay, endOfDay));
-			}
+                date = date.AddDays(1);
+            }
 			//Load excelsheet and create new DailySchedules for each day with an end and start time
 		}
 	}

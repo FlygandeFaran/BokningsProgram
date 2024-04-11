@@ -27,6 +27,8 @@ namespace BokningsProgram
         }
         private void InitializeGUI()
         {
+            lblWarning.Text = "";
+
             dtpBehTid.CustomFormat = "HH:mm";
             dtpBehTid.ShowUpDown = true;
             dtpStartTime.CustomFormat = "HH:mm";
@@ -65,14 +67,14 @@ namespace BokningsProgram
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
-            Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
+            Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
 
             starttime = 10;
             duration = 1;
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
-            newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn);
+            newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
             _cm.SuggestBooking(newBooking);
 
             starttime = 15;
@@ -80,14 +82,14 @@ namespace BokningsProgram
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
-            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel);
+            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
             _cm.SuggestBooking(newBooking);
 
             starttime = 14;
             duration = 2;
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel);
+            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
             _cm.SuggestBooking(newBooking);
 
             UpdateBookingsSSK();
@@ -128,7 +130,7 @@ namespace BokningsProgram
             DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
-                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
+                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
                 addTaskRoom(serie, i, newBooking);
             }
         }
@@ -144,7 +146,7 @@ namespace BokningsProgram
             DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
-                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel);
+                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
                 addTaskSSK(serie, i, newBooking);
             }
         }
@@ -184,10 +186,18 @@ namespace BokningsProgram
             {
                 SSK tempSSK = _cm.SskManager.ListOfSSK[i];
                 DailySchedule scheduleOfTheDay = tempSSK.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
+                if (scheduleOfTheDay is DailySchedule)
                 {
-                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
-                    addTaskSSK(serie, i, tempBooking);
+                    lblWarning.Text = "";
+                    for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
+                    {
+                        Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
+                        addTaskSSK(serie, i, tempBooking);
+                    }
+                }
+                else
+                {
+                    lblWarning.Text = "Finns inget schema för den här dagen";
                 }
             }
         }
@@ -215,15 +225,18 @@ namespace BokningsProgram
             string strOut = cbDescription.Text;
 
             RoomCategory roomRequired = GetRequiredRoom();
-
-            Booking newBooking = new Booking(start, end, strOut, roomRequired);
+            Booking newBooking = new Booking(start, end, strOut, roomRequired, cbEntireDayBooking.Checked);
             _cm.SuggestBooking(newBooking);
+            UpdateChartDependingOnTab();
+            //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
+        }
 
+        private void UpdateChartDependingOnTab()
+        {
             if (rbChartSSK.Checked)
                 UpdateBookingsSSK();
             else
                 UpdateBookingsRoom();
-            //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
         }
 
         private void GetBookingTime(out DateTime start, out DateTime end)
@@ -347,6 +360,7 @@ namespace BokningsProgram
         private void dtpScheduleDay_ValueChanged(object sender, EventArgs e)
         {
             UpdateChart();
+            UpdateChartDependingOnTab();
         }
 
         // Round a DateTime value to the nearest 30 minutes

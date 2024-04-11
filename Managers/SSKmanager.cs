@@ -80,7 +80,7 @@ namespace BokningsProgram
 
             foreach (SSK ssk in _listOfSSK)
             {
-                if (!ssk.IsTheyBooked(booking))
+                if (!ssk.IsItBooked(booking, ssk.ScheduledDays))
                 {
                     if (booking.RoomRequired == RoomCategory.PicclineIn && ssk.Kompetens == KompetensLevel.Pickline)
                     {
