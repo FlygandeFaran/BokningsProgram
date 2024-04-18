@@ -79,21 +79,6 @@ namespace BokningsProgram
             }
             return sskOK;
         }
-
-        //private bool SetFirstTrackToFull()
-        //{
-        //    bool ok = false;
-        //    foreach (SSK ssk in _listOfSSK)
-        //    {
-        //        if (ssk.Kompetens == KompetensLevel.Piccline && !ssk.IsFirstTrackFull)
-        //        {
-        //            ssk.IsFirstTrackFull = true;
-        //            ok = true;
-        //        }
-        //    }
-        //    return ok;
-        //}
-
         public void AddBooking(Booking booking, SSK newSSK)
         {
             _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking);//bokar SSK
@@ -125,6 +110,8 @@ namespace BokningsProgram
                         }
                     }
                 }
+                if (sskOK)
+                    break;
             }
 
             return availableSSK;

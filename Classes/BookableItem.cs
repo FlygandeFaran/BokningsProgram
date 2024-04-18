@@ -9,8 +9,18 @@ namespace BokningsProgram
     public class BookableItem
     {
         private DailySchedule _schedule;
+        private bool _isFullDayBooked;
 
-        public BookableItem() { }
+        public bool IsFullDayBooked
+        {
+            get { return _isFullDayBooked; }
+            set { _isFullDayBooked = value; }
+        }
+
+        public BookableItem()
+        {
+
+        }
 
         public bool IsItBooked(Booking newBooking, ScheduledDays scheduledDays)
         {
@@ -23,7 +33,7 @@ namespace BokningsProgram
             bool isItBooked = false;
             int i = 0;
 
-            if (newBooking.FullDay)
+            if (newBooking.FullDay && !IsFullDayBooked)
                 isItBooked = !_schedule.CheckAvailabilityForFullDay();
             else
             {
@@ -46,6 +56,10 @@ namespace BokningsProgram
         }
         public void AddBooking(Booking booking)
         {
+            if (booking.FullDay)
+            {
+                IsFullDayBooked = true;
+            }
             _schedule.AddBooking(booking);
         }
     }

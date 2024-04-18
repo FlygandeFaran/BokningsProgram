@@ -36,13 +36,14 @@ namespace BokningsProgram
 
             Room bookedRoom = _listOfRooms.FirstOrDefault(room =>
                                                             room.RoomType == booking.RoomRequired &&
-                                                            room.ScheduledDays.Days.Any(ds =>
+                                                            room.ScheduleForBeds.Any(s => s.Days.Any(ds =>
                                                             ds.ListOfBookings.Any(booked =>
                                                             booked.StartTime == booking.StartTime &&
-                                                            booked.EndTime == booking.EndTime)));
+                                                            booked.EndTime == booking.EndTime &&
+                                                            booked.Description == booking.Description))));
             return bookedRoom;
         }
-        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
+        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom, bool secondTrack)
         {
             bool ok = true;
             newBooking = booking;
@@ -51,37 +52,51 @@ namespace BokningsProgram
 
             while (ok)
             {
-                availableRoom = CheckBookingForRoom(newBooking, out roomOK);
+                availableRoom = CheckBookingForRoom(newBooking, out roomOK, secondTrack);
+                if (availableRoom is Room)
+                {
+                    if (roomOK)
+                        ok = false;
+                    else
+                        newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                if (roomOK)
-                    ok = false;
+                    if (booking.EndTime.Hour > _endOfDay)
+                    {
+                        //if (!secondTrack)
+                        //{
+                        //MessageBox.Show("Hittade ingen ledig tid för bokningen");
+                        break;
+                        //}
+                        //newBooking = booking; // börjar om igen med ursprungliga bokningen
+                    }
+                }
                 else
                     newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-
-                if (booking.EndTime.Hour > _endOfDay)
-                {
-                    MessageBox.Show("Hittade ingen ledig tid för bokningen");
-                    break;
-                }
             }
 
             return roomOK;
         }
-        public Room CheckBookingForRoom(Booking booking, out bool roomOK)
+        public Room CheckBookingForRoom(Booking booking, out bool roomOK, bool secondTrack)
         {
             roomOK = false;
             int j = 0;
+            ScheduledDays bed = null;
             RoomCategory originalRoomCategory = booking.RoomRequired;
             Room tempRoom = _listOfRooms[j];
             while (!roomOK)
             {
                 tempRoom = _listOfRooms[j];
-                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking, tempRoom.ScheduledDays)) //fortsätt här
+                if (secondTrack && tempRoom.RoomType == RoomCategory.Dubbel)
+                    bed = tempRoom.ScheduleForBeds[1];
+                else
+                    bed = tempRoom.ScheduleForBeds[0];
+                
+                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking, bed)) //fortsätt här
                 {
-                    //tempRoom.AddBooking(booking); //bokas redan i SSKmanager
                     roomOK = true;
                     return tempRoom;
                 }
+                
                 j++;
 
                 if (j == _listOfRooms.Count && booking.RoomRequired == RoomCategory.PicclineOm)

@@ -10,6 +10,8 @@ namespace BokningsProgram
     public enum KompetensLevel
     {
         None = 0,
-        Pickline = 1
+        Tablett = 1,
+        Telefon = 2,
+        Piccline = 3
     }
 }

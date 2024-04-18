@@ -47,5 +47,10 @@ namespace BokningsProgram.Forms
             Ssk = lbAvailableSSK.SelectedItem as SSK;
             Room = lbAvailableRoom.SelectedItem as Room;
         }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

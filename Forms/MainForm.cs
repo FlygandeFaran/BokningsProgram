@@ -41,7 +41,9 @@ namespace BokningsProgram
             dtpStartTime.Value = behTid;
             CreateNewSeries();
 
-            //cbDescription.Items.Add("Piccline");
+            cbDescription.Items.Add("Piccline");
+            cbDescription.Items.Add("Telefon");
+            cbDescription.Items.Add("Tablett");
             cbDescription.Items.Add("Cytostatika");
             cbDescription.Items.Add("Vanlig");
 
@@ -153,22 +155,6 @@ namespace BokningsProgram
                 addTaskSSK(serieSecondTrack, i, newBooking);
             }
         }
-
-        //private void UpdateSSKaxis()
-        //{
-        //    UpdateChart();
-        //    var serie = chart1.Series[0];
-        //    int starttime = 2;
-        //    int duration = 1;
-        //    DateTime date = dtpScheduleDay.Value;
-        //    DateTime start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
-        //    DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
-        //    for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
-        //    {
-        //        Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
-        //        addTaskSSK(serie, i, newBooking);
-        //    }
-        //}
         private void CreateNewSeries()
         {
             Series serie = new Series
@@ -182,7 +168,6 @@ namespace BokningsProgram
             };
             chart1.Series.Add(serie);
         }
-
         private void addTaskSSK(Series s, int who, Booking booking)
         {
             int pt = s.Points.AddXY(who, booking.StartTime, booking.EndTime);
@@ -314,7 +299,7 @@ namespace BokningsProgram
 
             if (cbNystart.Checked)
                 roomRequired = RoomCategory.Enkel;
-            else if (cbPiccline.Checked)
+            else if (cbDescription.Text.Equals("Piccline"))
                 roomRequired = RoomCategory.PicclineIn;
             else
                 roomRequired = RoomCategory.Dubbel;
@@ -381,19 +366,6 @@ namespace BokningsProgram
             }
         }
 
-        private void cbPiccline_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbPiccline.Checked)
-            {
-                cbDescription.Text = "Piccline";
-                cbDescription.Enabled = false;
-            }
-            else 
-            { 
-                cbDescription.Enabled = true; 
-            }
-        }
-
         private void btnPrevDay_Click(object sender, EventArgs e)
         {
             dtpScheduleDay.Value = dtpScheduleDay.Value.AddDays(-1);
@@ -442,6 +414,14 @@ namespace BokningsProgram
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
             }
+        }
+
+        private void cbDescription_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDescription.Text.Equals("Tablett") || cbDescription.Text.Equals("Telefon"))
+                cbEntireDayBooking.Checked = true;
+            else 
+                cbEntireDayBooking.Checked = false;
         }
     }
 }

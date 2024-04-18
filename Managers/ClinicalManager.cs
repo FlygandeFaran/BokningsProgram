@@ -50,9 +50,13 @@ namespace BokningsProgram.Managers
 
         private void exportStaff()
         {
-            _sskManager.ListOfSSK.Add(new SSK("Erik", "34VB", KompetensLevel.Piccline));
-            _sskManager.ListOfSSK.Add(new SSK("Maiar", "56gh", KompetensLevel.Piccline));
-            _sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", KompetensLevel.None));
+            List<KompetensLevel> kompetensLevelsErik = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevelsMaiar = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett };
+            List<KompetensLevel> kompetensLevelsLinnea = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett, KompetensLevel.Telefon };
+
+            _sskManager.ListOfSSK.Add(new SSK("Erik", "34VB", kompetensLevelsErik));
+            _sskManager.ListOfSSK.Add(new SSK("Maiar", "56gh", kompetensLevelsMaiar));
+            _sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", kompetensLevelsLinnea));
             _sskManager.ExportToXml();
         }
 
@@ -87,25 +91,24 @@ namespace BokningsProgram.Managers
             bool ok = false;
             var selectedSSK = _sskManager.ListOfSSK[index];
 
-            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, selectedSSK);
-
-            Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
+            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedSSK);
 
             if (selectedBooking is Booking)
             {
-                ChangeBooking changeBooking = new ChangeBooking(selectedBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
+                Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
+                Booking newBooking = new Booking();
+                newBooking.CopyBooking(selectedBooking);
+                ChangeBooking changeBooking = new ChangeBooking(newBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
                 DialogResult dlgResult = changeBooking.ShowDialog();
                 if (dlgResult == DialogResult.OK)
                 {
-                    Booking newBooking = new Booking();
-                    newBooking.CopyBooking(selectedBooking);
-                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBookingFromSSK(selectedBooking);
-                    ds.RemoveBooking(newBooking);
-                    ds = selectedRoom.GetDailyScheduleOfBookingFromRoom(selectedBooking);
-                    ds.RemoveBooking(newBooking);
-
                     SuggestBooking(newBooking, changeBooking.Ssk);
-                    
+
+                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBookingFromSSK(selectedBooking);
+                    ds.RemoveBooking(selectedBooking);
+                    ds = selectedRoom.GetDailyScheduleOfBookingFromRoom(selectedBooking);
+                    ds.RemoveBooking(selectedBooking);
+
                     ok = true;
                 }
                 else if (dlgResult == DialogResult.Abort)
@@ -144,6 +147,7 @@ namespace BokningsProgram.Managers
                 MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
 
         }
+        //Föreslår en bokning med medföljande ssk, om inte går körs vanliga suggestbooking
         public void SuggestBooking(Booking booking, SSK ssk)
         {
             bool roomOK = false;
@@ -153,7 +157,7 @@ namespace BokningsProgram.Managers
                 bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk);
                 if (sskOK)
                 {
-                    if (!_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false))
+                    if (_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false))
                         roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
                     if (roomOK)
                     {

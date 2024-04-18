@@ -52,13 +52,21 @@ namespace BokningsProgram
                 string HSAid = txtHSAid.Text;
                 bool nameOK = CheckText(name);
                 bool HSAidOK = CheckText(HSAid);
+
                 if (nameOK && HSAidOK)
                 {
                     SSK newSSK;
-                    if (rbHighKompetens.Checked)
-                        newSSK = new SSK(name, HSAid, KompetensLevel.Pickline);
-                    else
-                        newSSK = new SSK(name, HSAid, KompetensLevel.None);
+                    List<KompetensLevel> kompetenser = new List<KompetensLevel>();
+                    if (clbKompetenser.GetItemChecked(0))
+                        kompetenser.Add(KompetensLevel.None);
+                    if (clbKompetenser.GetItemChecked(1))
+                        kompetenser.Add(KompetensLevel.Tablett);
+                    if (clbKompetenser.GetItemChecked(2))
+                        kompetenser.Add(KompetensLevel.Telefon);
+                    if (clbKompetenser.GetItemChecked(3))
+                        kompetenser.Add(KompetensLevel.Piccline);
+                    
+                    newSSK = new SSK(name, HSAid, kompetenser);
 
                     _sskm.ListOfSSK.Add(newSSK);
                 }
@@ -81,7 +89,16 @@ namespace BokningsProgram
                 bool HSAidOK = CheckText(HSAid);
                 if (nameOK && HSAidOK)
                 {
-                    SSK newSSK = new SSK(name, HSAid, KompetensLevel.Pickline);
+                    List<KompetensLevel> kompetenser = new List<KompetensLevel>();
+                    if (clbKompetenser.GetItemChecked(0))
+                        kompetenser.Add(KompetensLevel.None);
+                    if (clbKompetenser.GetItemChecked(1))
+                        kompetenser.Add(KompetensLevel.Tablett);
+                    if (clbKompetenser.GetItemChecked(2))
+                        kompetenser.Add(KompetensLevel.Telefon);
+                    if (clbKompetenser.GetItemChecked(3))
+                        kompetenser.Add(KompetensLevel.Piccline);
+                    SSK newSSK = new SSK(name, HSAid, kompetenser);
                     _sskm.ListOfSSK.RemoveAt(n);
                     _sskm.ListOfSSK.Insert(n, newSSK);
                 }
@@ -118,13 +135,22 @@ namespace BokningsProgram
                 {
                     if (tempSSKmanager.ListOfSSK.ElementAt(i).HSAID != _sskm.ListOfSSK.ElementAt(i).HSAID ||
                         tempSSKmanager.ListOfSSK.ElementAt(i).Name != _sskm.ListOfSSK.ElementAt(i).Name ||
-                        tempSSKmanager.ListOfSSK.ElementAt(i).Kompetens != _sskm.ListOfSSK.ElementAt(i).Kompetens)
+                        HaveIdenticalKompetensList(_sskm.ListOfSSK.ElementAt(i), tempSSKmanager.ListOfSSK.ElementAt(i)))
                     {
                         ok = false;
                     }
                 }
             }
             return ok;
+        }
+        private bool HaveIdenticalKompetensList(SSK original, SSK other)
+        {
+            for (int i = 0; i < other.Kompetenser.Count; i++)
+            {
+                if (original.Kompetenser[i] != other.Kompetenser[i])
+                    return false;
+            }
+            return true;
         }
         private void lbCurrentSSK_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -133,18 +159,25 @@ namespace BokningsProgram
             txtName.Text = selectedSSK.Name;
             txtHSAid.Text = selectedSSK.HSAID;
 
-            switch (selectedSSK.Kompetens)
+            foreach (var kompetens in selectedSSK.Kompetenser)
             {
-                case KompetensLevel.None:
-                    rbLowKompetens.Checked = true;
-                    rbHighKompetens.Checked = false;
-                    break;
-                case KompetensLevel.Pickline:
-                    rbHighKompetens.Checked = true;
-                    rbLowKompetens.Checked = false;
-                    break;
-                default:
-                    break;
+                switch (kompetens)
+                {
+                    case KompetensLevel.None:
+                        clbKompetenser.SetItemChecked(0, true);
+                        break;
+                    case KompetensLevel.Tablett:
+                        clbKompetenser.SetItemChecked(1, true);
+                        break;
+                    case KompetensLevel.Telefon:
+                        clbKompetenser.SetItemChecked(2, true);
+                        break;
+                    case KompetensLevel.Piccline:
+                        clbKompetenser.SetItemChecked(3, true);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

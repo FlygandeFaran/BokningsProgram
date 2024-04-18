@@ -16,7 +16,13 @@ namespace BokningsProgram
         private string _description;
         private DateTime _startTime;
         private DateTime _endTime;
+        private Color _taskTextColor;
 
+        public Color TaskTextColor
+        {
+            get { return _taskTextColor; }
+            set { _taskTextColor = value; }
+        }
         public bool FullDay
         {
             get { return _fullDay; }
@@ -60,15 +66,15 @@ namespace BokningsProgram
             _description = description;
             SetColorToTask();
         }
-        public Booking CopyBooking(Booking booking)
+        public void CopyBooking(Booking booking)
         {
-            booking.RoomRequired = _roomRequired;
-            booking.StartTime = _startTime;
-            booking.EndTime = _endTime;
-            booking.Description = _description;
-            booking.FullDay = _fullDay;
-            booking.TaskColor = _taskColor;
-            return booking;
+            _roomRequired = booking.RoomRequired;
+            _endTime = booking.EndTime;
+            _startTime = booking.StartTime;
+            _description = booking.Description;
+            _fullDay = booking.FullDay;
+            _taskColor = booking.TaskColor;
+            _taskTextColor = booking.TaskTextColor;
         }
         public Booking GenerateNewBookingSuggestion(Booking booking)
         {
@@ -78,6 +84,7 @@ namespace BokningsProgram
         }
         private void SetColorToTask()
         {
+            _taskTextColor = Color.Black;
             switch (_description)
             {
                 case "Piccline":
@@ -88,9 +95,11 @@ namespace BokningsProgram
                     break;
                 case "Stängt":
                     _taskColor = Color.LightGray;
+                    _taskTextColor = _taskColor;
                     break;
                 case "Lunch":
                     _taskColor = Color.LightCoral;
+                    _taskTextColor = _taskColor;
                     break;
                 default:
                     _taskColor = Color.LightPink;

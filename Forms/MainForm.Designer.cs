@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -46,7 +46,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
-            this.cbPiccline = new System.Windows.Forms.CheckBox();
             this.cbNystart = new System.Windows.Forms.CheckBox();
             this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -77,7 +76,7 @@
             // 
             // btnExecute
             // 
-            this.btnExecute.Location = new System.Drawing.Point(487, 128);
+            this.btnExecute.Location = new System.Drawing.Point(419, 127);
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.Size = new System.Drawing.Size(50, 23);
             this.btnExecute.TabIndex = 6;
@@ -101,7 +100,7 @@
             this.groupBox1.Controls.Add(this.btnExecute);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(544, 162);
+            this.groupBox1.Size = new System.Drawing.Size(479, 162);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
@@ -109,9 +108,9 @@
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.cbDescription);
-            this.groupBox6.Location = new System.Drawing.Point(369, 21);
+            this.groupBox6.Location = new System.Drawing.Point(301, 20);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(112, 135);
+            this.groupBox6.Size = new System.Drawing.Size(112, 136);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Beskrivning";
@@ -124,6 +123,7 @@
             this.cbDescription.Name = "cbDescription";
             this.cbDescription.Size = new System.Drawing.Size(100, 111);
             this.cbDescription.TabIndex = 18;
+            this.cbDescription.SelectedIndexChanged += new System.EventHandler(this.cbDescription_SelectedIndexChanged);
             // 
             // groupBox5
             // 
@@ -194,7 +194,6 @@
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dtpStartTime);
             this.groupBox4.Controls.Add(this.dtpBehTid);
-            this.groupBox4.Controls.Add(this.cbPiccline);
             this.groupBox4.Controls.Add(this.cbNystart);
             this.groupBox4.Controls.Add(this.cbEntireDayBooking);
             this.groupBox4.Location = new System.Drawing.Point(6, 20);
@@ -230,17 +229,6 @@
             this.dtpStartTime.Size = new System.Drawing.Size(50, 20);
             this.dtpStartTime.TabIndex = 25;
             this.dtpStartTime.ValueChanged += new System.EventHandler(this.dtpStartTime_ValueChanged);
-            // 
-            // cbPiccline
-            // 
-            this.cbPiccline.AutoSize = true;
-            this.cbPiccline.Location = new System.Drawing.Point(85, 84);
-            this.cbPiccline.Name = "cbPiccline";
-            this.cbPiccline.Size = new System.Drawing.Size(63, 17);
-            this.cbPiccline.TabIndex = 23;
-            this.cbPiccline.Text = "Piccline";
-            this.cbPiccline.UseVisualStyleBackColor = true;
-            this.cbPiccline.CheckedChanged += new System.EventHandler(this.cbPiccline_CheckedChanged);
             // 
             // cbNystart
             // 
@@ -348,19 +336,19 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(12, 195);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series1.IsVisibleInLegend = false;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series1.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series2.IsVisibleInLegend = false;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            series2.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(1142, 441);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
@@ -370,7 +358,7 @@
             // 
             this.rbChartSSK.AutoSize = true;
             this.rbChartSSK.Checked = true;
-            this.rbChartSSK.Location = new System.Drawing.Point(648, 89);
+            this.rbChartSSK.Location = new System.Drawing.Point(759, 171);
             this.rbChartSSK.Name = "rbChartSSK";
             this.rbChartSSK.Size = new System.Drawing.Size(46, 17);
             this.rbChartSSK.TabIndex = 16;
@@ -381,7 +369,7 @@
             // rbChartRoom
             // 
             this.rbChartRoom.AutoSize = true;
-            this.rbChartRoom.Location = new System.Drawing.Point(584, 89);
+            this.rbChartRoom.Location = new System.Drawing.Point(695, 171);
             this.rbChartRoom.Name = "rbChartRoom";
             this.rbChartRoom.Size = new System.Drawing.Size(47, 17);
             this.rbChartRoom.TabIndex = 17;
@@ -392,7 +380,7 @@
             // dtpScheduleDay
             // 
             this.dtpScheduleDay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpScheduleDay.Location = new System.Drawing.Point(628, 163);
+            this.dtpScheduleDay.Location = new System.Drawing.Point(548, 169);
             this.dtpScheduleDay.Name = "dtpScheduleDay";
             this.dtpScheduleDay.Size = new System.Drawing.Size(93, 20);
             this.dtpScheduleDay.TabIndex = 28;
@@ -400,7 +388,7 @@
             // 
             // btnNextDay
             // 
-            this.btnNextDay.Location = new System.Drawing.Point(727, 163);
+            this.btnNextDay.Location = new System.Drawing.Point(647, 169);
             this.btnNextDay.Name = "btnNextDay";
             this.btnNextDay.Size = new System.Drawing.Size(28, 20);
             this.btnNextDay.TabIndex = 27;
@@ -410,7 +398,7 @@
             // 
             // btnPrevDay
             // 
-            this.btnPrevDay.Location = new System.Drawing.Point(594, 163);
+            this.btnPrevDay.Location = new System.Drawing.Point(514, 169);
             this.btnPrevDay.Name = "btnPrevDay";
             this.btnPrevDay.Size = new System.Drawing.Size(28, 20);
             this.btnPrevDay.TabIndex = 29;
@@ -422,7 +410,7 @@
             // 
             this.lblWarning.AutoSize = true;
             this.lblWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblWarning.Location = new System.Drawing.Point(596, 135);
+            this.lblWarning.Location = new System.Drawing.Point(516, 141);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(65, 13);
             this.lblWarning.TabIndex = 30;
@@ -486,7 +474,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.CheckBox cbEntireDayBooking;
         private System.Windows.Forms.CheckBox cbNystart;
-        private System.Windows.Forms.CheckBox cbPiccline;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox6;

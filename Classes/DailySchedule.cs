@@ -12,7 +12,13 @@ namespace BokningsProgram
 		private List<Booking> _listOfBookings;
         private DateTime _startOfDay;
         private DateTime _endOfDay;
+        private bool _isFirstTrackFull;
 
+        public bool IsFirstTrackFull
+        {
+            get { return _isFirstTrackFull; }
+            set { _isFirstTrackFull = value; }
+        }
         public DateTime StartOfDay
         {
             get { return _startOfDay; }
@@ -38,6 +44,7 @@ namespace BokningsProgram
 			_listOfBookings = new List<Booking>();
 			_startOfDay = startOfDay;
 			_endOfDay = endOfDay;
+            _isFirstTrackFull= false;
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
             AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Stängt", RoomCategory.Dubbel, false)); //Spärrar starten av dagen
             AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Stängt", RoomCategory.Dubbel, false)); //Spärrar slutet av dagen
