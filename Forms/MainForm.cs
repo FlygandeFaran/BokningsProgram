@@ -187,62 +187,76 @@ namespace BokningsProgram
         }
         private void UpdateBookingsSSK()
         {
-            var serie = chart1.Series[0];
-            var serieSecondTrack = chart1.Series[1];
-            serie.Points.Clear();
-            serieSecondTrack.Points.Clear();
+            chart1.Series[0].Points.Clear();
+            chart1.Series[1].Points.Clear();
             UpdateSSKaxis();
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 SSK tempSSK = _cm.SskManager.ListOfSSK[i];
                 DailySchedule scheduleOfTheDay = tempSSK.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-
-                AddDailyTasksFromListOfBookings(serie, i, scheduleOfTheDay);
-                if (tempSSK.Kompetenser.Contains(KompetensLevel.Piccline))
-                {
-                    DailySchedule scheduleOfTheDaySecondTrack = tempSSK.ScheduledDaysSecondTrack.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-                    AddDailyTasksFromListOfBookings(serieSecondTrack, i, scheduleOfTheDaySecondTrack);
-                }
+                
+                AddDailyTasksOfSSKFromListOfBookings(i, scheduleOfTheDay);
             }
         }
         private void UpdateBookingsRoom()
         {
-            List<Series> series = new List<Series>() { chart1.Series[0],
-                chart1.Series[1] };
-
-            foreach (var serie in series)
-            {
-                serie.Points.Clear();
-            }
+            chart1.Series[0].Points.Clear();
+            chart1.Series[1].Points.Clear();
             UpdateRoomAxis();
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Room tempRoom = _cm.RoomManager.ListOfRooms[i];
-                for (int j = 0; j < tempRoom.ScheduleForBeds.Count; j++)
-                {
-                    ScheduledDays bed = tempRoom.ScheduleForBeds[j];
-                    DailySchedule scheduleOfTheDay = bed.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-                    if (scheduleOfTheDay is DailySchedule)
-                    {
-                        for (int k = 0; k < scheduleOfTheDay.ListOfBookings.Count; k++)
-                        {
-                            Booking tempBooking = scheduleOfTheDay.ListOfBookings[k];
+                DailySchedule scheduleOfTheDay = tempRoom.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
 
-                            addTaskRoom(series[j], i, tempBooking);
-                        }
-                    }
-                }
+                AddDailyTasksOfRoomFromListOfBookings(i, scheduleOfTheDay);
+                
             }
         }
-        private void AddDailyTasksFromListOfBookings(Series serie, int i, DailySchedule scheduleOfTheDay)
+        private void AddDailyTasksOfSSKFromListOfBookings(int i, DailySchedule scheduleOfTheDay)
         {
+            var serie = chart1.Series[0];
+            var serieSecondTrack = chart1.Series[1];
             if (scheduleOfTheDay is DailySchedule)
             {
                 lblWarning.Text = "";
-                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
+                if (scheduleOfTheDay.SecondlistOfBookings != null)
                 {
-                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
+                    for (int j = 0; j < scheduleOfTheDay.SecondlistOfBookings.Count; j++)
+                    {
+                        Booking tempBooking = scheduleOfTheDay.SecondlistOfBookings[j];
+                        addTaskSSK(serieSecondTrack, i, tempBooking);
+                    }
+                }
+                for (int j = 0; j < scheduleOfTheDay.FirstlistOfBookings.Count; j++)
+                {
+                    Booking tempBooking = scheduleOfTheDay.FirstlistOfBookings[j];
                     addTaskSSK(serie, i, tempBooking);
+                }
+            }
+            else
+            {
+                lblWarning.Text = "Finns inget schema för den här dagen";
+            }
+        }
+        private void AddDailyTasksOfRoomFromListOfBookings(int i, DailySchedule scheduleOfTheDay)
+        {
+            var serie = chart1.Series[0];
+            var serieSecondTrack = chart1.Series[1];
+            if (scheduleOfTheDay is DailySchedule)
+            {
+                lblWarning.Text = "";
+                if (scheduleOfTheDay.SecondlistOfBookings != null)
+                {
+                    for (int j = 0; j < scheduleOfTheDay.SecondlistOfBookings.Count; j++)
+                    {
+                        Booking tempBooking = scheduleOfTheDay.SecondlistOfBookings[j];
+                        addTaskRoom(serieSecondTrack, i, tempBooking);
+                    }
+                }
+                for (int j = 0; j < scheduleOfTheDay.FirstlistOfBookings.Count; j++)
+                {
+                    Booking tempBooking = scheduleOfTheDay.FirstlistOfBookings[j];
+                    addTaskRoom(serie, i, tempBooking);
                 }
             }
             else
@@ -408,8 +422,11 @@ namespace BokningsProgram
                 DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
                 var bookableObject = result.Series.Points[result.PointIndex].AxisLabel;
                 var description = result.Series.Points[result.PointIndex].Label;
+                bool secondTrack = false;
+                if (result.Series == chart1.Series[1])
+                    secondTrack = true;
 
-                _cm.ChangeBooking(index, startOfBooking, endOfBooking, bookableObject, description);
+                _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
                 UpdateChartDependingOnTab();
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());

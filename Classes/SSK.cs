@@ -10,23 +10,11 @@ namespace BokningsProgram
 {
     public class SSK : BookableItem
     {
-        private ScheduledDays _scheduledDays;
-        private ScheduledDays _scheduledDaysSecondTrack;
         private string _name;
 		private string _HSAid;
         private List<KompetensLevel> _kompetenser;
         //private KompetensLevel _kompetens;
 
-        public ScheduledDays ScheduledDays
-        {
-            get { return _scheduledDays; }
-            set { _scheduledDays = value; }
-        }
-        public ScheduledDays ScheduledDaysSecondTrack
-        {
-            get { return _scheduledDaysSecondTrack; }
-            set { _scheduledDaysSecondTrack = value; }
-        }
         public string HSAID
 		{
 			get { return _HSAid; }
@@ -43,22 +31,21 @@ namespace BokningsProgram
 			get { return _kompetenser; } 
 			set { _kompetenser = value; } 
 		}
-		//public bool IsBokad
-		//{
-		//	get { return _isBooked; }
-        //}
         public SSK() { }
         public SSK(string name, string hsaID, List<KompetensLevel> kompetenser)
         {
 			_name = name;
 			_HSAid = hsaID;
             _kompetenser = kompetenser;
-            _scheduledDays = new ScheduledDays();
-
+            
             if (_kompetenser.Contains(KompetensLevel.Piccline))
-                _scheduledDaysSecondTrack = new ScheduledDays();
-            else
-                _scheduledDaysSecondTrack = null;
+            {
+                this.HasSecondSchedule = true;
+                foreach (var day in ScheduledDays.Days)
+                {
+                    day.AddSecondListOfBookings(day.StartOfDay);
+                }
+            }
         }
         public bool IsCompetentEnough(Booking booking)
         {
@@ -88,13 +75,6 @@ namespace BokningsProgram
         {
 			string strOut = $"{_name}, {_HSAid}";//Ta bort kompetens när QA är klar
 			return strOut;
-        }
-        public DailySchedule GetDailyScheduleOfBookingFromSSK(Booking booking)
-        {
-            DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(booking);
-            if (ds == null)
-                ds = _scheduledDaysSecondTrack.GetDailyScheduleOfBooking(booking);
-            return ds;
         }
     }
 }

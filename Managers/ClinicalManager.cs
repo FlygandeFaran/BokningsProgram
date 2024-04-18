@@ -86,12 +86,12 @@ namespace BokningsProgram.Managers
             _roomManager.ExportToXml();
         }
         //Öppnar en ny ruta med möjlighet att uppdatera bookning genom att ta bort och lägga till uppdaterade bookning
-        public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking, string bookableObject, string description)
+        public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking, string description, bool secondTrack)
         {
             bool ok = false;
             var selectedSSK = _sskManager.ListOfSSK[index];
 
-            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedSSK);
+            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedSSK, secondTrack);
 
             if (selectedBooking is Booking)
             {
@@ -104,19 +104,23 @@ namespace BokningsProgram.Managers
                 {
                     SuggestBooking(newBooking, changeBooking.Ssk);
 
-                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBookingFromSSK(selectedBooking);
-                    ds.RemoveBooking(selectedBooking);
-                    ds = selectedRoom.GetDailyScheduleOfBookingFromRoom(selectedBooking);
-                    ds.RemoveBooking(selectedBooking);
+                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
+                    ds.RemoveBooking(selectedBooking, secondTrack);
+                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
+                    if (ds == null)
+                        ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, false);
+                    ds.RemoveBooking(selectedBooking, secondTrack);
 
                     ok = true;
                 }
                 else if (dlgResult == DialogResult.Abort)
                 {
-                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBookingFromSSK(selectedBooking);
-                    ds.RemoveBooking(selectedBooking);
-                    ds = selectedRoom.GetDailyScheduleOfBookingFromRoom(selectedBooking);
-                    ds.RemoveBooking(selectedBooking);
+                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
+                    ds.RemoveBooking(selectedBooking, secondTrack);
+                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
+                    if (ds == null)
+                        ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, false);
+                    ds.RemoveBooking(selectedBooking, secondTrack);
                 }
             }
             else
@@ -126,21 +130,29 @@ namespace BokningsProgram.Managers
         private void SuggestBooking(Booking booking)
         {
             //Check for ssk
+            bool sskSecondTrackBooking = false;
+            bool roomSecondTrackBooking = false;
             bool sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out SSK availableSSK, false);
             if (!sskOK)
+            {
                 sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, true);//check second track
+                sskSecondTrackBooking = sskOK;
+            }
 
             if (sskOK)
             {
-                bool roomOK = !_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
+                bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
                 if (!roomOK)
+                {
                     roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
+                    roomSecondTrackBooking = roomOK;
+                }
 
                 if (roomOK)
                 {
                     //lägg till bekräftelse av användaren
-                    _sskManager.AddBooking(booking, availableSSK);
-                    _roomManager.AddBooking(booking, availableRoom);
+                    _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking);
+                    _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking);
                 }
             }
             else
@@ -152,18 +164,29 @@ namespace BokningsProgram.Managers
         {
             bool roomOK = false;
             //Check for ssk
+            bool sskSecondTrackBooking = false;
+            bool roomSecondTrackBooking = false;
             if (ssk is SSK)
             {
-                bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk);
+                bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
+                if (!sskOK)
+                {
+                    sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
+                    sskSecondTrackBooking = sskOK;
+                }
                 if (sskOK)
                 {
-                    if (_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false))
+                    roomOK = !_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
+                    if (!roomOK)
+                    {
                         roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
+                        roomSecondTrackBooking = roomOK;
+                    }
                     if (roomOK)
                     {
                         //lägg till bekräftelse av användaren
-                        _sskManager.AddBooking(booking, ssk);
-                        _roomManager.AddBooking(booking, availableRoom);
+                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking);
+                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking);
                     }
                 }
                 else

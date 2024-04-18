@@ -33,14 +33,23 @@ namespace BokningsProgram
         }
         public Room GetRoomFromBooking(Booking booking)
         {
-
             Room bookedRoom = _listOfRooms.FirstOrDefault(room =>
                                                             room.RoomType == booking.RoomRequired &&
-                                                            room.ScheduleForBeds.Any(s => s.Days.Any(ds =>
-                                                            ds.ListOfBookings.Any(booked =>
+                                                            room.ScheduledDays.Days.Any(s => s.FirstlistOfBookings.Any(booked =>
                                                             booked.StartTime == booking.StartTime &&
                                                             booked.EndTime == booking.EndTime &&
-                                                            booked.Description == booking.Description))));
+                                                            booked.Description == booking.Description)));
+            if (bookedRoom is Room)
+                return bookedRoom;
+            else
+            {
+                bookedRoom = _listOfRooms.FirstOrDefault(room =>
+                                                            room.RoomType == booking.RoomRequired &&
+                                                            room.ScheduledDays.Days.Any(s => s.SecondlistOfBookings.Any(booked =>
+                                                            booked.StartTime == booking.StartTime &&
+                                                            booked.EndTime == booking.EndTime &&
+                                                            booked.Description == booking.Description)));
+            }
             return bookedRoom;
         }
         public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom, bool secondTrack)
@@ -80,23 +89,22 @@ namespace BokningsProgram
         {
             roomOK = false;
             int j = 0;
-            ScheduledDays bed = null;
             RoomCategory originalRoomCategory = booking.RoomRequired;
             Room tempRoom = _listOfRooms[j];
             while (!roomOK)
             {
                 tempRoom = _listOfRooms[j];
-                if (secondTrack && tempRoom.RoomType == RoomCategory.Dubbel)
-                    bed = tempRoom.ScheduleForBeds[1];
-                else
-                    bed = tempRoom.ScheduleForBeds[0];
-                
-                if (booking.RoomRequired == tempRoom.RoomType && !tempRoom.IsItBooked(booking, bed)) //fortsätt här
+                if ((secondTrack && tempRoom.HasSecondSchedule) || !secondTrack)
                 {
-                    roomOK = true;
-                    return tempRoom;
+                    if (booking.RoomRequired.Equals(tempRoom.RoomType))
+                    {
+                        if (!tempRoom.IsItBooked(booking, secondTrack))
+                        {
+                            roomOK = true;
+                            return tempRoom;
+                        }
+                    }
                 }
-                
                 j++;
 
                 if (j == _listOfRooms.Count && booking.RoomRequired == RoomCategory.PicclineOm)
@@ -117,11 +125,12 @@ namespace BokningsProgram
                     j = 0;
                 }
             }
+            
             return tempRoom;
         }
-        public void AddBooking(Booking booking, Room newRoom)
+        public void AddBooking(Booking booking, Room newRoom, bool secondRoomTrack)
         {
-            _listOfRooms.FirstOrDefault(r => r.RoomNumber.Equals(newRoom.RoomNumber)).AddBooking(booking);//bokar SSK
+            _listOfRooms.FirstOrDefault(r => r.RoomNumber.Equals(newRoom.RoomNumber)).AddBooking(booking, secondRoomTrack);//bokar SSK
         }
 
         private Booking SingleRoomQueue(Booking booking)

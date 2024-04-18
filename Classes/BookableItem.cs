@@ -9,39 +9,48 @@ namespace BokningsProgram
     public class BookableItem
     {
         private DailySchedule _schedule;
-        private bool _isFullDayBooked;
+        private bool _hasSecondSchedule;
+        private ScheduledDays _scheduledDays;
 
-        public bool IsFullDayBooked
+        public ScheduledDays ScheduledDays
         {
-            get { return _isFullDayBooked; }
-            set { _isFullDayBooked = value; }
+            get { return _scheduledDays; }
+            set { _scheduledDays = value; }
         }
-
+        public bool HasSecondSchedule
+        {
+            get { return _hasSecondSchedule; }
+            set { _hasSecondSchedule = value; }
+        }
         public BookableItem()
         {
-
+            _scheduledDays = new ScheduledDays();
+            _scheduledDays.GenerateSCheduleDays();
         }
-
-        public bool IsItBooked(Booking newBooking, ScheduledDays scheduledDays)
+        public bool IsItBooked(Booking newBooking, bool secondTrack)
         {
-            _schedule = scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == newBooking.StartTime.DayOfYear);
-            int NoOfBookings = _schedule.ListOfBookings.Count;
-            if (NoOfBookings == 0) //Om det inte finns någon bokning är det garanterat ledigt
-                return false;
+            _schedule = _scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == newBooking.StartTime.DayOfYear);
+            int NoOfBookings;
+            if (secondTrack && _hasSecondSchedule)
+            {
+                NoOfBookings = _schedule.SecondlistOfBookings.Count;
+            }
+            else
+            {
+                NoOfBookings = _schedule.FirstlistOfBookings.Count;
+            }
 
             bool ok = false;
             bool isItBooked = false;
             int i = 0;
 
-            if (newBooking.FullDay && !IsFullDayBooked)
+            if (newBooking.FullDay)
                 isItBooked = !_schedule.CheckAvailabilityForFullDay();
             else
             {
                 while (!ok) //kollar om bokning passar in i schemat
                 {
-                    Booking booking = _schedule.ListOfBookings[i];
-
-                    ok = _schedule.CheckAvailability(newBooking, i);
+                    ok = _schedule.CheckAvailability(newBooking, i, secondTrack);
 
                     i++;
                     if (i == NoOfBookings && !ok)//Om det inte finns någon tid alls
@@ -54,13 +63,14 @@ namespace BokningsProgram
 
             return isItBooked;
         }
-        public void AddBooking(Booking booking)
+        public void AddBooking(Booking booking, bool secondTrack)
         {
-            if (booking.FullDay)
-            {
-                IsFullDayBooked = true;
-            }
-            _schedule.AddBooking(booking);
+            _schedule.AddBooking(booking, secondTrack);
+        }
+        public DailySchedule GetDailyScheduleOfBooking(Booking booking, bool secondTrack)
+        {
+            DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(booking, secondTrack);
+            return ds;
         }
     }
 }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -76,7 +76,7 @@
             // 
             // btnExecute
             // 
-            this.btnExecute.Location = new System.Drawing.Point(419, 127);
+            this.btnExecute.Location = new System.Drawing.Point(34, 103);
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.Size = new System.Drawing.Size(50, 23);
             this.btnExecute.TabIndex = 6;
@@ -97,10 +97,11 @@
             this.groupBox1.Controls.Add(this.groupBox6);
             this.groupBox1.Controls.Add(this.groupBox5);
             this.groupBox1.Controls.Add(this.groupBox4);
-            this.groupBox1.Controls.Add(this.btnExecute);
+            this.groupBox1.Controls.Add(this.groupBox2);
+            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(479, 162);
+            this.groupBox1.Size = new System.Drawing.Size(154, 761);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
@@ -108,20 +109,22 @@
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.cbDescription);
-            this.groupBox6.Location = new System.Drawing.Point(301, 20);
+            this.groupBox6.Controls.Add(this.cbEntireDayBooking);
+            this.groupBox6.Controls.Add(this.cbNystart);
+            this.groupBox6.Controls.Add(this.btnExecute);
+            this.groupBox6.Location = new System.Drawing.Point(6, 302);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(112, 136);
+            this.groupBox6.Size = new System.Drawing.Size(148, 136);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Beskrivning";
             // 
             // cbDescription
             // 
-            this.cbDescription.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.cbDescription.FormattingEnabled = true;
             this.cbDescription.Location = new System.Drawing.Point(6, 19);
             this.cbDescription.Name = "cbDescription";
-            this.cbDescription.Size = new System.Drawing.Size(100, 111);
+            this.cbDescription.Size = new System.Drawing.Size(100, 21);
             this.cbDescription.TabIndex = 18;
             this.cbDescription.SelectedIndexChanged += new System.EventHandler(this.cbDescription_SelectedIndexChanged);
             // 
@@ -132,21 +135,21 @@
             this.groupBox5.Controls.Add(this.lblStartDate);
             this.groupBox5.Controls.Add(this.dtpStartDate);
             this.groupBox5.Controls.Add(this.lblEndDate);
-            this.groupBox5.Location = new System.Drawing.Point(165, 20);
+            this.groupBox5.Location = new System.Drawing.Point(6, 161);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(130, 135);
+            this.groupBox5.Size = new System.Drawing.Size(148, 135);
             this.groupBox5.TabIndex = 25;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Flerdagsbehandling";
+            this.groupBox5.Text = "Välj dagar";
             // 
             // cbFlerdagsbeh
             // 
             this.cbFlerdagsbeh.AutoSize = true;
             this.cbFlerdagsbeh.Location = new System.Drawing.Point(6, 19);
             this.cbFlerdagsbeh.Name = "cbFlerdagsbeh";
-            this.cbFlerdagsbeh.Size = new System.Drawing.Size(34, 17);
+            this.cbFlerdagsbeh.Size = new System.Drawing.Size(118, 17);
             this.cbFlerdagsbeh.TabIndex = 16;
-            this.cbFlerdagsbeh.Text = "ja";
+            this.cbFlerdagsbeh.Text = "Flerdagsbehandling";
             this.cbFlerdagsbeh.UseVisualStyleBackColor = true;
             this.cbFlerdagsbeh.CheckedChanged += new System.EventHandler(this.cbFlerdagsbeh_CheckedChanged);
             // 
@@ -194,11 +197,9 @@
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dtpStartTime);
             this.groupBox4.Controls.Add(this.dtpBehTid);
-            this.groupBox4.Controls.Add(this.cbNystart);
-            this.groupBox4.Controls.Add(this.cbEntireDayBooking);
             this.groupBox4.Location = new System.Drawing.Point(6, 20);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(153, 135);
+            this.groupBox4.Size = new System.Drawing.Size(148, 135);
             this.groupBox4.TabIndex = 24;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Behandlingstid";
@@ -233,7 +234,7 @@
             // cbNystart
             // 
             this.cbNystart.AutoSize = true;
-            this.cbNystart.Location = new System.Drawing.Point(85, 61);
+            this.cbNystart.Location = new System.Drawing.Point(6, 69);
             this.cbNystart.Name = "cbNystart";
             this.cbNystart.Size = new System.Drawing.Size(59, 17);
             this.cbNystart.TabIndex = 22;
@@ -243,7 +244,7 @@
             // cbEntireDayBooking
             // 
             this.cbEntireDayBooking.AutoSize = true;
-            this.cbEntireDayBooking.Location = new System.Drawing.Point(85, 38);
+            this.cbEntireDayBooking.Location = new System.Drawing.Point(6, 46);
             this.cbEntireDayBooking.Name = "cbEntireDayBooking";
             this.cbEntireDayBooking.Size = new System.Drawing.Size(60, 17);
             this.cbEntireDayBooking.TabIndex = 21;
@@ -255,9 +256,9 @@
             // 
             this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.lbAvailableSSK);
-            this.groupBox2.Location = new System.Drawing.Point(864, 27);
+            this.groupBox2.Location = new System.Drawing.Point(6, 444);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(140, 148);
+            this.groupBox2.Size = new System.Drawing.Size(148, 148);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sköterskor";
@@ -283,9 +284,9 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.lbAvailableRooms);
-            this.groupBox3.Location = new System.Drawing.Point(1010, 27);
+            this.groupBox3.Location = new System.Drawing.Point(6, 598);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(144, 148);
+            this.groupBox3.Size = new System.Drawing.Size(148, 148);
             this.groupBox3.TabIndex = 10;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Rum";
@@ -336,20 +337,20 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(12, 195);
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
+            this.chart1.Location = new System.Drawing.Point(172, 86);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series2.IsVisibleInLegend = false;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            series2.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series2);
-            this.chart1.Size = new System.Drawing.Size(1142, 441);
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            series4.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(982, 779);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
             this.chart1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseDoubleClick);
@@ -358,7 +359,7 @@
             // 
             this.rbChartSSK.AutoSize = true;
             this.rbChartSSK.Checked = true;
-            this.rbChartSSK.Location = new System.Drawing.Point(759, 171);
+            this.rbChartSSK.Location = new System.Drawing.Point(1082, 62);
             this.rbChartSSK.Name = "rbChartSSK";
             this.rbChartSSK.Size = new System.Drawing.Size(46, 17);
             this.rbChartSSK.TabIndex = 16;
@@ -369,7 +370,7 @@
             // rbChartRoom
             // 
             this.rbChartRoom.AutoSize = true;
-            this.rbChartRoom.Location = new System.Drawing.Point(695, 171);
+            this.rbChartRoom.Location = new System.Drawing.Point(1018, 62);
             this.rbChartRoom.Name = "rbChartRoom";
             this.rbChartRoom.Size = new System.Drawing.Size(47, 17);
             this.rbChartRoom.TabIndex = 17;
@@ -380,7 +381,7 @@
             // dtpScheduleDay
             // 
             this.dtpScheduleDay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpScheduleDay.Location = new System.Drawing.Point(548, 169);
+            this.dtpScheduleDay.Location = new System.Drawing.Point(845, 60);
             this.dtpScheduleDay.Name = "dtpScheduleDay";
             this.dtpScheduleDay.Size = new System.Drawing.Size(93, 20);
             this.dtpScheduleDay.TabIndex = 28;
@@ -388,7 +389,7 @@
             // 
             // btnNextDay
             // 
-            this.btnNextDay.Location = new System.Drawing.Point(647, 169);
+            this.btnNextDay.Location = new System.Drawing.Point(944, 60);
             this.btnNextDay.Name = "btnNextDay";
             this.btnNextDay.Size = new System.Drawing.Size(28, 20);
             this.btnNextDay.TabIndex = 27;
@@ -398,7 +399,7 @@
             // 
             // btnPrevDay
             // 
-            this.btnPrevDay.Location = new System.Drawing.Point(514, 169);
+            this.btnPrevDay.Location = new System.Drawing.Point(811, 60);
             this.btnPrevDay.Name = "btnPrevDay";
             this.btnPrevDay.Size = new System.Drawing.Size(28, 20);
             this.btnPrevDay.TabIndex = 29;
@@ -410,7 +411,7 @@
             // 
             this.lblWarning.AutoSize = true;
             this.lblWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblWarning.Location = new System.Drawing.Point(516, 141);
+            this.lblWarning.Location = new System.Drawing.Point(813, 32);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(65, 13);
             this.lblWarning.TabIndex = 30;
@@ -420,7 +421,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1166, 648);
+            this.ClientSize = new System.Drawing.Size(1166, 877);
             this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.btnPrevDay);
             this.Controls.Add(this.btnNextDay);
@@ -428,16 +429,16 @@
             this.Controls.Add(this.rbChartRoom);
             this.Controls.Add(this.rbChartSSK);
             this.Controls.Add(this.chart1);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bokningssystem Dagvård av Erik Fura";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBox1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);

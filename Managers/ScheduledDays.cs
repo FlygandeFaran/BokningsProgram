@@ -20,7 +20,7 @@ namespace BokningsProgram
         public ScheduledDays()
         {
             _dagar = new List<DailySchedule>();
-            GenerateSCheduleDays();
+            //GenerateSCheduleDays();
         }
         //public ScheduledDays(string hsaID)
         //{
@@ -34,31 +34,28 @@ namespace BokningsProgram
         //    _dagar = new List<DailySchedule>();
         //    GenerateSCheduleDays();
         //}
-        public static Booking GetBooking(DateTime start, DateTime end, string description, SSK ssk)
+        public static Booking GetBooking(DateTime start, DateTime end, string description, SSK ssk, bool secondTrack)
         {
-            Booking booking = ssk.ScheduledDays.Days.SelectMany(ds =>
-                                                            ds.ListOfBookings).FirstOrDefault(booked =>
-                                                            booked.StartTime == start &&
-                                                            booked.EndTime == end &&
-                                                            booked.Description == description) ?? ssk.ScheduledDaysSecondTrack.Days.SelectMany(ds =>
-                                                                ds.ListOfBookings).FirstOrDefault(booked =>
+            Booking booking;
+            if (secondTrack)
+            {
+                booking = ssk.ScheduledDays.Days.SelectMany(ds =>
+                                                                ds.SecondlistOfBookings).FirstOrDefault(booked =>
                                                                 booked.StartTime == start &&
                                                                 booked.EndTime == end &&
                                                                 booked.Description == description);
+            }
+            else
+            {
+                booking = ssk.ScheduledDays.Days.SelectMany(ds =>
+                                                                ds.FirstlistOfBookings).FirstOrDefault(booked =>
+                                                                booked.StartTime == start &&
+                                                                booked.EndTime == end &&
+                                                                booked.Description == description);
+            }
             return booking;
         }
-        public static Booking GetBooking(DateTime start, DateTime end, Room room)
-        {
-            Booking booking = room.ScheduleForBeds.SelectMany(bed => 
-                                    bed.Days.SelectMany(ds => ds.ListOfBookings)).FirstOrDefault(booked => 
-                                    booked.StartTime == start && booked.EndTime == end);
-
-
-            //DailySchedule schedule = room.ScheduleForBeds.FirstOrDefault(s=>s.Days.Any(d => d.StartOfDay.DayOfYear.Equals(start.DayOfYear)));
-            //Booking booking = schedule.ListOfBookings.FirstOrDefault(b => { return b.StartTime.Equals(start) && b.EndTime.Equals(end) && b.RoomRequired.Equals(room.RoomType); });
-            return booking;
-        }
-        private void GenerateSCheduleDays()
+        public void GenerateSCheduleDays()
 		{
 			DateTime date = DateTime.Now;
             for (int i = 0; i < 10; i++)
@@ -70,13 +67,25 @@ namespace BokningsProgram
             }
             //Load excelsheet and create new DailySchedules for each day with an end and start time
         }
-        public DailySchedule GetDailyScheduleOfBooking(Booking booking)
+        public DailySchedule GetDailyScheduleOfBooking(Booking booking, bool secondTrack)
         {
-            DailySchedule ds = _dagar.FirstOrDefault(dailySchedule =>
-                                                        dailySchedule.ListOfBookings.Any(booked =>
-                                                            booked.StartTime == booking.StartTime &&
-                                                            booked.EndTime == booking.EndTime &&
-                                                            booked.Description == booking.Description));
+            DailySchedule ds = null;
+            if (secondTrack)
+            {
+                ds = _dagar.FirstOrDefault(dailySchedule =>
+                                                            dailySchedule.SecondlistOfBookings.Any(booked =>
+                                                                booked.StartTime == booking.StartTime &&
+                                                                booked.EndTime == booking.EndTime &&
+                                                                booked.Description == booking.Description));
+            }
+            else
+            {
+                ds = _dagar.FirstOrDefault(dailySchedule =>
+                                                            dailySchedule.FirstlistOfBookings.Any(booked =>
+                                                                booked.StartTime == booking.StartTime &&
+                                                                booked.EndTime == booking.EndTime &&
+                                                                booked.Description == booking.Description));
+            }
             return ds;
         }
     }
