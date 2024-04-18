@@ -266,17 +266,38 @@ namespace BokningsProgram
         }
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            GetBookingTime(out DateTime start, out DateTime end);
-
-            string description = cbDescription.Text;
-
             RoomCategory roomRequired = GetRequiredRoom();
-            Booking newBooking = new Booking(start, end, description, roomRequired, cbEntireDayBooking.Checked);
-            _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
+            if (cbFlerdagsbeh.Checked)
+            {
+                List<Booking> multipleNewBookings = MultipleNewBookings(roomRequired);
+                foreach (var booking in multipleNewBookings)
+                {
+                    _cm.SuggestBooking(booking, lbAvailableSSK.SelectedItem as SSK);
+                }
+            }
+            else
+            {
+                GetBookingTime(out DateTime start, out DateTime end, dtpStartTime.Value);
+                Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked);
+                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
+            }
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
         }
-
+        private List<Booking> MultipleNewBookings(RoomCategory roomRequired)
+        {
+            List<Booking> newBookings = new List<Booking>();
+            DateTime enddate = dtpEndDate.Value.AddMinutes(30);
+            var days = (enddate - dtpStartDate.Value);
+            DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
+            for (int i = 0; i < days.Days; i++)
+            {
+                GetBookingTime(out DateTime start, out DateTime end, date);
+                date = date.AddDays(i + 1);
+                newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
+            }
+            return newBookings;
+        }
         private void UpdateChartDependingOnTab()
         {
             if (rbChartSSK.Checked)
@@ -285,14 +306,13 @@ namespace BokningsProgram
                 UpdateBookingsRoom();
         }
 
-        private void GetBookingTime(out DateTime start, out DateTime end)
+        private void GetBookingTime(out DateTime start, out DateTime end, DateTime date)
         {
             //int starttime = 7;
             int startHour = dtpStartTime.Value.Hour;
             int startMinute = dtpStartTime.Value.Minute;
             int durationHour = DateTime.Parse(dtpBehTid.Text).Hour;
             int durationMinute = DateTime.Parse(dtpBehTid.Text).Minute;
-            DateTime date = dtpScheduleDay.Value;
             if (cbEntireDayBooking.Checked)
             {
                 start = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0);
