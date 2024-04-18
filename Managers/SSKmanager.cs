@@ -104,20 +104,29 @@ namespace BokningsProgram
             sskOK = false;
             ScheduledDays scheduledDays = null;
 
-            foreach (SSK ssk in _listOfSSK.OrderBy(ssk => ssk.Kompetens))
+            foreach (KompetensLevel kompetensLevel in Enum.GetValues(typeof(KompetensLevel)))//sorterar efter kompetenser
             {
-            {
-                if (secondTrack && ssk.Kompetens == KompetensLevel.Piccline)
-                    scheduledDays = ssk.ScheduledDaysSecondTrack;
-                else
-                    scheduledDays = ssk.ScheduledDays;
-                if (!ssk.IsItBooked(booking, scheduledDays))
+                foreach (SSK ssk in _listOfSSK)
                 {
-                    sskOK = ssk.IsCompetentEnough(booking);
-                    availableSSK = ssk;
-                    break;
+                    if (ssk.Kompetenser.Contains(kompetensLevel))
+                    {
+                        if (secondTrack && ssk.Kompetenser.Contains(KompetensLevel.Piccline))//om ssk har kompetens piccline kan de även ha 2 spår
+                            scheduledDays = ssk.ScheduledDaysSecondTrack;
+                        else
+                            scheduledDays = ssk.ScheduledDays;
+                        if (!ssk.IsItBooked(booking, scheduledDays))
+                        {
+                            sskOK = ssk.IsCompetentEnough(booking);
+                            if (sskOK)
+                            {
+                                availableSSK = ssk;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+
             return availableSSK;
         }
         public bool CheckBookingForSelectedSSK(Booking booking, SSK ssk)

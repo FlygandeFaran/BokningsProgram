@@ -36,7 +36,10 @@ namespace BokningsProgram
             dtpStartTime.ShowUpDown = true;
             DateTime idag = DateTime.Now;
             DateTime dt = new DateTime(idag.Year, idag.Month, idag.Day, 1, 0, 0);
+            DateTime behTid = new DateTime(idag.Year, idag.Month, idag.Day, 7, 0, 0);
             dtpBehTid.Value = dt;
+            dtpStartTime.Value = behTid;
+            CreateNewSeries();
 
             //cbDescription.Items.Add("Piccline");
             cbDescription.Items.Add("Cytostatika");
@@ -63,20 +66,13 @@ namespace BokningsProgram
         }
         private void CreateFakeBookings()
         {
-            int starttime = 2;
+            int starttime = 10;
             int duration = 1;
             DateTime today = DateTime.Now;
             DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
-            Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
-
-            starttime = 10;
-            duration = 1;
-            start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-
-            newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
+            Booking newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
             SSK ssk = lbAvailableSSK.SelectedItem as SSK;
             _cm.SuggestBooking(newBooking, ssk);
 
@@ -124,8 +120,9 @@ namespace BokningsProgram
         private void UpdateRoomAxis()
         {
             UpdateChart();
-            var serie = chart1.Series[0];
-            int starttime = 2;
+            List<Series> series = new List<Series>() { chart1.Series[0],
+                chart1.Series[1] };
+            int starttime = 6;
             int duration = 1;
             //DateTime today = DateTime.Now;
             DateTime date = dtpScheduleDay.Value;
@@ -133,8 +130,9 @@ namespace BokningsProgram
             DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
-                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
-                addTaskRoom(serie, i, newBooking);
+                Booking newBooking = new Booking(start, end, "Stängt", RoomCategory.Dubbel, false);
+                foreach (var serie in series)
+                    addTaskRoom(serie, i, newBooking);
             }
         }
 
@@ -142,20 +140,38 @@ namespace BokningsProgram
         {
             UpdateChart();
             var serie = chart1.Series[0];
-            int starttime = 2;
+            var serieSecondTrack = chart1.Series[1];
+            int starttime = 6;
             int duration = 1;
             DateTime date = dtpScheduleDay.Value;
             DateTime start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
             DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
-                Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
+                Booking newBooking = new Booking(start, end, "Stängt", RoomCategory.Dubbel, false);
                 addTaskSSK(serie, i, newBooking);
+                addTaskSSK(serieSecondTrack, i, newBooking);
             }
         }
-        private static Series CreateNewSeries()
+
+        //private void UpdateSSKaxis()
+        //{
+        //    UpdateChart();
+        //    var serie = chart1.Series[0];
+        //    int starttime = 2;
+        //    int duration = 1;
+        //    DateTime date = dtpScheduleDay.Value;
+        //    DateTime start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
+        //    DateTime end = new DateTime(date.Year, date.Month, date.Day, starttime + duration, 0, 0);
+        //    for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
+        //    {
+        //        Booking newBooking = new Booking(start, end, "vanlig", RoomCategory.Dubbel, false);
+        //        addTaskSSK(serie, i, newBooking);
+        //    }
+        //}
+        private void CreateNewSeries()
         {
-            return new Series
+            Series serie = new Series
             {
                 IsVisibleInLegend = false,
                 ChartType = SeriesChartType.RangeBar,
@@ -164,6 +180,7 @@ namespace BokningsProgram
                 IsXValueIndexed = false,
                 YValuesPerPoint = 2
             };
+            chart1.Series.Add(serie);
         }
 
         private void addTaskSSK(Series s, int who, Booking booking)
@@ -172,6 +189,7 @@ namespace BokningsProgram
             s.Points[pt].AxisLabel = _cm.SskManager.ListOfSSK[who].Name;
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
+            s.Points[pt].LabelForeColor = booking.TaskTextColor;
         }
         private void addTaskRoom(Series s, int index, Booking booking)
         {
@@ -179,56 +197,82 @@ namespace BokningsProgram
             s.Points[pt].AxisLabel = _cm.RoomManager.ListOfRooms[index].RoomNumber.ToString();
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
+            s.Points[pt].LabelForeColor = booking.TaskTextColor;
+
         }
         private void UpdateBookingsSSK()
         {
             var serie = chart1.Series[0];
+            var serieSecondTrack = chart1.Series[1];
             serie.Points.Clear();
+            serieSecondTrack.Points.Clear();
             UpdateSSKaxis();
             for (int i = 0; i < _cm.SskManager.ListOfSSK.Count; i++)
             {
                 SSK tempSSK = _cm.SskManager.ListOfSSK[i];
                 DailySchedule scheduleOfTheDay = tempSSK.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-                if (scheduleOfTheDay is DailySchedule)
+
+                AddDailyTasksFromListOfBookings(serie, i, scheduleOfTheDay);
+                if (tempSSK.Kompetenser.Contains(KompetensLevel.Piccline))
                 {
-                    lblWarning.Text = "";
-                    for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
-                    {
-                        Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
-                        addTaskSSK(serie, i, tempBooking);
-                    }
-                }
-                else
-                {
-                    lblWarning.Text = "Finns inget schema för den här dagen";
+                    DailySchedule scheduleOfTheDaySecondTrack = tempSSK.ScheduledDaysSecondTrack.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
+                    AddDailyTasksFromListOfBookings(serieSecondTrack, i, scheduleOfTheDaySecondTrack);
                 }
             }
         }
         private void UpdateBookingsRoom()
         {
-            var serie = chart1.Series[0];
-            serie.Points.Clear();
+            List<Series> series = new List<Series>() { chart1.Series[0],
+                chart1.Series[1] };
+
+            foreach (var serie in series)
+            {
+                serie.Points.Clear();
+            }
             UpdateRoomAxis();
             for (int i = 0; i < _cm.RoomManager.ListOfRooms.Count; i++)
             {
                 Room tempRoom = _cm.RoomManager.ListOfRooms[i];
-                DailySchedule scheduleOfTheDay = tempRoom.ScheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
-                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
+                for (int j = 0; j < tempRoom.ScheduleForBeds.Count; j++)
                 {
-                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
-                    addTaskRoom(serie, i, tempBooking);
+                    ScheduledDays bed = tempRoom.ScheduleForBeds[j];
+                    DailySchedule scheduleOfTheDay = bed.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear.Equals(dtpScheduleDay.Value.DayOfYear));
+                    if (scheduleOfTheDay is DailySchedule)
+                    {
+                        for (int k = 0; k < scheduleOfTheDay.ListOfBookings.Count; k++)
+                        {
+                            Booking tempBooking = scheduleOfTheDay.ListOfBookings[k];
+
+                            addTaskRoom(series[j], i, tempBooking);
+                        }
+                    }
                 }
             }
         }
-
+        private void AddDailyTasksFromListOfBookings(Series serie, int i, DailySchedule scheduleOfTheDay)
+        {
+            if (scheduleOfTheDay is DailySchedule)
+            {
+                lblWarning.Text = "";
+                for (int j = 0; j < scheduleOfTheDay.ListOfBookings.Count; j++)
+                {
+                    Booking tempBooking = scheduleOfTheDay.ListOfBookings[j];
+                    addTaskSSK(serie, i, tempBooking);
+                }
+            }
+            else
+            {
+                lblWarning.Text = "Finns inget schema för den här dagen";
+            }
+        }
         private void btnExecute_Click(object sender, EventArgs e)
         {
             GetBookingTime(out DateTime start, out DateTime end);
 
-            string strOut = cbDescription.Text;
+            string description = cbDescription.Text;
 
             RoomCategory roomRequired = GetRequiredRoom();
-            Booking newBooking = new Booking(start, end, strOut, roomRequired, cbEntireDayBooking.Checked);
+            Booking newBooking = new Booking(start, end, description, roomRequired, cbEntireDayBooking.Checked);
             _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
@@ -244,9 +288,9 @@ namespace BokningsProgram
 
         private void GetBookingTime(out DateTime start, out DateTime end)
         {
-            int starttime = 7;
-            //int startHour = dtpStartTime.Value.Hour;
-            //int startMinute = dtpStartTime.Value.Minute;
+            //int starttime = 7;
+            int startHour = dtpStartTime.Value.Hour;
+            int startMinute = dtpStartTime.Value.Minute;
             int durationHour = DateTime.Parse(dtpBehTid.Text).Hour;
             int durationMinute = DateTime.Parse(dtpBehTid.Text).Minute;
             DateTime date = dtpScheduleDay.Value;
@@ -257,8 +301,8 @@ namespace BokningsProgram
             }
             else
             {
-                start = new DateTime(date.Year, date.Month, date.Day, starttime, 0, 0);
-                end = new DateTime(date.Year, date.Month, date.Day, starttime + durationHour, durationMinute, 0);
+                start = new DateTime(date.Year, date.Month, date.Day, startHour, startMinute, 0);
+                end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, durationMinute, 0);
                 //start = new DateTime(date.Year, date.Month, date.Day, startHour, startMinute, 0);
                 //end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, startMinute + durationMinute, 0);
             }
@@ -385,15 +429,16 @@ namespace BokningsProgram
         {
             var result = chart1.HitTest(e.X, e.Y);
 
-            if (result.ChartElementType == ChartElementType.DataPoint)
+            if (result.ChartElementType == ChartElementType.DataPoint || result.ChartElementType == ChartElementType.DataPointLabel)
             {
                 int index = (int)result.Series.Points[result.PointIndex].XValue;
                 DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
                 DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
+                var bookableObject = result.Series.Points[result.PointIndex].AxisLabel;
+                var description = result.Series.Points[result.PointIndex].Label;
 
-                bool ok = _cm.ChangeBooking(index, startOfBooking, endOfBooking);
-                if (ok)
-                    UpdateChartDependingOnTab();
+                _cm.ChangeBooking(index, startOfBooking, endOfBooking, bookableObject, description);
+                UpdateChartDependingOnTab();
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
             }
