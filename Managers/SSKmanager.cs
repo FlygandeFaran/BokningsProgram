@@ -45,33 +45,32 @@ namespace BokningsProgram
                 serializer.Serialize(writer, _listOfSSK);
             }
         }
-        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out SSK availableSSK)
+        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out SSK availableSSK, bool secondTrack)
         {
             bool ok = true;
-            newBooking = booking;
+            newBooking = new Booking();
+            newBooking.CopyBooking(booking);
             bool sskOK = false;
             availableSSK = new SSK();
 
             while (ok)
             {
-                availableSSK = CheckBookingForSSK(newBooking, out sskOK);
+                if (newBooking.EndTime.Hour > _endOfDay)
+                {
+                    //bool secondTrackAvailable = SetFirstTrackToFull();
+                    //if (!secondTrackAvailable)
+                    {
+                        newBooking = booking;
+                        break;
+                    }
+                    //newBooking = booking; // börjar om igen med ursprungliga bokningen
+                }
+                availableSSK = CheckBookingForSSK(newBooking, out sskOK, secondTrack);
                 if (availableSSK is SSK)
                 {
                     if (sskOK)
                         ok = false;
-                    //else
-                    //    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                    if (booking.EndTime.Hour > _endOfDay)
-                    {
-                        bool secondTrackAvailable = SetFirstTrackToFull();
-                        if (!secondTrackAvailable)
-                        {
-                            MessageBox.Show("Hittade ingen ledig tid för bokningen");
-                            break;
-                        }
-                        newBooking = booking; // börjar om igen med ursprungliga bokningen
-                    }
                 }
                 else
                     newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
@@ -81,37 +80,34 @@ namespace BokningsProgram
             return sskOK;
         }
 
-        private bool SetFirstTrackToFull()
-        {
-            bool ok = false;
-            foreach (SSK ssk in _listOfSSK)
-            {
-                if (ssk.Kompetens == KompetensLevel.Piccline && !ssk.IsFirstTrackFull)
-                {
-                    ssk.IsFirstTrackFull = true;
-                    ok = true;
-                }
-            }
-            return ok;
-        }
+        //private bool SetFirstTrackToFull()
+        //{
+        //    bool ok = false;
+        //    foreach (SSK ssk in _listOfSSK)
+        //    {
+        //        if (ssk.Kompetens == KompetensLevel.Piccline && !ssk.IsFirstTrackFull)
+        //        {
+        //            ssk.IsFirstTrackFull = true;
+        //            ok = true;
+        //        }
+        //    }
+        //    return ok;
+        //}
 
         public void AddBooking(Booking booking, SSK newSSK)
         {
             _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking);//bokar SSK
         }
-        private SSK CheckBookingForSSK(Booking booking, out bool sskOK)
+        private SSK CheckBookingForSSK(Booking booking, out bool sskOK, bool secondTrack)
         {
-            sskOK = CheckCompetensAndAvailabilityOfTrack(booking, out SSK availableSSK);
-            return availableSSK;
-        }
-
-        private bool CheckCompetensAndAvailabilityOfTrack(Booking booking, out SSK availableSSK)
-        {
-            bool sskOK = false;
+            SSK availableSSK = null;
+            sskOK = false;
             ScheduledDays scheduledDays = null;
-            foreach (SSK ssk in _listOfSSK)
+
+            foreach (SSK ssk in _listOfSSK.OrderBy(ssk => ssk.Kompetens))
             {
-                if (ssk.IsFirstTrackFull)
+            {
+                if (secondTrack && ssk.Kompetens == KompetensLevel.Piccline)
                     scheduledDays = ssk.ScheduledDaysSecondTrack;
                 else
                     scheduledDays = ssk.ScheduledDays;
@@ -119,13 +115,11 @@ namespace BokningsProgram
                 {
                     sskOK = ssk.IsCompetentEnough(booking);
                     availableSSK = ssk;
-                    return sskOK;
+                    break;
                 }
             }
-            availableSSK = null;
-            return sskOK;
+            return availableSSK;
         }
-
         public bool CheckBookingForSelectedSSK(Booking booking, SSK ssk)
         {
             bool sskOK = false;
@@ -140,24 +134,5 @@ namespace BokningsProgram
             }
             return sskOK;
         }
-        //public void RemoveSSK(string HSAid)
-        //{
-        //    // Find the person with the given name and remove them from the list
-        //    SSK personToRemove = _listOfSSK.FirstOrDefault(s => s.HSAID == HSAid);
-        //    if (personToRemove != null)
-        //    {
-        //        _listOfSSK.Remove(personToRemove);
-        //        Console.WriteLine($"SSK '{HSAid}' borttagen.");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"SSK '{HSAid}' not found.");
-        //    }
-        //}
-        //public void AddSSK(SSK newSSK)
-        //{
-        //    _listOfSSK.Add(newSSK);
-        //    ExportToXml();
-        //}
     }
 }
