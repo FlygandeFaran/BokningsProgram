@@ -73,7 +73,7 @@ namespace BokningsProgram
             _description = description;
             SetColorToTask();
         }
-        public void CopyBooking(Booking booking)
+        public Booking(Booking booking)
         {
             _roomRequired = booking.RoomRequired;
             _endTime = booking.EndTime;

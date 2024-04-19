@@ -101,9 +101,13 @@ namespace BokningsProgram
 
             return ok;
         }
-        public bool CheckAvailabilityForFullDay()
+        public bool CheckAvailabilityForFullDay(bool secondTrack)
         {
-            if ((_firstlistOfBookings.Count == 3 || _secondlistOfBookings.Count == 3) && !IsFullDayBooked)
+            if ((_firstlistOfBookings.Count == 3) && !IsFullDayBooked && !secondTrack)
+            {
+                return true;
+            }
+            else if (_secondlistOfBookings.Count == 3 && !IsFullDayBooked && secondTrack)
             {
                 return true;
             }
@@ -151,6 +155,8 @@ namespace BokningsProgram
                 _secondlistOfBookings.Add(booking);
             else
                 _firstlistOfBookings.Add(booking);
+            if (booking.FullDay)
+                _isFullDayBooked = true;
 
             SortBookings();
         }
@@ -168,6 +174,8 @@ namespace BokningsProgram
                 _secondlistOfBookings.Remove(booking);
             else
                 _firstlistOfBookings.Remove(booking);
+            if (booking.FullDay)
+                _isFullDayBooked = false;
             SortBookings();
         }
 	}

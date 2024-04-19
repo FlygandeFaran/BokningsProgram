@@ -111,8 +111,7 @@ namespace BokningsProgram.Managers
             if (selectedBooking is Booking)
             {
                 Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
-                Booking newBooking = new Booking();
-                newBooking.CopyBooking(selectedBooking);
+                Booking newBooking = new Booking(selectedBooking);
                 ChangeBooking changeBooking = new ChangeBooking(newBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
                 DialogResult dlgResult = changeBooking.ShowDialog();
                 if (dlgResult == DialogResult.OK)
@@ -234,6 +233,10 @@ namespace BokningsProgram.Managers
                     SuggestBooking(booking, ssk);
                 }
             }
+            else
+            {
+                MessageBox.Show("Hittade ingen tillgänglig tid. Testa att boka var och en för sig", "Aj då");
+            }
 
         }
 
@@ -253,8 +256,7 @@ namespace BokningsProgram.Managers
                         foreach (var booking in multipleBookings)
                         {
                             bool ok = true;
-                            Booking newBooking = new Booking();
-                            newBooking.CopyBooking(booking);
+                            Booking newBooking = new Booking(booking);
                             while (ok)
                             {
                                 ok = _sskManager.CheckBookingForSelectedSSKWithVariableTime(newBooking, out newBooking, ssk);

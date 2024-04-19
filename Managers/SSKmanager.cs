@@ -49,8 +49,7 @@ namespace BokningsProgram
         public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out SSK availableSSK, bool secondTrack)
         {
             bool ok = true;
-            newBooking = new Booking();
-            newBooking.CopyBooking(booking);
+            newBooking = new Booking(booking);
             bool sskOK = false;
             availableSSK = new SSK();
 
@@ -128,8 +127,7 @@ namespace BokningsProgram
         public bool CheckBookingForSelectedSSKWithVariableTime(Booking booking, out Booking newBooking, SSK ssk)
         {
             bool ok = true;
-            newBooking = new Booking();
-            newBooking.CopyBooking(booking);
+            newBooking = new Booking(booking);
             bool sskOK = false;
 
             while (ok)

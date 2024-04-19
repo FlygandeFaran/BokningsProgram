@@ -45,7 +45,7 @@ namespace BokningsProgram
             int i = 0;
 
             if (newBooking.FullDay)
-                isItBooked = !_schedule.CheckAvailabilityForFullDay();
+                isItBooked = !_schedule.CheckAvailabilityForFullDay(secondTrack);
             else
             {
                 while (!ok) //kollar om bokning passar in i schemat

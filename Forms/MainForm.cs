@@ -321,7 +321,7 @@ namespace BokningsProgram
             else
             {
                 start = new DateTime(date.Year, date.Month, date.Day, startHour, startMinute, 0);
-                end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, durationMinute, 0);
+                end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, startMinute + durationMinute, 0);
                 //start = new DateTime(date.Year, date.Month, date.Day, startHour, startMinute, 0);
                 //end = new DateTime(date.Year, date.Month, date.Day, startHour + durationHour, startMinute + durationMinute, 0);
             }
