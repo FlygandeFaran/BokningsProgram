@@ -67,9 +67,26 @@ namespace BokningsProgram
         {
             _schedule.AddBooking(booking, secondTrack, bookingID);
         }
-        public DailySchedule GetDailyScheduleOfBooking(Booking booking, bool secondTrack)
+        public List<Booking> GetAllBookingsFromDay(DateTime date)
         {
-            DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(booking, secondTrack);
+            List<Booking> bookings = new List<Booking>();
+            DailySchedule ds = _scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == date.DayOfYear);
+            foreach (var booking in ds.FirstlistOfBookings)
+            {
+                if (booking.ID != 0)
+                    bookings.Add(booking);
+            }
+            if (_hasSecondSchedule)
+                foreach (var booking in ds.SecondlistOfBookings)
+                {
+                    if (booking.ID != 0)
+                        bookings.Add(booking);
+                }
+            return bookings;
+        }
+        public DailySchedule GetDailyScheduleOfBooking(Booking booking)
+        {
+            DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(booking);
             return ds;
         }
     }

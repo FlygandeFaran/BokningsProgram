@@ -168,12 +168,15 @@ namespace BokningsProgram
                 _secondlistOfBookings.Sort((x, y) => DateTime.Compare(x.StartTime, y.StartTime));
         }
 
-        public void RemoveBooking(Booking booking, bool secondTrack)
+        public void RemoveBooking(Booking booking)
         {
-            if (secondTrack)
-                _secondlistOfBookings.Remove(booking);
-            else
+            bool bookingExists = _firstlistOfBookings.Any(b => b.ID.Equals(booking.ID));
+            if (bookingExists)
+            {
                 _firstlistOfBookings.Remove(booking);
+            }
+            else
+                _secondlistOfBookings.Remove(booking);
             if (booking.FullDay)
                 _isFullDayBooked = false;
             SortBookings();

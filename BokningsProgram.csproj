@@ -63,6 +63,12 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SickLeave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SickLeave.Designer.cs">
+      <DependentUpon>SickLeave.cs</DependentUpon>
+    </Compile>
     <Compile Include="Managers\ClinicalManager.cs" />
     <Compile Include="Forms\ContinueToSearchForSlotDialog.cs">
       <SubType>Form</SubType>
@@ -93,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ContinueToSearchForSlotDialog.resx">
       <DependentUpon>ContinueToSearchForSlotDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SickLeave.resx">
+      <DependentUpon>SickLeave.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

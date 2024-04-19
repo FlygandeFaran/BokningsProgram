@@ -31,9 +31,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.btnClearSSK = new System.Windows.Forms.Button();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lbAvailableRoom = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,15 +40,15 @@
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(104, 181);
+            this.btnOK.Location = new System.Drawing.Point(104, 230);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -60,7 +59,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(205, 181);
+            this.btnCancel.Location = new System.Drawing.Point(205, 230);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -69,49 +68,41 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.checkBox1);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.lbAvailableRoom);
+            this.groupBox2.Controls.Add(this.btnClearSSK);
             this.groupBox2.Controls.Add(this.lbAvailableSSK);
             this.groupBox2.Location = new System.Drawing.Point(171, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(140, 148);
+            this.groupBox2.Size = new System.Drawing.Size(276, 201);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sköterskor";
             // 
-            // checkBox1
+            // btnClearSSK
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 20);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(68, 17);
-            this.checkBox1.TabIndex = 21;
-            this.checkBox1.Text = "Två spår";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.btnClearSSK.Location = new System.Drawing.Point(95, 172);
+            this.btnClearSSK.Name = "btnClearSSK";
+            this.btnClearSSK.Size = new System.Drawing.Size(75, 23);
+            this.btnClearSSK.TabIndex = 22;
+            this.btnClearSSK.Text = "Rensa valda";
+            this.btnClearSSK.UseVisualStyleBackColor = true;
+            this.btnClearSSK.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // lbAvailableSSK
             // 
             this.lbAvailableSSK.FormattingEnabled = true;
-            this.lbAvailableSSK.Location = new System.Drawing.Point(6, 41);
+            this.lbAvailableSSK.Location = new System.Drawing.Point(6, 19);
             this.lbAvailableSSK.Name = "lbAvailableSSK";
-            this.lbAvailableSSK.Size = new System.Drawing.Size(120, 95);
+            this.lbAvailableSSK.Size = new System.Drawing.Size(120, 147);
             this.lbAvailableSSK.TabIndex = 0;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.lbAvailableRoom);
-            this.groupBox3.Location = new System.Drawing.Point(317, 12);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(144, 148);
-            this.groupBox3.TabIndex = 31;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Rum";
             // 
             // lbAvailableRoom
             // 
             this.lbAvailableRoom.FormattingEnabled = true;
-            this.lbAvailableRoom.Location = new System.Drawing.Point(6, 28);
+            this.lbAvailableRoom.Location = new System.Drawing.Point(134, 19);
             this.lbAvailableRoom.Name = "lbAvailableRoom";
-            this.lbAvailableRoom.Size = new System.Drawing.Size(120, 108);
+            this.lbAvailableRoom.Size = new System.Drawing.Size(120, 147);
             this.lbAvailableRoom.TabIndex = 0;
             // 
             // groupBox4
@@ -122,7 +113,7 @@
             this.groupBox4.Controls.Add(this.dtpBehTid);
             this.groupBox4.Location = new System.Drawing.Point(12, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(153, 148);
+            this.groupBox4.Size = new System.Drawing.Size(153, 201);
             this.groupBox4.TabIndex = 32;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Behandlingstid";
@@ -130,7 +121,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 20);
+            this.label1.Location = new System.Drawing.Point(33, 52);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 27;
@@ -139,7 +130,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 72);
+            this.label2.Location = new System.Drawing.Point(33, 104);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 13);
             this.label2.TabIndex = 26;
@@ -148,7 +139,7 @@
             // dtpStartTime
             // 
             this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpStartTime.Location = new System.Drawing.Point(6, 36);
+            this.dtpStartTime.Location = new System.Drawing.Point(36, 68);
             this.dtpStartTime.Name = "dtpStartTime";
             this.dtpStartTime.Size = new System.Drawing.Size(50, 20);
             this.dtpStartTime.TabIndex = 25;
@@ -156,7 +147,7 @@
             // dtpBehTid
             // 
             this.dtpBehTid.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpBehTid.Location = new System.Drawing.Point(6, 88);
+            this.dtpBehTid.Location = new System.Drawing.Point(36, 120);
             this.dtpBehTid.Name = "dtpBehTid";
             this.dtpBehTid.Size = new System.Drawing.Size(50, 20);
             this.dtpBehTid.TabIndex = 7;
@@ -167,22 +158,29 @@
             this.btnDelete.DialogResult = System.Windows.Forms.DialogResult.Abort;
             this.btnDelete.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDelete.Location = new System.Drawing.Point(305, 181);
+            this.btnDelete.Location = new System.Drawing.Point(305, 230);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 33;
             this.btnDelete.Text = "Ta bort";
             this.btnDelete.UseVisualStyleBackColor = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(131, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 13);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "Rum";
             // 
             // ChangeBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 225);
+            this.ClientSize = new System.Drawing.Size(473, 271);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
@@ -194,7 +192,6 @@
             this.Text = "Ändra bokning";
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -206,9 +203,7 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ListBox lbAvailableSSK;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox lbAvailableRoom;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label1;
@@ -216,5 +211,7 @@
         private System.Windows.Forms.DateTimePicker dtpStartTime;
         private System.Windows.Forms.DateTimePicker dtpBehTid;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnClearSSK;
+        private System.Windows.Forms.Label label3;
     }
 }

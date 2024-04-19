@@ -67,21 +67,13 @@ namespace BokningsProgram
             }
             //Load excelsheet and create new DailySchedules for each day with an end and start time
         }
-        public DailySchedule GetDailyScheduleOfBooking(Booking booking, bool secondTrack)
+        public DailySchedule GetDailyScheduleOfBooking(Booking booking)
         {
             DailySchedule ds = null;
-            if (secondTrack)
-            {
-                ds = _dagar.FirstOrDefault(dailySchedule =>
-                                                            dailySchedule.SecondlistOfBookings.Any(booked =>
-                                                                booked.ID == booking.ID));
-            }
-            else
-            {
-                ds = _dagar.FirstOrDefault(dailySchedule =>
-                                                            dailySchedule.FirstlistOfBookings.Any(booked =>
-                                                                booked.ID == booking.ID));
-            }
+            ds = _dagar.FirstOrDefault(dailySchedule =>
+                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.ID == booking.ID) ||
+                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.ID == booking.ID));
+
             return ds;
         }
     }

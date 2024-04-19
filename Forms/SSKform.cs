@@ -31,7 +31,12 @@ namespace BokningsProgram
         {
 
             txtName.TabIndex = 0;
-            txtHSAid.TabIndex = 1;
+            txtHSAid.TabIndex = 1; 
+            foreach (KompetensLevel enumValue in Enum.GetValues(typeof(KompetensLevel)))
+            {
+                // Add each enum value to the CheckedListBox
+                clbKompetenser.Items.Add(enumValue);
+            }
             UpdateCurrentSSKlistBox();
         }
         private void UpdateCurrentSSKlistBox()
@@ -158,6 +163,11 @@ namespace BokningsProgram
 
             txtName.Text = selectedSSK.Name;
             txtHSAid.Text = selectedSSK.HSAID;
+
+            for (int i = 0; i < Enum.GetValues(typeof(KompetensLevel)).Length; i++)
+            {
+                clbKompetenser.SetItemChecked(i, false);
+            }
 
             foreach (var kompetens in selectedSSK.Kompetenser)
             {

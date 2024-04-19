@@ -84,6 +84,13 @@ namespace BokningsProgram
             _taskTextColor = booking.TaskTextColor;
             _id = booking.ID;
         }
+        public void SickDay()
+        {
+            _startTime = _startTime.AddHours(-_startTime.Hour);
+            _endTime = _endTime.AddHours(-_endTime.Hour + 23);
+            _description = "Sjuk";
+            SetColorToTask();
+        }
         public Booking GenerateNewBookingSuggestion(Booking booking)
         {
             booking.StartTime = booking.StartTime.AddHours(0.5);
@@ -108,6 +115,9 @@ namespace BokningsProgram
                 case "Lunch":
                     _taskColor = Color.LightCoral;
                     _taskTextColor = _taskColor;
+                    break;
+                case "Sjuk":
+                    _taskColor = Color.LightCoral;
                     break;
                 default:
                     _taskColor = Color.LightPink;

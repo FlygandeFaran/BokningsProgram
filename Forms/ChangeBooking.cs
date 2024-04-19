@@ -27,7 +27,9 @@ namespace BokningsProgram.Forms
             dtpStartTime.Value = booking.StartTime;
             TimeSpan behTid = booking.EndTime - booking.StartTime;
             dtpBehTid.Value = new DateTime(booking.StartTime.Year, booking.StartTime.Month, booking.StartTime.Day, behTid.Hours, behTid.Minutes, 0);
-            lbAvailableSSK.SelectedItem = ssk;
+            //lbAvailableSSK.SelectedItem = ssk;
+            lbAvailableSSK.SelectedIndex = -1;
+            lbAvailableRoom.SelectedIndex = -1;
         }
         private void InitializeGUI()
         {
@@ -47,10 +49,10 @@ namespace BokningsProgram.Forms
             Ssk = lbAvailableSSK.SelectedItem as SSK;
             Room = lbAvailableRoom.SelectedItem as Room;
         }
-
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
         {
-
+            lbAvailableSSK.SelectedIndex = -1;
+            lbAvailableRoom.SelectedIndex = -1;
         }
     }
 }

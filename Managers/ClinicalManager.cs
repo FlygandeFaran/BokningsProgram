@@ -110,38 +110,47 @@ namespace BokningsProgram.Managers
 
             if (selectedBooking is Booking)
             {
-                Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
-                Booking newBooking = new Booking(selectedBooking);
-                ChangeBooking changeBooking = new ChangeBooking(newBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
-                DialogResult dlgResult = changeBooking.ShowDialog();
-                if (dlgResult == DialogResult.OK)
-                {
-                    DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
-                    if (ds == null)
-                        ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, false);
-                    ds.RemoveBooking(selectedBooking, secondTrack);
-                    
-                    SuggestBooking(newBooking, changeBooking.Ssk);
-
-                    ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
-                    ds.RemoveBooking(selectedBooking, secondTrack);
-
-                    ok = true;
-                }
-                else if (dlgResult == DialogResult.Abort)
-                {
-                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
-                    ds.RemoveBooking(selectedBooking, secondTrack);
-                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
-                    if (ds == null)
-                        ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, false);
-                    ds.RemoveBooking(selectedBooking, secondTrack);
-                }
+                ok = UpdateBooking(selectedSSK, selectedBooking);
             }
             else
                 MessageBox.Show("Kunde inte hitta någon bokning", "Hoppsan");
             return ok;
         }
+
+        public bool UpdateBooking(SSK selectedSSK, Booking selectedBooking)
+        {
+            bool ok = false;
+            Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
+            Booking newBooking = new Booking(selectedBooking);
+            ChangeBooking changeBooking = new ChangeBooking(newBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
+            DialogResult dlgResult = changeBooking.ShowDialog();
+            if (dlgResult == DialogResult.OK)
+            {
+                DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                if (ds == null)
+                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                ds.RemoveBooking(selectedBooking);
+
+                SuggestBooking(newBooking, changeBooking.Ssk);
+
+                ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
+                ds.RemoveBooking(selectedBooking);
+
+                ok = true;
+            }
+            else if (dlgResult == DialogResult.Abort)
+            {
+                DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
+                ds.RemoveBooking(selectedBooking);
+                ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                if (ds == null)
+                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                ds.RemoveBooking(selectedBooking);
+            }
+
+            return ok;
+        }
+
         private void SuggestBooking(Booking booking)
         {
             //Check for ssk
@@ -287,6 +296,13 @@ namespace BokningsProgram.Managers
             }
 
             return roomOK;
+        }
+        public void AddSickBooking(SSK sickSSK, Booking sickBooking)
+        {
+            sickBooking.SickDay(); //blockerar hela dagen
+            _sskManager.AddBooking(sickBooking, sickSSK, false, 0);
+            if (sickSSK.HasSecondSchedule)
+                _sskManager.AddBooking(sickBooking, sickSSK, true, 0);
         }
     }
 }
