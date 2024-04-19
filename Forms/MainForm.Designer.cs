@@ -28,14 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.cbDescription = new System.Windows.Forms.ComboBox();
+            this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
+            this.cbNystart = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbFlerdagsbeh = new System.Windows.Forms.CheckBox();
             this.dtpEndDate = new System.Windows.Forms.DateTimePicker();
@@ -46,8 +48,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
-            this.cbNystart = new System.Windows.Forms.CheckBox();
-            this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
@@ -127,6 +127,27 @@
             this.cbDescription.Size = new System.Drawing.Size(100, 21);
             this.cbDescription.TabIndex = 18;
             this.cbDescription.SelectedIndexChanged += new System.EventHandler(this.cbDescription_SelectedIndexChanged);
+            // 
+            // cbEntireDayBooking
+            // 
+            this.cbEntireDayBooking.AutoSize = true;
+            this.cbEntireDayBooking.Location = new System.Drawing.Point(6, 46);
+            this.cbEntireDayBooking.Name = "cbEntireDayBooking";
+            this.cbEntireDayBooking.Size = new System.Drawing.Size(60, 17);
+            this.cbEntireDayBooking.TabIndex = 21;
+            this.cbEntireDayBooking.Text = "Heldag";
+            this.cbEntireDayBooking.UseVisualStyleBackColor = true;
+            this.cbEntireDayBooking.CheckedChanged += new System.EventHandler(this.cbEntireDayBooking_CheckedChanged);
+            // 
+            // cbNystart
+            // 
+            this.cbNystart.AutoSize = true;
+            this.cbNystart.Location = new System.Drawing.Point(6, 69);
+            this.cbNystart.Name = "cbNystart";
+            this.cbNystart.Size = new System.Drawing.Size(59, 17);
+            this.cbNystart.TabIndex = 22;
+            this.cbNystart.Text = "Nystart";
+            this.cbNystart.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
@@ -231,27 +252,6 @@
             this.dtpStartTime.TabIndex = 25;
             this.dtpStartTime.ValueChanged += new System.EventHandler(this.dtpStartTime_ValueChanged);
             // 
-            // cbNystart
-            // 
-            this.cbNystart.AutoSize = true;
-            this.cbNystart.Location = new System.Drawing.Point(6, 69);
-            this.cbNystart.Name = "cbNystart";
-            this.cbNystart.Size = new System.Drawing.Size(59, 17);
-            this.cbNystart.TabIndex = 22;
-            this.cbNystart.Text = "Nystart";
-            this.cbNystart.UseVisualStyleBackColor = true;
-            // 
-            // cbEntireDayBooking
-            // 
-            this.cbEntireDayBooking.AutoSize = true;
-            this.cbEntireDayBooking.Location = new System.Drawing.Point(6, 46);
-            this.cbEntireDayBooking.Name = "cbEntireDayBooking";
-            this.cbEntireDayBooking.Size = new System.Drawing.Size(60, 17);
-            this.cbEntireDayBooking.TabIndex = 21;
-            this.cbEntireDayBooking.Text = "Heldag";
-            this.cbEntireDayBooking.UseVisualStyleBackColor = true;
-            this.cbEntireDayBooking.CheckedChanged += new System.EventHandler(this.cbEntireDayBooking_CheckedChanged);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBox1);
@@ -337,19 +337,19 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea4.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chart1.Legends.Add(legend4);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(172, 86);
             this.chart1.Name = "chart1";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series4.IsVisibleInLegend = false;
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            series4.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series4);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series2.IsVisibleInLegend = false;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            series2.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(982, 779);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
@@ -436,6 +436,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bokningssystem Dagvård av Erik Fura";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();

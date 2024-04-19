@@ -34,21 +34,15 @@ namespace BokningsProgram
         public Room GetRoomFromBooking(Booking booking)
         {
             Room bookedRoom = _listOfRooms.FirstOrDefault(room =>
-                                                            room.RoomType == booking.RoomRequired &&
                                                             room.ScheduledDays.Days.Any(s => s.FirstlistOfBookings.Any(booked =>
-                                                            booked.StartTime == booking.StartTime &&
-                                                            booked.EndTime == booking.EndTime &&
-                                                            booked.Description == booking.Description)));
+                                                            booked.ID == booking.ID)));
             if (bookedRoom is Room)
                 return bookedRoom;
             else
             {
                 bookedRoom = _listOfRooms.FirstOrDefault(room =>
-                                                            room.RoomType == booking.RoomRequired &&
                                                             room.ScheduledDays.Days.Any(s => s.SecondlistOfBookings.Any(booked =>
-                                                            booked.StartTime == booking.StartTime &&
-                                                            booked.EndTime == booking.EndTime &&
-                                                            booked.Description == booking.Description)));
+                                                            booked.ID == booking.ID)));
             }
             return bookedRoom;
         }
@@ -109,8 +103,8 @@ namespace BokningsProgram
 
                 if (j == _listOfRooms.Count && booking.RoomRequired == RoomCategory.PicclineOm)
                 {
-                    roomOK = true;
-                    MessageBox.Show("Hittade inget ledigt rum vid den här tiden. Vänligen välj ny tid");
+                    roomOK = false;
+                    break;
                 }
                 else if (j == _listOfRooms.Count && !roomOK)
                 {
@@ -128,9 +122,9 @@ namespace BokningsProgram
             
             return tempRoom;
         }
-        public void AddBooking(Booking booking, Room newRoom, bool secondRoomTrack)
+        public void AddBooking(Booking booking, Room newRoom, bool secondRoomTrack, int bookingID)
         {
-            _listOfRooms.FirstOrDefault(r => r.RoomNumber.Equals(newRoom.RoomNumber)).AddBooking(booking, secondRoomTrack);//bokar SSK
+            _listOfRooms.FirstOrDefault(r => r.RoomNumber.Equals(newRoom.RoomNumber)).AddBooking(booking, secondRoomTrack, bookingID);//bokar SSK
         }
 
         private Booking SingleRoomQueue(Booking booking)

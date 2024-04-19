@@ -74,17 +74,13 @@ namespace BokningsProgram
             {
                 ds = _dagar.FirstOrDefault(dailySchedule =>
                                                             dailySchedule.SecondlistOfBookings.Any(booked =>
-                                                                booked.StartTime == booking.StartTime &&
-                                                                booked.EndTime == booking.EndTime &&
-                                                                booked.Description == booking.Description));
+                                                                booked.ID == booking.ID));
             }
             else
             {
                 ds = _dagar.FirstOrDefault(dailySchedule =>
                                                             dailySchedule.FirstlistOfBookings.Any(booked =>
-                                                                booked.StartTime == booking.StartTime &&
-                                                                booked.EndTime == booking.EndTime &&
-                                                                booked.Description == booking.Description));
+                                                                booked.ID == booking.ID));
             }
             return ds;
         }

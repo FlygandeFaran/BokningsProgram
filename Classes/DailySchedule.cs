@@ -58,9 +58,9 @@ namespace BokningsProgram
         private void LoadDay(DateTime startOfDay, bool secondTrack)
         {
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
-            AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Stängt", RoomCategory.Dubbel, false), secondTrack); //Spärrar starten av dagen
-            AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Stängt", RoomCategory.Dubbel, false), secondTrack); //Spärrar slutet av dagen
-            AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack); //Spärrar lunch
+            AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar starten av dagen
+            AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar slutet av dagen
+            AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar lunch
         }
 
         public void AddSecondListOfBookings(DateTime startOfDay)
@@ -82,8 +82,10 @@ namespace BokningsProgram
             else if (_secondlistOfBookings is List<Booking>)
             {
                 if (!IsFullDayBooked && _secondlistOfBookings.Count > i && secondTrack)
-                bookings = _secondlistOfBookings;
-                booking = bookings[i];
+                {
+                    bookings = _secondlistOfBookings;
+                    booking = bookings[i];
+                }
             }
 
             if (booking is Booking)
@@ -142,8 +144,9 @@ namespace BokningsProgram
             }
             return false;
         }
-        public void AddBooking(Booking booking, bool secondTrack)
+        public void AddBooking(Booking booking, bool secondTrack, int bookingID)
         {
+            booking.ID = bookingID;
             if (secondTrack && _secondlistOfBookings is List<Booking>)
                 _secondlistOfBookings.Add(booking);
             else

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,13 +58,10 @@ namespace BokningsProgram
             {
                 if (newBooking.EndTime.Hour > _endOfDay)
                 {
-                    //bool secondTrackAvailable = SetFirstTrackToFull();
-                    //if (!secondTrackAvailable)
                     {
                         newBooking = booking;
                         break;
                     }
-                    //newBooking = booking; // börjar om igen med ursprungliga bokningen
                 }
                 availableSSK = CheckBookingForSSK(newBooking, out sskOK, secondTrack);
                 if (availableSSK is SSK)
@@ -74,14 +72,13 @@ namespace BokningsProgram
                 }
                 else
                     newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-                //else { MessageBox.Show("Hittade ingen ssk"); }
 
             }
             return sskOK;
         }
-        public void AddBooking(Booking booking, SSK newSSK, bool secondTrack)
+        public void AddBooking(Booking booking, SSK newSSK, bool secondTrack, int bookingID)
         {
-            _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking, secondTrack);//bokar SSK
+            _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking, secondTrack, bookingID);//bokar SSK
         }
         private SSK CheckBookingForSSK(Booking booking, out bool sskOK, bool secondTrack)
         {
@@ -125,6 +122,40 @@ namespace BokningsProgram
                     return sskOK;
                 else
                     MessageBox.Show("Sköterska kan inte lägga piccline");
+            }
+            return sskOK;
+        }
+        public bool CheckBookingForSelectedSSKWithVariableTime(Booking booking, out Booking newBooking, SSK ssk)
+        {
+            bool ok = true;
+            newBooking = new Booking();
+            newBooking.CopyBooking(booking);
+            bool sskOK = false;
+
+            while (ok)
+            {
+                if (newBooking.EndTime.Hour > _endOfDay)
+                {
+                    {
+                        newBooking = booking;
+                        break;
+                    }
+                }
+                sskOK = !ssk.IsItBooked(newBooking, false);
+                if (!sskOK)
+                {
+                    sskOK = !ssk.IsItBooked(newBooking, true);
+                    if (sskOK)
+                    {
+                        ok = false;
+                    }
+                }
+                if (sskOK)
+                {
+                    return sskOK;
+                }
+                else
+                    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
             }
             return sskOK;
         }

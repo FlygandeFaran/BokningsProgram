@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,6 +20,7 @@ namespace BokningsProgram.Managers
         //private DateTime _endOfDay;
         private SSKmanager _sskManager;
         private RoomManager _roomManager;
+        private int _bookingID;
 
         public RoomManager RoomManager
         {
@@ -34,7 +37,7 @@ namespace BokningsProgram.Managers
         {
             _roomManager = new RoomManager();
             _sskManager = new SSKmanager();
-
+            GetID();
             //ska tas bort innan klar
             File.Delete("SSK.xml");
             File.Delete("Rooms.xml");
@@ -46,6 +49,18 @@ namespace BokningsProgram.Managers
         private void InitializeStaff()
         {
             _sskManager.ImportFromXml();
+        }
+        private void GetID()
+        {
+            string filename = "bookingID.txt";
+            _bookingID = int.Parse(File.ReadAllText(filename));
+
+        }
+        public void UpdateID()
+        {
+            string filename = "bookingID.txt";
+            string content = (++_bookingID).ToString();
+            File.WriteAllText(filename, content);
         }
 
         private void exportStaff()
@@ -102,13 +117,14 @@ namespace BokningsProgram.Managers
                 DialogResult dlgResult = changeBooking.ShowDialog();
                 if (dlgResult == DialogResult.OK)
                 {
-                    SuggestBooking(newBooking, changeBooking.Ssk);
-
-                    DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
-                    ds.RemoveBooking(selectedBooking, secondTrack);
-                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
+                    DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
                     if (ds == null)
                         ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking, false);
+                    ds.RemoveBooking(selectedBooking, secondTrack);
+                    
+                    SuggestBooking(newBooking, changeBooking.Ssk);
+
+                    ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking, secondTrack);
                     ds.RemoveBooking(selectedBooking, secondTrack);
 
                     ok = true;
@@ -151,9 +167,12 @@ namespace BokningsProgram.Managers
                 if (roomOK)
                 {
                     //lägg till bekräftelse av användaren
-                    _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking);
-                    _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking);
+                    _bookingID++;
+                    _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, _bookingID);
+                    _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
                 }
+                else
+                    MessageBox.Show("Hittade inget ledigt rum för bokningen", "Hoppsan");
             }
             else
                 MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
@@ -171,22 +190,23 @@ namespace BokningsProgram.Managers
                 bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
                 if (!sskOK)
                 {
+                    sskSecondTrackBooking = true;
                     sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
-                    sskSecondTrackBooking = sskOK;
                 }
                 if (sskOK)
                 {
-                    roomOK = !_roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
+                    roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, sskSecondTrackBooking);
                     if (!roomOK)
                     {
-                        roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
-                        roomSecondTrackBooking = roomOK;
+                        sskSecondTrackBooking = true;
+                        roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, sskSecondTrackBooking);//Check second track
                     }
                     if (roomOK)
                     {
                         //lägg till bekräftelse av användaren
-                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking);
-                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking);
+                        _bookingID++;
+                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
+                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
                     }
                 }
                 else
@@ -203,6 +223,68 @@ namespace BokningsProgram.Managers
             {
                 SuggestBooking(booking);
             }
+        }
+        public void SuggestMultipleBookings(List<Booking> multipleBookings)
+        {
+            SSK ssk = GetFreeSSK(multipleBookings, out List<Booking> bookings);
+            if (ssk is SSK)
+            {
+                foreach (var booking in bookings)
+                {
+                    SuggestBooking(booking, ssk);
+                }
+            }
+
+        }
+
+        private SSK GetFreeSSK(List<Booking> multipleBookings, out List<Booking> bookings)
+        {
+            SSK noSSK = null;
+            bookings = new List<Booking>();
+
+            foreach (KompetensLevel kompetensLevel in Enum.GetValues(typeof(KompetensLevel)))//sorterar efter kompetenser
+            {
+                foreach (SSK ssk in _sskManager.ListOfSSK)
+                {
+                    int count = 0;
+                    if (ssk.Kompetenser.Contains(kompetensLevel))
+                    {
+                        bookings = new List<Booking>();
+                        foreach (var booking in multipleBookings)
+                        {
+                            bool ok = true;
+                            Booking newBooking = new Booking();
+                            newBooking.CopyBooking(booking);
+                            while (ok)
+                            {
+                                ok = _sskManager.CheckBookingForSelectedSSKWithVariableTime(newBooking, out newBooking, ssk);
+                                if (ok)
+                                    ok = CheckRoomWithSelectedBooking(newBooking, out newBooking);
+                                if (ok)
+                                {
+                                    count++;
+                                    ok = false;
+                                    bookings.Add(newBooking);
+                                }
+                            }
+                        }
+                        if (count == multipleBookings.Count)
+                            return ssk;
+                    }
+                }
+            }
+            return noSSK;
+        }
+
+        private bool CheckRoomWithSelectedBooking(Booking booking, out Booking newBooking)
+        {
+            bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out newBooking, out Room availableRoom, false);
+            if (!roomOK)
+            {
+                roomOK = _roomManager.CheckAvailabilityForBooking(newBooking, out newBooking, out availableRoom, true);//Check second track
+            }
+
+            return roomOK;
         }
     }
 }

@@ -270,14 +270,15 @@ namespace BokningsProgram
             if (cbFlerdagsbeh.Checked)
             {
                 List<Booking> multipleNewBookings = MultipleNewBookings(roomRequired);
-                foreach (var booking in multipleNewBookings)
-                {
-                    _cm.SuggestBooking(booking, lbAvailableSSK.SelectedItem as SSK);
-                }
+                _cm.SuggestMultipleBookings(multipleNewBookings);
+                //foreach (var booking in multipleNewBookings)
+                //{
+                //    _cm.SuggestBooking(booking, lbAvailableSSK.SelectedItem as SSK);
+                //}
             }
             else
             {
-                GetBookingTime(out DateTime start, out DateTime end, dtpStartTime.Value);
+                GetBookingTime(out DateTime start, out DateTime end, dtpScheduleDay.Value);
                 Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked);
                 _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
             }
@@ -287,13 +288,12 @@ namespace BokningsProgram
         private List<Booking> MultipleNewBookings(RoomCategory roomRequired)
         {
             List<Booking> newBookings = new List<Booking>();
-            DateTime enddate = dtpEndDate.Value.AddMinutes(30);
-            var days = (enddate - dtpStartDate.Value);
+            var days = (dtpEndDate.Value.DayOfYear - dtpStartDate.Value.DayOfYear) + 1;
             DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
-            for (int i = 0; i < days.Days; i++)
+            for (int i = 0; i < days; i++)
             {
                 GetBookingTime(out DateTime start, out DateTime end, date);
-                date = date.AddDays(i + 1);
+                date = date.AddDays(1);
                 newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
             }
             return newBookings;
@@ -440,7 +440,6 @@ namespace BokningsProgram
                 int index = (int)result.Series.Points[result.PointIndex].XValue;
                 DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
                 DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
-                var bookableObject = result.Series.Points[result.PointIndex].AxisLabel;
                 var description = result.Series.Points[result.PointIndex].Label;
                 bool secondTrack = false;
                 if (result.Series == chart1.Series[1])
@@ -459,6 +458,10 @@ namespace BokningsProgram
                 cbEntireDayBooking.Checked = true;
             else 
                 cbEntireDayBooking.Checked = false;
+        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _cm.UpdateID();
         }
     }
 }

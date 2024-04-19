@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,13 @@ namespace BokningsProgram
         private DateTime _startTime;
         private DateTime _endTime;
         private Color _taskTextColor;
+        private int _id;
 
+        public int ID
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
         public Color TaskTextColor
         {
             get { return _taskTextColor; }
@@ -75,6 +82,7 @@ namespace BokningsProgram
             _fullDay = booking.FullDay;
             _taskColor = booking.TaskColor;
             _taskTextColor = booking.TaskTextColor;
+            _id = booking.ID;
         }
         public Booking GenerateNewBookingSuggestion(Booking booking)
         {

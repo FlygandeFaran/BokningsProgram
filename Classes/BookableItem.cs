@@ -63,9 +63,9 @@ namespace BokningsProgram
 
             return isItBooked;
         }
-        public void AddBooking(Booking booking, bool secondTrack)
+        public void AddBooking(Booking booking, bool secondTrack, int bookingID)
         {
-            _schedule.AddBooking(booking, secondTrack);
+            _schedule.AddBooking(booking, secondTrack, bookingID);
         }
         public DailySchedule GetDailyScheduleOfBooking(Booking booking, bool secondTrack)
         {
