@@ -385,28 +385,6 @@ namespace BokningsProgram
             // When the value changes, round it to the nearest 30 minutes
             dtpStartTime.Value = RoundToNearest30Minutes(dtpStartTime.Value);
         }
-
-        private void chart1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            var result = chart1.HitTest(e.X, e.Y);
-
-            if (result.ChartElementType == ChartElementType.DataPoint || result.ChartElementType == ChartElementType.DataPointLabel)
-            {
-                int index = (int)result.Series.Points[result.PointIndex].XValue;
-                DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
-                DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
-                var description = result.Series.Points[result.PointIndex].Label;
-                bool secondTrack = false;
-                if (result.Series == chart1.Series[1])
-                    secondTrack = true;
-
-                _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
-                UpdateChartDependingOnTab();
-
-                //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
-            }
-        }
-
         private void cbDescription_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDescription.Text.Equals("Tablett") || cbDescription.Text.Equals("Telefon"))
@@ -428,15 +406,41 @@ namespace BokningsProgram
                 SSK sickSSK = sickLeave.SelectedSSK;
 
                 List<Booking> GetAllBookings = sickSSK.GetAllBookingsFromDay(dtpScheduleDay.Value);
-                Booking sickBooking = new Booking(GetAllBookings.FirstOrDefault());
-                _cm.AddSickBooking(sickSSK, sickBooking);
-                foreach (Booking booking in GetAllBookings)
+                //if (GetAllBookings.Count > 0)
                 {
-                    _cm.UpdateBooking(sickSSK, booking);
-                    UpdateChartDependingOnTab();
+                    Booking sickBooking = new Booking();
+                    sickBooking.SickDay(dtpScheduleDay.Value);
+                    //Booking sickBooking = new Booking(GetAllBookings.FirstOrDefault());
+                    _cm.AddSickBooking(sickSSK, sickBooking);
+                    foreach (Booking booking in GetAllBookings)
+                    {
+                        _cm.UpdateBooking(sickSSK, booking);
+                        UpdateChartDependingOnTab();
+                    }
                 }
             }
             UpdateChartDependingOnTab();
+        }
+
+        private void chart1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var result = chart1.HitTest(e.X, e.Y);
+
+            if (result.ChartElementType == ChartElementType.DataPoint || result.ChartElementType == ChartElementType.DataPointLabel)
+            {
+                int index = (int)result.Series.Points[result.PointIndex].XValue;
+                DateTime startOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[0]);
+                DateTime endOfBooking = DateTime.FromOADate(result.Series.Points[result.PointIndex].YValues[1]);
+                var description = result.Series.Points[result.PointIndex].Label;
+                bool secondTrack = false;
+                if (result.Series == chart1.Series[1])
+                    secondTrack = true;
+
+                _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
+                UpdateChartDependingOnTab();
+
+                //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
+            }
         }
     }
 }

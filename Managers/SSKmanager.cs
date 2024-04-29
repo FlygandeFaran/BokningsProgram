@@ -28,7 +28,7 @@ namespace BokningsProgram
         {
             _listOfSSK = new List<SSK>();
             filename = "SSK.xml"; //Updatera efter dagvårdens IT-miljö
-            ImportSSKschedule();
+            //ImportSSKschedule();
             _endOfDay = 16;
         }
         public void ImportFromXml()
@@ -157,36 +157,6 @@ namespace BokningsProgram
                     newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
             }
             return sskOK;
-        }
-        private void ImportSSKschedule()
-        {
-            string filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Pilot_schema.xlsx";
-            // Create an instance of Excel Application
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-
-            // Open the Excel workbook
-            Workbook workbook = excelApp.Workbooks.Open(filename);
-
-            // Get the first worksheet
-            Worksheet worksheet = workbook.Sheets[1];
-
-            // Get cell values
-            Range range = worksheet.UsedRange;
-            object[,] values = range.Value;
-
-            string scheman = "";
-            // Loop through the cells and print their values
-            for (int i = 1; i <= range.Rows.Count; i++)
-            {
-                for (int j = 1; j <= range.Columns.Count; j++)
-                {
-                    scheman += (values[i, j] + "\t");
-                }
-            }
-
-            // Close Excel
-            workbook.Close();
-            excelApp.Quit();
         }
     }
 }

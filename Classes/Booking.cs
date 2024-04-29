@@ -84,10 +84,11 @@ namespace BokningsProgram
             _taskTextColor = booking.TaskTextColor;
             _id = booking.ID;
         }
-        public void SickDay()
+        public void SickDay(DateTime date)
         {
-            _startTime = _startTime.AddHours(-_startTime.Hour);
-            _endTime = _endTime.AddHours(-_endTime.Hour + 23);
+
+            _startTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
+            _endTime = new DateTime(date.Year, date.Month, date.Day, 23, 0, 0);
             _description = "Sjuk";
             SetColorToTask();
         }
@@ -106,7 +107,7 @@ namespace BokningsProgram
                     _taskColor = Color.LightGreen;
                     break;
                 case "Cytostatika":
-                    _taskColor = Color.LightCyan;
+                    _taskColor = Color.LightSalmon;
                     break;
                 case "Stängt":
                     _taskColor = Color.LightGray;
@@ -121,6 +122,25 @@ namespace BokningsProgram
                     break;
                 default:
                     _taskColor = Color.LightPink;
+                    break;
+            }
+        }
+        public void GetTreatmentDuration(out double hour, out double minutes)
+        {
+            hour = 0;
+            minutes = 0;
+            switch (_description)
+            {
+                case "Piccline":
+                    hour = 1;
+                    minutes = 30;
+                    break;
+                case "Cytostatika":
+                    hour = 1;
+                    minutes = 30;
+                    break;
+                default:
+                    hour = 1;
                     break;
             }
         }

@@ -34,6 +34,7 @@
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSickLeave = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.cbDescription = new System.Windows.Forms.ComboBox();
             this.cbEntireDayBooking = new System.Windows.Forms.CheckBox();
@@ -64,7 +65,6 @@
             this.btnNextDay = new System.Windows.Forms.Button();
             this.btnPrevDay = new System.Windows.Forms.Button();
             this.lblWarning = new System.Windows.Forms.Label();
-            this.btnSickLeave = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -107,6 +107,16 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
+            // 
+            // btnSickLeave
+            // 
+            this.btnSickLeave.Location = new System.Drawing.Point(28, 752);
+            this.btnSickLeave.Name = "btnSickLeave";
+            this.btnSickLeave.Size = new System.Drawing.Size(93, 23);
+            this.btnSickLeave.TabIndex = 31;
+            this.btnSickLeave.Text = "Sjukanmälan";
+            this.btnSickLeave.UseVisualStyleBackColor = true;
+            this.btnSickLeave.Click += new System.EventHandler(this.btnSickLeave_Click);
             // 
             // groupBox6
             // 
@@ -295,6 +305,7 @@
             // 
             // lbAvailableRooms
             // 
+            this.lbAvailableRooms.Enabled = false;
             this.lbAvailableRooms.FormattingEnabled = true;
             this.lbAvailableRooms.Location = new System.Drawing.Point(6, 28);
             this.lbAvailableRooms.Name = "lbAvailableRooms";
@@ -355,7 +366,7 @@
             this.chart1.Size = new System.Drawing.Size(982, 779);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
-            this.chart1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseDoubleClick);
+            this.chart1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseClick);
             // 
             // rbChartSSK
             // 
@@ -418,16 +429,6 @@
             this.lblWarning.Size = new System.Drawing.Size(65, 13);
             this.lblWarning.TabIndex = 30;
             this.lblWarning.Text = "Varningstext";
-            // 
-            // btnSickLeave
-            // 
-            this.btnSickLeave.Location = new System.Drawing.Point(28, 752);
-            this.btnSickLeave.Name = "btnSickLeave";
-            this.btnSickLeave.Size = new System.Drawing.Size(93, 23);
-            this.btnSickLeave.TabIndex = 31;
-            this.btnSickLeave.Text = "Sjukanmälan";
-            this.btnSickLeave.UseVisualStyleBackColor = true;
-            this.btnSickLeave.Click += new System.EventHandler(this.btnSickLeave_Click);
             // 
             // MainForm
             // 

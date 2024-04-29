@@ -49,6 +49,8 @@ namespace BokningsProgram.Managers
         private void InitializeStaff()
         {
             _sskManager.ImportFromXml();
+            ExcelImport excelImport = new ExcelImport();
+            //excelImport.ImportSSKschedule();
         }
         private void GetID()
         {
@@ -142,7 +144,8 @@ namespace BokningsProgram.Managers
             {
                 DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
-                ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                if (selectedRoom is Room)
+                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
                 if (ds == null)
                     ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
@@ -299,10 +302,10 @@ namespace BokningsProgram.Managers
         }
         public void AddSickBooking(SSK sickSSK, Booking sickBooking)
         {
-            sickBooking.SickDay(); //blockerar hela dagen
-            _sskManager.AddBooking(sickBooking, sickSSK, false, 0);
+            _bookingID++;
+            _sskManager.AddBooking(sickBooking, sickSSK, false, _bookingID);
             if (sickSSK.HasSecondSchedule)
-                _sskManager.AddBooking(sickBooking, sickSSK, true, 0);
+                _sskManager.AddBooking(sickBooking, sickSSK, true, _bookingID);
         }
     }
 }

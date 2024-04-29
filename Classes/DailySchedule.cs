@@ -60,7 +60,7 @@ namespace BokningsProgram
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
             AddBooking(new Booking(_startOfDay.AddHours(-3), _startOfDay, "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar starten av dagen
             AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(3), "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar slutet av dagen
-            AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar lunch
+            AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 1); //Spärrar lunch
         }
 
         public void AddSecondListOfBookings(DateTime startOfDay)
@@ -73,32 +73,33 @@ namespace BokningsProgram
             bool ok = false;
             Booking booking = null;
             List<Booking> bookings = null;
-            
-            if (_firstlistOfBookings.Count > i && !secondTrack)
+            if (!IsFullDayBooked && !_firstlistOfBookings.First().Description.Equals("Sjuk"))
             {
-                bookings = _firstlistOfBookings;
-                booking = bookings[i];
-            }
-            else if (_secondlistOfBookings is List<Booking>)
-            {
-                if (!IsFullDayBooked && _secondlistOfBookings.Count > i && secondTrack)
+                if (_firstlistOfBookings.Count > i && !secondTrack)
                 {
-                    bookings = _secondlistOfBookings;
+                    bookings = _firstlistOfBookings;
                     booking = bookings[i];
                 }
-            }
+                else if (_secondlistOfBookings is List<Booking>)
+                {
 
-            if (booking is Booking)
-            {
-                if (CheckAvailabilityBeforeFirstBooking(newBooking, i, booking))
-                    ok = true;
-                else if (CheckAvailabilityBetweenBookings(newBooking, i, booking, bookings))
-                    ok = true;
-                else if (CheckAvailabilityAfterLastBooking(newBooking, i, booking, bookings))
-                    ok = true;
+                    //if (!IsFullDayBooked && _secondlistOfBookings.Count > i && secondTrack) Om man kan jobba samtidigt som telefon/tablett
+                    if (_secondlistOfBookings.Count > i && secondTrack)
+                    {
+                        bookings = _secondlistOfBookings;
+                        booking = bookings[i];
+                    }
+                }
+                if (booking is Booking)
+                {
+                    if (CheckAvailabilityBeforeFirstBooking(newBooking, i, booking))
+                        ok = true;
+                    else if (CheckAvailabilityBetweenBookings(newBooking, i, booking, bookings))
+                        ok = true;
+                    else if (CheckAvailabilityAfterLastBooking(newBooking, i, booking, bookings))
+                        ok = true;
+                }
             }
-            
-
             return ok;
         }
         public bool CheckAvailabilityForFullDay(bool secondTrack)
