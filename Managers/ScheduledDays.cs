@@ -55,15 +55,28 @@ namespace BokningsProgram
             }
             return booking;
         }
-        public void GenerateSCheduleDays()
-		{
-			DateTime date = DateTime.Now;
-            for (int i = 0; i < 10; i++)
+        public void GenerateSCheduleDaysForSSK(List<DateTime> startTimes, List<DateTime> endTimes)
+        {
+            //DateTime date = DateTime.Now;
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    DateTime startOfDay = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0);
+            //    DateTime endOfDay = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
+            //    _dagar.Add(new DailySchedule(startOfDay, endOfDay));
+            //    date = date.AddDays(1);
+            //}
+            for (int i = 0; i < startTimes.Count; i++)
             {
-                DateTime startOfDay = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0);
-                DateTime endOfDay = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
+                _dagar.Add(new DailySchedule(startTimes[i], endTimes[i]));
+            }
+        }
+        public void GenerateSCheduleDaysForRooms(List<DateTime> dates)
+        {
+            foreach (var day in dates)
+            {
+                DateTime startOfDay = new DateTime(day.Year, day.Month, day.Day, 7, 0, 0);
+                DateTime endOfDay = new DateTime(day.Year, day.Month, day.Day, 16, 0, 0);
                 _dagar.Add(new DailySchedule(startOfDay, endOfDay));
-                date = date.AddDays(1);
             }
             //Load excelsheet and create new DailySchedules for each day with an end and start time
         }
@@ -71,8 +84,10 @@ namespace BokningsProgram
         {
             DailySchedule ds = null;
             ds = _dagar.FirstOrDefault(dailySchedule =>
-                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.ID == booking.ID) ||
-                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.ID == booking.ID));
+                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.ID == booking.ID &&
+                                                                            booked.StartTime == booking.StartTime) ||
+                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.ID == booking.ID &&
+                                                                            booked.StartTime == booking.StartTime));
 
             return ds;
         }

@@ -181,5 +181,12 @@ namespace BokningsProgram
                 serializer.Serialize(writer, _listOfRooms);
             }
         }
+        public void CreateAllBeds()
+        {
+            foreach (var room in ListOfRooms)
+            {
+                room.CreateAllBeds();
+            }
+        }
     }
 }

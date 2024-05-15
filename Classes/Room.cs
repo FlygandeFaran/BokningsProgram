@@ -33,11 +33,11 @@ namespace BokningsProgram
         {
             _roomType = roomType;
             _roomNumber = roomNumber;
-            CreateAllBeds();
+            //CreateAllBeds();
             //_scheduledDays = new ScheduledDays(_roomNumber);
         }
         public Room() { }
-        private void CreateAllBeds()
+        public void CreateAllBeds()
         {
             switch (_roomType)
             {

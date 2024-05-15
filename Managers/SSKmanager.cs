@@ -158,5 +158,12 @@ namespace BokningsProgram
             }
             return sskOK;
         }
+        public void GenerateSecondSchedule()
+        {
+            foreach (var ssk in ListOfSSK)
+            {
+                ssk.GenerateSecondBookings();
+            }
+        }
     }
 }

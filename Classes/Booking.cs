@@ -125,11 +125,11 @@ namespace BokningsProgram
                     break;
             }
         }
-        public void GetTreatmentDuration(out double hour, out double minutes)
+        static public void GetTreatmentDuration(out int hour, out int minutes, string description)
         {
             hour = 0;
             minutes = 0;
-            switch (_description)
+            switch (description)
             {
                 case "Piccline":
                     hour = 1;

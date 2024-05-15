@@ -3,31 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BokningsProgram.Managers
 {
     public class ExcelImport
     {
         private string filename;
-        private List<string> _sskNames;
         //private List<DateTime> _dates;
+        //private List<DateTime> _startTimes;
+        //private List<DateTime> _endTimes;
         private List<DateTime> _startTimes;
         private List<DateTime> _endTimes;
+        private List<DateTime> _dates;
         public ExcelImport()
         {
-            _sskNames = new List<string>();
-            _startTimes = new List<DateTime>();
-            _endTimes = new List<DateTime>();
+            _dates = new List<DateTime>();
         }
 
-        public void ImportSSKschedule()
+        public void ImportSchedules(SSKmanager sm, RoomManager rm)
         {
-            filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Pilot_schema.xlsx";
+            filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Pilot_schemaNy.xlsx";
             // Create an instance of Excel Application
-            Application excelApp = new Application();
+            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
 
             // Open the Excel workbook
             Workbook workbook = excelApp.Workbooks.Open(filename);
@@ -38,43 +40,71 @@ namespace BokningsProgram.Managers
             // Get cell values
             Range range = worksheet.UsedRange;
             object[,] values = range.Value;
-
+            var len = values.Length;
             string cellString = "";
-            string startTid = "";
             DateTime date = DateTime.Today;
 
             // Loop through the cells and print their values
+            string msg = "";
             try
             {
                 for (int i = 1; i <= range.Rows.Count; i++)
                 {
-                    if (i > 1)
-                    {
-                        _sskNames.Add(values[i, 1].ToString());
-                    }
-                    for (int j = 1; j < range.Columns.Count; j++)
+                    _startTimes = new List<DateTime>();
+                    _endTimes = new List<DateTime>();
+                    for (int j = 2; j < range.Columns.Count; j++)
                     {
                         cellString = values[i, j].ToString();
-                        if (i == 1)
+                        if (i == 1)//rubrik i excelbladet
                         {
-                            date = DateTime.ParseExact(cellString, "ddd  dd  MMM", CultureInfo.GetCultureInfo("sv-SE"));
+                            date = DateTime.ParseExact(cellString.Substring(0, 12), "ddd  dd  MMM", CultureInfo.GetCultureInfo("sv-SE"));
+                            _dates.Add(date);
+                        }
+                        else if (cellString.ToLower().Contains("semester") || string.IsNullOrEmpty(cellString))
+                        {
+                            date = _dates.ElementAt(j - 2);
+                            date = new DateTime(date.Year, date.Month, date.Day, 23, 0, 0);
+                            _startTimes.Add(date);
+                            date = new DateTime(date.Year, date.Month, date.Day, 23, 59, 0);
+                            _endTimes.Add(date);
                         }
                         else
                         {
+                            date = _dates.ElementAt(j - 2);
                             ExtractDates(cellString, date);
+                        }
+                    }
+                    if (i > 1)
+                    {
+                        if (!sm.ListOfSSK.Any(s => s.Name.Equals(values[i, 1].ToString())))
+                        {
+                            //i++;
+                            msg += "\n" + values[i, 1].ToString();
+                        }
+                        else
+                        {
+                            SSK ssk = sm.ListOfSSK.FirstOrDefault(s => s.Name.Equals(values[i, 1].ToString()));
+                            GenerateScheduleForSSK(ssk);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
+                string error = ex.Message;
                 workbook.Close();
                 excelApp.Quit();
+            }
+            if (!msg.Equals(""))
+            {
+                MessageBox.Show("Kunde inte hitta följande ssk i systemet:\n" + msg + "\n\nKontrollera att de heter samma i systemet som i Heroma");
             }
 
             // Close Excel
             workbook.Close();
             excelApp.Quit();
+
+            GenerateScheduleForRooms(rm);
         }
         private void ExtractDates(string cellValue, DateTime date)
         {
@@ -86,17 +116,33 @@ namespace BokningsProgram.Managers
 
             // Extract the times from the matches
             string startTimeStr = matches[0].Value;
-            double startTimeHour = double.Parse(startTimeStr.Substring(0, 2));
-            double startTimeMinute = double.Parse(startTimeStr.Substring(3, 2));
+            int startTimeHour = int.Parse(startTimeStr.Substring(0, 2));
+            int startTimeMinute = int.Parse(startTimeStr.Substring(3, 2));
+
+            date = new DateTime(date.Year, date.Month, date.Day, startTimeHour, startTimeMinute, 0);
+            _startTimes.Add(date);
 
             string endTimeStr = matches[1].Value;
-            double endTimeHour = double.Parse(endTimeStr.Substring(0, 2));
-            double endTimeMinute = double.Parse(endTimeStr.Substring(3, 2));
+            int endTimeHour = int.Parse(endTimeStr.Substring(0, 2));
+            int endTimeMinute = int.Parse(endTimeStr.Substring(3, 2));
 
+            date = new DateTime(date.Year, date.Month, date.Day, endTimeHour, endTimeMinute, 0);
+            _endTimes.Add(date);
         }
-        private void GetSSKnames()
+        private void CheckIfScheduleExists()
         {
 
+        }
+        private void GenerateScheduleForSSK(SSK ssk)
+        {
+            ssk.ScheduledDays.GenerateSCheduleDaysForSSK(_startTimes, _endTimes);
+        }
+        private void GenerateScheduleForRooms(RoomManager rm)
+        {
+            foreach (Room room in rm.ListOfRooms)
+            {
+                room.ScheduledDays.GenerateSCheduleDaysForRooms(_startTimes);
+            }
         }
         private void GetDates()
         {

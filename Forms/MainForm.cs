@@ -173,6 +173,8 @@ namespace BokningsProgram
             var serieSecondTrack = chart1.Series[1];
             if (scheduleOfTheDay is DailySchedule)
             {
+                btnExecute.Enabled = true;
+                btnSickLeave.Enabled = true;
                 lblWarning.Text = "";
                 if (scheduleOfTheDay.SecondlistOfBookings != null)
                 {
@@ -191,6 +193,8 @@ namespace BokningsProgram
             else
             {
                 lblWarning.Text = "Finns inget schema för den här dagen";
+                btnExecute.Enabled = false;
+                btnSickLeave.Enabled = false;
             }
         }
         private void AddDailyTasksOfRoomFromListOfBookings(int i, DailySchedule scheduleOfTheDay)
@@ -224,12 +228,16 @@ namespace BokningsProgram
             RoomCategory roomRequired = GetRequiredRoom();
             if (cbFlerdagsbeh.Checked)
             {
-                List<Booking> multipleNewBookings = MultipleNewBookings(roomRequired);
-                _cm.SuggestMultipleBookings(multipleNewBookings);
-                //foreach (var booking in multipleNewBookings)
-                //{
-                //    _cm.SuggestBooking(booking, lbAvailableSSK.SelectedItem as SSK);
-                //}
+                bool ok = CheckWeeklyInput();
+                if (ok)
+                {
+                    List<Booking> multipleNewBookings = MultipleNewBookings(roomRequired);
+                    _cm.SuggestMultipleBookings(multipleNewBookings);
+                }
+                else
+                {
+                    MessageBox.Show("Fel format på veckovis intervall");
+                }
             }
             else
             {
@@ -243,15 +251,45 @@ namespace BokningsProgram
         private List<Booking> MultipleNewBookings(RoomCategory roomRequired)
         {
             List<Booking> newBookings = new List<Booking>();
-            var days = (dtpEndDate.Value.DayOfYear - dtpStartDate.Value.DayOfYear) + 1;
-            DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
-            for (int i = 0; i < days; i++)
+            List<DateTime> days = GenerateDaysForMultipleBookings();
+            foreach (DateTime date in days)
             {
                 GetBookingTime(out DateTime start, out DateTime end, date);
-                date = date.AddDays(1);
                 newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
             }
             return newBookings;
+
+            //var days = (dtpEndDate.Value.DayOfYear - dtpStartDate.Value.DayOfYear) + 1;
+            //DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
+            //for (int i = 0; i < days; i++)
+            //{
+            //    GetBookingTime(out DateTime start, out DateTime end, date);
+            //    date = date.AddDays(1);
+            //    newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
+            //}
+        }
+        private List<DateTime> GenerateDaysForMultipleBookings()
+        {
+            List<DateTime> dateTimes = new List<DateTime>();
+
+            double days = (dtpEndDate.Value.DayOfYear - dtpStartDate.Value.DayOfYear) + 1;
+            int interval = int.Parse(txtWeeklyInterval.Text);
+            double treatmentDays = Math.Floor(days / (interval * 7));
+            DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
+            for ( int i = 0; treatmentDays >= i; i++)
+            {
+                date = date.AddDays(i * interval * 7);
+                dateTimes.Add(date);
+            }
+            return dateTimes;
+        }
+        private bool CheckWeeklyInput()
+        {
+            bool ok = int.TryParse(txtWeeklyInterval.Text, out int result);
+            if (ok && result > 0)
+                return true;
+            else
+                return false;
         }
         private void UpdateChartDependingOnTab()
         {
@@ -299,6 +337,7 @@ namespace BokningsProgram
         {
             if (cbFlerdagsbeh.Checked)
             {
+                txtWeeklyInterval.Enabled = true;
                 lblEndDate.Enabled = true;
                 lblStartDate.Enabled = true;
                 dtpStartDate.Enabled = true;
@@ -306,6 +345,7 @@ namespace BokningsProgram
             }
             else if (!cbFlerdagsbeh.Checked)
             {
+                txtWeeklyInterval.Enabled = false;
                 lblEndDate.Enabled = false;
                 lblStartDate.Enabled = false;
                 dtpStartDate.Enabled = false;
@@ -358,11 +398,15 @@ namespace BokningsProgram
         private void btnPrevDay_Click(object sender, EventArgs e)
         {
             dtpScheduleDay.Value = dtpScheduleDay.Value.AddDays(-1);
+            //dtpStartDate.Value = dtpStartDate.Value.AddDays(1);
+            //dtpEndDate.Value = dtpEndDate.Value.AddDays(1);
         }
 
         private void btnNextDay_Click(object sender, EventArgs e)
         {
             dtpScheduleDay.Value = dtpScheduleDay.Value.AddDays(1);
+            //dtpStartDate.Value = dtpStartDate.Value.AddDays(1);
+            //dtpEndDate.Value = dtpEndDate.Value.AddDays(1);
         }
 
         private void dtpScheduleDay_ValueChanged(object sender, EventArgs e)
@@ -391,6 +435,8 @@ namespace BokningsProgram
                 cbEntireDayBooking.Checked = true;
             else 
                 cbEntireDayBooking.Checked = false;
+            Booking.GetTreatmentDuration(out int hour, out int minutes, cbDescription.Text);
+            dtpBehTid.Value = new DateTime(dtpBehTid.Value.Year, dtpBehTid.Value.Month, dtpBehTid.Value.Day, hour, minutes, 0);
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -441,6 +487,21 @@ namespace BokningsProgram
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
             }
+        }
+
+        private void dtpEndDate_ValueChanged(object sender, EventArgs e)
+        {
+            DateTime pickedDate = dtpEndDate.Value;
+            DateTime lastScheduledDate = _cm.SskManager.ListOfSSK.First().ScheduledDays.Days.Last().StartOfDay;
+            if (pickedDate > lastScheduledDate)
+            {
+                MessageBox.Show($"Finns inget schema som sträcker sig till {pickedDate.ToString("dd MMM yyyy")}", "Usch då");
+                dtpEndDate.Value = lastScheduledDate;
+            }
+        }
+        private void btnClearSSK_Click(object sender, EventArgs e)
+        {
+            lbAvailableSSK.SelectedIndex = -1;
         }
     }
 }

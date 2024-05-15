@@ -41,16 +41,19 @@ namespace BokningsProgram.Managers
             //ska tas bort innan klar
             File.Delete("SSK.xml");
             File.Delete("Rooms.xml");
+            CreateRooms();
+            CreateSSK();
+            ImportSchedules();
+
             exportRooms();
             exportStaff();
+
             InitializeStaff();
             InitializeRooms();
         }
         private void InitializeStaff()
         {
             _sskManager.ImportFromXml();
-            ExcelImport excelImport = new ExcelImport();
-            //excelImport.ImportSSKschedule();
         }
         private void GetID()
         {
@@ -64,8 +67,14 @@ namespace BokningsProgram.Managers
             string content = (++_bookingID).ToString();
             File.WriteAllText(filename, content);
         }
-
-        private void exportStaff()
+        private void ImportSchedules()
+        {
+            ExcelImport excelImport = new ExcelImport();
+            excelImport.ImportSchedules(_sskManager, _roomManager);
+            _sskManager.GenerateSecondSchedule();
+            _roomManager.CreateAllBeds();
+        }
+        private void CreateSSK()
         {
             List<KompetensLevel> kompetensLevelsErik = new List<KompetensLevel>() { KompetensLevel.None };
             List<KompetensLevel> kompetensLevelsMaiar = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett };
@@ -74,6 +83,9 @@ namespace BokningsProgram.Managers
             _sskManager.ListOfSSK.Add(new SSK("Erik", "34VB", kompetensLevelsErik));
             _sskManager.ListOfSSK.Add(new SSK("Maiar", "56gh", kompetensLevelsMaiar));
             _sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", kompetensLevelsLinnea));
+        }
+        private void exportStaff()
+        {
             _sskManager.ExportToXml();
         }
 
@@ -81,8 +93,7 @@ namespace BokningsProgram.Managers
         {
             _roomManager.ImportFromXml();
         }
-
-        private void exportRooms()
+        private void CreateRooms()
         {
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 3.ToString()));
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.Dubbel, 4.ToString()));
@@ -100,6 +111,9 @@ namespace BokningsProgram.Managers
 
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1.ToString()));
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2.ToString()));
+        }
+        private void exportRooms()
+        {
             _roomManager.ExportToXml();
         }
         //Öppnar en ny ruta med möjlighet att uppdatera bookning genom att ta bort och lägga till uppdaterade bookning

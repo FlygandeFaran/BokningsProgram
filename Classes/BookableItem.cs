@@ -25,7 +25,7 @@ namespace BokningsProgram
         public BookableItem()
         {
             _scheduledDays = new ScheduledDays();
-            _scheduledDays.GenerateSCheduleDays();
+            //_scheduledDays.GenerateSCheduleDays();
         }
         public bool IsItBooked(Booking newBooking, bool secondTrack)
         {

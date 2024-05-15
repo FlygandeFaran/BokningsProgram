@@ -38,6 +38,17 @@ namespace BokningsProgram
 			_HSAid = hsaID;
             _kompetenser = kompetenser;
             
+            //if (_kompetenser.Contains(KompetensLevel.Piccline))
+            //{
+            //    this.HasSecondSchedule = true;
+            //    foreach (var day in ScheduledDays.Days)
+            //    {
+            //        day.AddSecondListOfBookings(day.StartOfDay);
+            //    }
+            //}
+        }
+        public void GenerateSecondBookings()
+        {
             if (_kompetenser.Contains(KompetensLevel.Piccline))
             {
                 this.HasSecondSchedule = true;
