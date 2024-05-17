@@ -140,7 +140,7 @@ namespace BokningsProgram
                 {
                     if (tempSSKmanager.ListOfSSK.ElementAt(i).HSAID != _sskm.ListOfSSK.ElementAt(i).HSAID ||
                         tempSSKmanager.ListOfSSK.ElementAt(i).Name != _sskm.ListOfSSK.ElementAt(i).Name ||
-                        HaveIdenticalKompetensList(_sskm.ListOfSSK.ElementAt(i), tempSSKmanager.ListOfSSK.ElementAt(i)))
+                        !HaveIdenticalKompetensList(_sskm.ListOfSSK.ElementAt(i), tempSSKmanager.ListOfSSK.ElementAt(i)))
                     {
                         ok = false;
                     }

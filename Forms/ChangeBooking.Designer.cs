@@ -31,16 +31,17 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbAvailableRoom = new System.Windows.Forms.ListBox();
             this.btnClearSSK = new System.Windows.Forms.Button();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
-            this.lbAvailableRoom = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblBooking = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +49,7 @@
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(104, 230);
+            this.btnOK.Location = new System.Drawing.Point(104, 260);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -59,7 +60,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(205, 230);
+            this.btnCancel.Location = new System.Drawing.Point(205, 260);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -72,12 +73,29 @@
             this.groupBox2.Controls.Add(this.lbAvailableRoom);
             this.groupBox2.Controls.Add(this.btnClearSSK);
             this.groupBox2.Controls.Add(this.lbAvailableSSK);
-            this.groupBox2.Location = new System.Drawing.Point(171, 12);
+            this.groupBox2.Location = new System.Drawing.Point(171, 42);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(276, 201);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sköterskor";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(131, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 13);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "Rum";
+            // 
+            // lbAvailableRoom
+            // 
+            this.lbAvailableRoom.FormattingEnabled = true;
+            this.lbAvailableRoom.Location = new System.Drawing.Point(134, 19);
+            this.lbAvailableRoom.Name = "lbAvailableRoom";
+            this.lbAvailableRoom.Size = new System.Drawing.Size(120, 147);
+            this.lbAvailableRoom.TabIndex = 0;
             // 
             // btnClearSSK
             // 
@@ -97,21 +115,13 @@
             this.lbAvailableSSK.Size = new System.Drawing.Size(120, 147);
             this.lbAvailableSSK.TabIndex = 0;
             // 
-            // lbAvailableRoom
-            // 
-            this.lbAvailableRoom.FormattingEnabled = true;
-            this.lbAvailableRoom.Location = new System.Drawing.Point(134, 19);
-            this.lbAvailableRoom.Name = "lbAvailableRoom";
-            this.lbAvailableRoom.Size = new System.Drawing.Size(120, 147);
-            this.lbAvailableRoom.TabIndex = 0;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dtpStartTime);
             this.groupBox4.Controls.Add(this.dtpBehTid);
-            this.groupBox4.Location = new System.Drawing.Point(12, 12);
+            this.groupBox4.Location = new System.Drawing.Point(12, 42);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(153, 201);
             this.groupBox4.TabIndex = 32;
@@ -158,27 +168,29 @@
             this.btnDelete.DialogResult = System.Windows.Forms.DialogResult.Abort;
             this.btnDelete.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDelete.Location = new System.Drawing.Point(305, 230);
+            this.btnDelete.Location = new System.Drawing.Point(305, 260);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 33;
             this.btnDelete.Text = "Ta bort";
             this.btnDelete.UseVisualStyleBackColor = false;
             // 
-            // label3
+            // lblBooking
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(131, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 13);
-            this.label3.TabIndex = 23;
-            this.label3.Text = "Rum";
+            this.lblBooking.AutoSize = true;
+            this.lblBooking.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBooking.Location = new System.Drawing.Point(215, 9);
+            this.lblBooking.Name = "lblBooking";
+            this.lblBooking.Size = new System.Drawing.Size(51, 20);
+            this.lblBooking.TabIndex = 34;
+            this.lblBooking.Text = "label4";
             // 
             // ChangeBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 271);
+            this.ClientSize = new System.Drawing.Size(473, 292);
+            this.Controls.Add(this.lblBooking);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -195,6 +207,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -213,5 +226,6 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnClearSSK;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblBooking;
     }
 }

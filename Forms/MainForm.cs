@@ -39,6 +39,7 @@ namespace BokningsProgram
             DateTime behTid = new DateTime(idag.Year, idag.Month, idag.Day, 7, 0, 0);
             dtpBehTid.Value = dt;
             dtpStartTime.Value = behTid;
+            lblWeekDay.Text = dtpScheduleDay.Value.DayOfWeek.ToString();
             CreateNewSeries();
 
             cbDescription.Items.Add("Piccline");
@@ -49,7 +50,8 @@ namespace BokningsProgram
 
             InitializeListBoxes();
 
-            CreateFakeBookings();
+            //CreateFakeBookings();
+            UpdateBookingsSSK();
 
             //InitializeBookings();
             UpdateChart();
@@ -76,7 +78,7 @@ namespace BokningsProgram
 
             Booking newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
             SSK ssk = lbAvailableSSK.SelectedItem as SSK;
-            _cm.SuggestBooking(newBooking, ssk);
+            _cm.SuggestBooking(newBooking, ssk, true);
 
             starttime = 15;
             duration = 1;
@@ -84,16 +86,15 @@ namespace BokningsProgram
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
 
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking, ssk);
+            _cm.SuggestBooking(newBooking, ssk, true);
 
             starttime = 14;
             duration = 2;
             start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
             end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
             newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking, ssk);
+            _cm.SuggestBooking(newBooking, ssk, true);
 
-            UpdateBookingsSSK();
         }
 
         private void UpdateChart()
@@ -243,7 +244,7 @@ namespace BokningsProgram
             {
                 GetBookingTime(out DateTime start, out DateTime end, dtpScheduleDay.Value);
                 Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked);
-                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK);
+                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK, true);
             }
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
@@ -358,6 +359,10 @@ namespace BokningsProgram
             SSKform sSKform = new SSKform();
             sSKform.ShowDialog();
             _cm.SskManager.ImportFromXml();
+            UpdateChart();
+            UpdateChartDependingOnTab();
+            UpdateBookingsSSK();
+            InitializeListBoxes();
         }
 
         private void NyttRumToolStripMenuItem_Click(object sender, EventArgs e)
@@ -413,6 +418,7 @@ namespace BokningsProgram
         {
             UpdateChart();
             UpdateChartDependingOnTab();
+            lblWeekDay.Text = dtpScheduleDay.Value.DayOfWeek.ToString();
         }
 
         // Round a DateTime value to the nearest 30 minutes
@@ -441,6 +447,8 @@ namespace BokningsProgram
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _cm.UpdateID();
+            _cm.exportStaff();
+            _cm.exportRooms();
         }
 
         private void btnSickLeave_Click(object sender, EventArgs e)
@@ -460,8 +468,11 @@ namespace BokningsProgram
                     _cm.AddSickBooking(sickSSK, sickBooking);
                     foreach (Booking booking in GetAllBookings)
                     {
-                        _cm.UpdateBooking(sickSSK, booking);
-                        UpdateChartDependingOnTab();
+                        if (booking.ID > 2)
+                        {
+                            _cm.UpdateBooking(sickSSK, booking);
+                            UpdateChartDependingOnTab();
+                        }
                     }
                 }
             }
@@ -482,7 +493,8 @@ namespace BokningsProgram
                 if (result.Series == chart1.Series[1])
                     secondTrack = true;
 
-                _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
+                if (description != "Stängt")
+                    _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
                 UpdateChartDependingOnTab();
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
@@ -502,6 +514,18 @@ namespace BokningsProgram
         private void btnClearSSK_Click(object sender, EventArgs e)
         {
             lbAvailableSSK.SelectedIndex = -1;
+        }
+
+        private void btnClearAllBookings_Click(object sender, EventArgs e)
+        {
+            _cm.ClearAllBookings();
+            UpdateChart();
+            UpdateChartDependingOnTab();
+        }
+
+        private void importeraSchemaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _cm.ImportSchedules();
         }
     }
 }

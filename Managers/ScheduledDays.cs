@@ -67,16 +67,25 @@ namespace BokningsProgram
             //}
             for (int i = 0; i < startTimes.Count; i++)
             {
-                _dagar.Add(new DailySchedule(startTimes[i], endTimes[i]));
+                var day = _dagar.FirstOrDefault(d => d.StartOfDay.DayOfYear == startTimes[i].DayOfYear && d.StartOfDay.Year == startTimes[i].Year);
+                if (day == null)
+                    _dagar.Add(new DailySchedule(startTimes[i], endTimes[i]));
             }
         }
         public void GenerateSCheduleDaysForRooms(List<DateTime> dates)
         {
             foreach (var day in dates)
             {
-                DateTime startOfDay = new DateTime(day.Year, day.Month, day.Day, 7, 0, 0);
+                DateTime startOfDay;
+                if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
+                    startOfDay = new DateTime(day.Year, day.Month, day.Day, 16, 0, 0);
+                else
+                    startOfDay = new DateTime(day.Year, day.Month, day.Day, 7, 0, 0);
+
                 DateTime endOfDay = new DateTime(day.Year, day.Month, day.Day, 16, 0, 0);
-                _dagar.Add(new DailySchedule(startOfDay, endOfDay));
+                var date = _dagar.FirstOrDefault(d => d.StartOfDay.DayOfYear == day.DayOfYear && d.StartOfDay.Year == day.Year);
+                if (date == null)
+                    _dagar.Add(new DailySchedule(startOfDay, endOfDay));
             }
             //Load excelsheet and create new DailySchedules for each day with an end and start time
         }

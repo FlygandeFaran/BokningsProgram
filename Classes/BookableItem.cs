@@ -60,11 +60,13 @@ namespace BokningsProgram
                     }
                 }
             }
-
+            if (!isItBooked && secondTrack)
+                ok = false;
             return isItBooked;
         }
         public void AddBooking(Booking booking, bool secondTrack, int bookingID)
         {
+            _schedule = _scheduledDays.Days.FirstOrDefault(d => d.StartOfDay.DayOfYear == booking.StartTime.DayOfYear);
             _schedule.AddBooking(booking, secondTrack, bookingID);
         }
         public List<Booking> GetAllBookingsFromDay(DateTime date)
@@ -88,6 +90,17 @@ namespace BokningsProgram
         {
             DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(booking);
             return ds;
+        }
+        public void ClearAllBookings()
+        {
+            foreach (var day in _scheduledDays.Days)
+            {
+                day.FirstlistOfBookings.RemoveAll(b => b.ID > 2);
+                if (day.SecondlistOfBookings != null)
+                {
+                    day.SecondlistOfBookings.RemoveAll(b => b.ID > 2);
+                }
+            }
         }
     }
 }

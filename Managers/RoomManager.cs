@@ -49,7 +49,7 @@ namespace BokningsProgram
         public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom, bool secondTrack)
         {
             bool ok = true;
-            newBooking = booking;
+            newBooking = new Booking(booking);
             bool roomOK = false;
             availableRoom = new Room();
 
@@ -63,7 +63,7 @@ namespace BokningsProgram
                     else
                         newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                    if (booking.EndTime.Hour > _endOfDay)
+                    if (newBooking.EndTime.Hour > _endOfDay)
                     {
                         //if (!secondTrack)
                         //{
@@ -157,7 +157,7 @@ namespace BokningsProgram
                     booking.RoomRequired = RoomCategory.Enkel;
                     break;
                 case RoomCategory.Enkel:
-                    booking.RoomRequired = RoomCategory.Dubbel;
+                    booking.RoomRequired = RoomCategory.PicclineIn;
                     break;
                 case RoomCategory.PicclineIn:
                     booking.RoomRequired = RoomCategory.PicclineOm;
@@ -186,6 +186,13 @@ namespace BokningsProgram
             foreach (var room in ListOfRooms)
             {
                 room.CreateAllBeds();
+            }
+        }
+        public void ClearAllBookings()
+        {
+            foreach (Room room in ListOfRooms)
+            {
+                room.ClearAllBookings();
             }
         }
     }

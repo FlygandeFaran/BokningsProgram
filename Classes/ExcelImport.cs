@@ -63,9 +63,9 @@ namespace BokningsProgram.Managers
                         else if (cellString.ToLower().Contains("semester") || string.IsNullOrEmpty(cellString))
                         {
                             date = _dates.ElementAt(j - 2);
-                            date = new DateTime(date.Year, date.Month, date.Day, 23, 0, 0);
+                            date = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
                             _startTimes.Add(date);
-                            date = new DateTime(date.Year, date.Month, date.Day, 23, 59, 0);
+                            date = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0);
                             _endTimes.Add(date);
                         }
                         else
@@ -126,12 +126,10 @@ namespace BokningsProgram.Managers
             int endTimeHour = int.Parse(endTimeStr.Substring(0, 2));
             int endTimeMinute = int.Parse(endTimeStr.Substring(3, 2));
 
+            if (endTimeHour > 16)
+                endTimeHour = 16;
             date = new DateTime(date.Year, date.Month, date.Day, endTimeHour, endTimeMinute, 0);
             _endTimes.Add(date);
-        }
-        private void CheckIfScheduleExists()
-        {
-
         }
         private void GenerateScheduleForSSK(SSK ssk)
         {
@@ -143,14 +141,6 @@ namespace BokningsProgram.Managers
             {
                 room.ScheduledDays.GenerateSCheduleDaysForRooms(_startTimes);
             }
-        }
-        private void GetDates()
-        {
-
-        }
-        private void GetStartAndEndTimes()
-        {
-
         }
     }
 }

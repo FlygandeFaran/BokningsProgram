@@ -30,6 +30,7 @@ namespace BokningsProgram.Forms
             //lbAvailableSSK.SelectedItem = ssk;
             lbAvailableSSK.SelectedIndex = -1;
             lbAvailableRoom.SelectedIndex = -1;
+            lblBooking.Text = booking.Description;
         }
         private void InitializeGUI()
         {

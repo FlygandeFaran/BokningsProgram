@@ -55,12 +55,13 @@ namespace BokningsProgram
             LoadDay(startOfDay, false);
         }
 
-        private void LoadDay(DateTime startOfDay, bool secondTrack)
+        public void LoadDay(DateTime startOfDay, bool secondTrack)
         {
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
             AddBooking(new Booking(_startOfDay.AddHours(-startOfDay.Hour), _startOfDay, "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar starten av dagen
             AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(23 - _endOfDay.Hour), "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar slutet av dagen
-            AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 1); //Spärrar lunch
+            if (StartOfDay.Hour < 16)
+                AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 1); //Spärrar lunch
         }
 
         public void AddSecondListOfBookings(DateTime startOfDay)
@@ -104,11 +105,11 @@ namespace BokningsProgram
         }
         public bool CheckAvailabilityForFullDay(bool secondTrack)
         {
-            if ((_firstlistOfBookings.Count == 3) && !IsFullDayBooked && !secondTrack)
+            if (_firstlistOfBookings.Count == 3 && !IsFullDayBooked && !secondTrack)
             {
                 return true;
             }
-            else if (_secondlistOfBookings.Count == 3 && !IsFullDayBooked && secondTrack)
+            else if (_firstlistOfBookings.Count == 3 && _secondlistOfBookings.Count == 3 && !IsFullDayBooked && secondTrack)
             {
                 return true;
             }

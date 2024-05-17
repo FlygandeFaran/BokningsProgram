@@ -78,7 +78,7 @@ namespace BokningsProgram
         }
         public void AddBooking(Booking booking, SSK newSSK, bool secondTrack, int bookingID)
         {
-            _listOfSSK.FirstOrDefault(s => s.HSAID.Equals(newSSK.HSAID)).AddBooking(booking, secondTrack, bookingID);//bokar SSK
+            newSSK.AddBooking(booking, secondTrack, bookingID);//bokar SSK
         }
         private SSK CheckBookingForSSK(Booking booking, out bool sskOK, bool secondTrack)
         {
@@ -163,6 +163,13 @@ namespace BokningsProgram
             foreach (var ssk in ListOfSSK)
             {
                 ssk.GenerateSecondBookings();
+            }
+        }
+        public void ClearAllBookings()
+        {
+            foreach (SSK ssk in ListOfSSK)
+            {
+                ssk.ClearAllBookings();
             }
         }
     }

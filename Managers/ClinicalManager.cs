@@ -39,14 +39,14 @@ namespace BokningsProgram.Managers
             _sskManager = new SSKmanager();
             GetID();
             //ska tas bort innan klar
-            File.Delete("SSK.xml");
-            File.Delete("Rooms.xml");
-            CreateRooms();
-            CreateSSK();
-            ImportSchedules();
+            //File.Delete("SSK.xml");
+            //File.Delete("Rooms.xml");
+            //CreateRooms();
+            //CreateSSK();
+            //ImportSchedules();
 
-            exportRooms();
-            exportStaff();
+            //exportRooms();
+            //exportStaff();
 
             InitializeStaff();
             InitializeRooms();
@@ -67,7 +67,7 @@ namespace BokningsProgram.Managers
             string content = (++_bookingID).ToString();
             File.WriteAllText(filename, content);
         }
-        private void ImportSchedules()
+        public void ImportSchedules()
         {
             ExcelImport excelImport = new ExcelImport();
             excelImport.ImportSchedules(_sskManager, _roomManager);
@@ -84,7 +84,7 @@ namespace BokningsProgram.Managers
             _sskManager.ListOfSSK.Add(new SSK("Maiar", "56gh", kompetensLevelsMaiar));
             _sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", kompetensLevelsLinnea));
         }
-        private void exportStaff()
+        public void exportStaff()
         {
             _sskManager.ExportToXml();
         }
@@ -112,7 +112,7 @@ namespace BokningsProgram.Managers
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineIn, 1.ToString()));
             _roomManager.ListOfRooms.Add(new Room(RoomCategory.PicclineOm, 2.ToString()));
         }
-        private void exportRooms()
+        public void exportRooms()
         {
             _roomManager.ExportToXml();
         }
@@ -147,7 +147,7 @@ namespace BokningsProgram.Managers
                     ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
 
-                SuggestBooking(newBooking, changeBooking.Ssk);
+                SuggestBooking(newBooking, changeBooking.Ssk, false);
 
                 ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
@@ -168,7 +168,7 @@ namespace BokningsProgram.Managers
             return ok;
         }
 
-        private void SuggestBooking(Booking booking)
+        private void SuggestBooking(Booking booking, bool isNewBooking)
         {
             //Check for ssk
             bool sskSecondTrackBooking = false;
@@ -192,9 +192,19 @@ namespace BokningsProgram.Managers
                 if (roomOK)
                 {
                     //lägg till bekräftelse av användaren
-                    _bookingID++;
-                    _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, _bookingID);
-                    _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
+                    if (booking.ID > 2 || isNewBooking)
+                    {
+                        GetID();
+                        _bookingID++;
+                        _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, _bookingID);
+                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
+                        UpdateID();
+                    }
+                    else
+                    {
+                        _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, booking.ID);
+                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
+                    }
                 }
                 else
                     MessageBox.Show("Hittade inget ledigt rum för bokningen", "Hoppsan");
@@ -204,7 +214,7 @@ namespace BokningsProgram.Managers
 
         }
         //Föreslår en bokning med medföljande ssk, om inte går körs vanliga suggestbooking
-        public void SuggestBooking(Booking booking, SSK ssk)
+        public void SuggestBooking(Booking booking, SSK ssk, bool isNewBooking)
         {
             bool roomOK = false;
             //Check for ssk
@@ -229,9 +239,20 @@ namespace BokningsProgram.Managers
                     if (roomOK)
                     {
                         //lägg till bekräftelse av användaren
-                        _bookingID++;
-                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
-                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
+
+                        if (booking.ID > 2 || isNewBooking)
+                        {
+                            GetID();
+                            _bookingID++;
+                            _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
+                            _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
+                            UpdateID();
+                        }
+                        else
+                        {
+                            _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, booking.ID);
+                            _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
+                        }
                     }
                 }
                 else
@@ -240,13 +261,13 @@ namespace BokningsProgram.Managers
                     DialogResult result = continueToSearchForSlotDialog.ShowDialog();
                     if (result == DialogResult.Yes)
                     {
-                        SuggestBooking(booking);
+                        SuggestBooking(booking, isNewBooking);
                     }
                 }
             }
             else
             {
-                SuggestBooking(booking);
+                SuggestBooking(booking, isNewBooking);
             }
         }
         public void SuggestMultipleBookings(List<Booking> multipleBookings)
@@ -256,7 +277,7 @@ namespace BokningsProgram.Managers
             {
                 foreach (var booking in bookings)
                 {
-                    SuggestBooking(booking, ssk);
+                    SuggestBooking(booking, ssk, true);
                 }
             }
             else
@@ -316,10 +337,17 @@ namespace BokningsProgram.Managers
         }
         public void AddSickBooking(SSK sickSSK, Booking sickBooking)
         {
+            GetID();
             _bookingID++;
+            UpdateID();
             _sskManager.AddBooking(sickBooking, sickSSK, false, _bookingID);
             if (sickSSK.HasSecondSchedule)
                 _sskManager.AddBooking(sickBooking, sickSSK, true, _bookingID);
+        }
+        public void ClearAllBookings()
+        {
+            _sskManager.ClearAllBookings();
+            _roomManager.ClearAllBookings();
         }
     }
 }

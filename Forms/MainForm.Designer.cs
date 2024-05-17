@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -53,6 +53,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnClearSSK = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -60,6 +61,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NySSKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importeraSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.rbChartSSK = new System.Windows.Forms.RadioButton();
             this.rbChartRoom = new System.Windows.Forms.RadioButton();
@@ -67,7 +69,8 @@
             this.btnNextDay = new System.Windows.Forms.Button();
             this.btnPrevDay = new System.Windows.Forms.Button();
             this.lblWarning = new System.Windows.Forms.Label();
-            this.btnClearSSK = new System.Windows.Forms.Button();
+            this.lblWeekDay = new System.Windows.Forms.Label();
+            this.btnClearAllBookings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -309,6 +312,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sköterskor";
             // 
+            // btnClearSSK
+            // 
+            this.btnClearSSK.Location = new System.Drawing.Point(21, 142);
+            this.btnClearSSK.Name = "btnClearSSK";
+            this.btnClearSSK.Size = new System.Drawing.Size(71, 23);
+            this.btnClearSSK.TabIndex = 32;
+            this.btnClearSSK.Text = "Rensa val";
+            this.btnClearSSK.UseVisualStyleBackColor = true;
+            this.btnClearSSK.Click += new System.EventHandler(this.btnClearSSK_Click);
+            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
@@ -360,7 +373,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NySSKToolStripMenuItem});
+            this.NySSKToolStripMenuItem,
+            this.importeraSchemaToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -368,28 +382,35 @@
             // NySSKToolStripMenuItem
             // 
             this.NySSKToolStripMenuItem.Name = "NySSKToolStripMenuItem";
-            this.NySSKToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.NySSKToolStripMenuItem.Text = "Lägg till sköterska";
+            this.NySSKToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.NySSKToolStripMenuItem.Text = "Hantera sköterskor";
             this.NySSKToolStripMenuItem.Click += new System.EventHandler(this.NySSKToolStripMenuItem_Click);
+            // 
+            // importeraSchemaToolStripMenuItem
+            // 
+            this.importeraSchemaToolStripMenuItem.Name = "importeraSchemaToolStripMenuItem";
+            this.importeraSchemaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importeraSchemaToolStripMenuItem.Text = "Importera schema";
+            this.importeraSchemaToolStripMenuItem.Click += new System.EventHandler(this.importeraSchemaToolStripMenuItem_Click);
             // 
             // chart1
             // 
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(172, 86);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series3.IsVisibleInLegend = false;
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            series3.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series1.IsVisibleInLegend = false;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            series1.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(982, 779);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
@@ -457,21 +478,32 @@
             this.lblWarning.TabIndex = 30;
             this.lblWarning.Text = "Varningstext";
             // 
-            // btnClearSSK
+            // lblWeekDay
             // 
-            this.btnClearSSK.Location = new System.Drawing.Point(21, 142);
-            this.btnClearSSK.Name = "btnClearSSK";
-            this.btnClearSSK.Size = new System.Drawing.Size(71, 23);
-            this.btnClearSSK.TabIndex = 32;
-            this.btnClearSSK.Text = "Rensa val";
-            this.btnClearSSK.UseVisualStyleBackColor = true;
-            this.btnClearSSK.Click += new System.EventHandler(this.btnClearSSK_Click);
+            this.lblWeekDay.AutoSize = true;
+            this.lblWeekDay.Location = new System.Drawing.Point(862, 91);
+            this.lblWeekDay.Name = "lblWeekDay";
+            this.lblWeekDay.Size = new System.Drawing.Size(35, 13);
+            this.lblWeekDay.TabIndex = 31;
+            this.lblWeekDay.Text = "label5";
+            // 
+            // btnClearAllBookings
+            // 
+            this.btnClearAllBookings.Location = new System.Drawing.Point(364, 60);
+            this.btnClearAllBookings.Name = "btnClearAllBookings";
+            this.btnClearAllBookings.Size = new System.Drawing.Size(119, 23);
+            this.btnClearAllBookings.TabIndex = 32;
+            this.btnClearAllBookings.Text = "Clear all bookings";
+            this.btnClearAllBookings.UseVisualStyleBackColor = true;
+            this.btnClearAllBookings.Click += new System.EventHandler(this.btnClearAllBookings_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 877);
+            this.Controls.Add(this.btnClearAllBookings);
+            this.Controls.Add(this.lblWeekDay);
             this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.btnPrevDay);
             this.Controls.Add(this.btnNextDay);
@@ -543,6 +575,9 @@
         private System.Windows.Forms.TextBox txtWeeklyInterval;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnClearSSK;
+        private System.Windows.Forms.Label lblWeekDay;
+        private System.Windows.Forms.Button btnClearAllBookings;
+        private System.Windows.Forms.ToolStripMenuItem importeraSchemaToolStripMenuItem;
     }
 }
 
