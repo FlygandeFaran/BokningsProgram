@@ -148,18 +148,20 @@
             // 
             // dtpStartTime
             // 
+            this.dtpStartTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpStartTime.Location = new System.Drawing.Point(36, 68);
             this.dtpStartTime.Name = "dtpStartTime";
-            this.dtpStartTime.Size = new System.Drawing.Size(50, 20);
+            this.dtpStartTime.Size = new System.Drawing.Size(73, 26);
             this.dtpStartTime.TabIndex = 25;
             // 
             // dtpBehTid
             // 
+            this.dtpBehTid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpBehTid.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBehTid.Location = new System.Drawing.Point(36, 120);
             this.dtpBehTid.Name = "dtpBehTid";
-            this.dtpBehTid.Size = new System.Drawing.Size(50, 20);
+            this.dtpBehTid.Size = new System.Drawing.Size(73, 26);
             this.dtpBehTid.TabIndex = 7;
             // 
             // btnDelete
@@ -179,7 +181,7 @@
             // 
             this.lblBooking.AutoSize = true;
             this.lblBooking.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBooking.Location = new System.Drawing.Point(215, 9);
+            this.lblBooking.Location = new System.Drawing.Point(173, 9);
             this.lblBooking.Name = "lblBooking";
             this.lblBooking.Size = new System.Drawing.Size(51, 20);
             this.lblBooking.TabIndex = 34;

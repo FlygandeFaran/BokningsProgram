@@ -69,7 +69,7 @@ namespace BokningsProgram
             {
                 var day = _dagar.FirstOrDefault(d => d.StartOfDay.DayOfYear == startTimes[i].DayOfYear && d.StartOfDay.Year == startTimes[i].Year);
                 if (day == null)
-                    _dagar.Add(new DailySchedule(startTimes[i], endTimes[i]));
+                    _dagar.Add(new DailySchedule(startTimes[i], endTimes[i], true));
             }
         }
         public void GenerateSCheduleDaysForRooms(List<DateTime> dates)
@@ -85,7 +85,7 @@ namespace BokningsProgram
                 DateTime endOfDay = new DateTime(day.Year, day.Month, day.Day, 16, 0, 0);
                 var date = _dagar.FirstOrDefault(d => d.StartOfDay.DayOfYear == day.DayOfYear && d.StartOfDay.Year == day.Year);
                 if (date == null)
-                    _dagar.Add(new DailySchedule(startOfDay, endOfDay));
+                    _dagar.Add(new DailySchedule(startOfDay, endOfDay, false));
             }
             //Load excelsheet and create new DailySchedules for each day with an end and start time
         }
@@ -93,10 +93,8 @@ namespace BokningsProgram
         {
             DailySchedule ds = null;
             ds = _dagar.FirstOrDefault(dailySchedule =>
-                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.ID == booking.ID &&
-                                                                            booked.StartTime == booking.StartTime) ||
-                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.ID == booking.ID &&
-                                                                            booked.StartTime == booking.StartTime));
+                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.Equals(booking)) ||
+                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.Equals(booking)));
 
             return ds;
         }

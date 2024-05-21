@@ -30,7 +30,8 @@ namespace BokningsProgram.Forms
             //lbAvailableSSK.SelectedItem = ssk;
             lbAvailableSSK.SelectedIndex = -1;
             lbAvailableRoom.SelectedIndex = -1;
-            lblBooking.Text = booking.Description;
+            lblBooking.Text = $"{booking.Description}: {booking.StartTime:HH:mm} - {booking.EndTime:HH:mm}";
+            lblBooking.BackColor = booking.TaskColor;
         }
         private void InitializeGUI()
         {

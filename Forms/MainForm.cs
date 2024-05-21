@@ -507,7 +507,7 @@ namespace BokningsProgram
             DateTime lastScheduledDate = _cm.SskManager.ListOfSSK.First().ScheduledDays.Days.Last().StartOfDay;
             if (pickedDate > lastScheduledDate)
             {
-                MessageBox.Show($"Finns inget schema som sträcker sig till {pickedDate.ToString("dd MMM yyyy")}", "Usch då");
+                MessageBox.Show($"Finns inget schema som sträcker sig till {pickedDate:dd MMM yyyy}", "Usch då");
                 dtpEndDate.Value = lastScheduledDate;
             }
         }
@@ -526,6 +526,12 @@ namespace BokningsProgram
         private void importeraSchemaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _cm.ImportSchedules();
+        }
+
+        private void återkommandeMötenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RecurringMeetings recurringMeetings = new RecurringMeetings(_cm.SskManager);
+            recurringMeetings.ShowDialog();
         }
     }
 }

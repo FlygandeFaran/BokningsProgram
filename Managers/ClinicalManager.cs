@@ -39,18 +39,24 @@ namespace BokningsProgram.Managers
             _sskManager = new SSKmanager();
             GetID();
             //ska tas bort innan klar
-            //File.Delete("SSK.xml");
-            //File.Delete("Rooms.xml");
-            //CreateRooms();
-            //CreateSSK();
-            //ImportSchedules();
-
-            //exportRooms();
-            //exportStaff();
+            //RensaOchStartaOmDatabas();
 
             InitializeStaff();
             InitializeRooms();
         }
+
+        private void RensaOchStartaOmDatabas()
+        {
+            File.Delete("SSK.xml");
+            File.Delete("Rooms.xml");
+            CreateRooms();
+            CreateSSK();
+            ImportSchedules();
+
+            exportRooms();
+            exportStaff();
+        }
+
         private void InitializeStaff()
         {
             _sskManager.ImportFromXml();
@@ -142,15 +148,12 @@ namespace BokningsProgram.Managers
             DialogResult dlgResult = changeBooking.ShowDialog();
             if (dlgResult == DialogResult.OK)
             {
-                DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
-                if (ds == null)
-                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
-                ds.RemoveBooking(selectedBooking);
-
-                SuggestBooking(newBooking, changeBooking.Ssk, false);
-
-                ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
-                ds.RemoveBooking(selectedBooking);
+                if (selectedBooking.Description.Equals("Lunch"))
+                {
+                    EditLunchBooking(selectedSSK, selectedBooking, newBooking);
+                }
+                else
+                    EditBooking(selectedSSK, selectedBooking, selectedRoom, newBooking, changeBooking.Ssk);
 
                 ok = true;
             }
@@ -166,6 +169,40 @@ namespace BokningsProgram.Managers
             }
 
             return ok;
+        }
+        private void EditLunchBooking(SSK selectedSSK, Booking selectedBooking, Booking newBooking)
+        {
+            DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
+            ds.RemoveBooking(selectedBooking);
+            if (selectedSSK.HasSecondSchedule)
+            {
+                Booking tempBooking = new Booking(selectedBooking);
+                selectedBooking = ScheduledDays.GetBooking(tempBooking.StartTime, tempBooking.EndTime, tempBooking.Description, selectedSSK, true);
+                if (selectedBooking == null)
+                    selectedBooking = ScheduledDays.GetBooking(tempBooking.StartTime, tempBooking.EndTime, tempBooking.Description, selectedSSK, false);
+                ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
+                ds.RemoveBooking(selectedBooking);
+            }
+            bool ok = SuggestBookingForLunch(newBooking, selectedSSK);
+            if (!ok)
+            {
+                SuggestBookingForLunch(selectedBooking, selectedSSK);
+                MessageBox.Show("Kunde inte flytta lunchen dit");
+            }
+        }
+
+
+        private void EditBooking(SSK selectedSSK, Booking selectedBooking, Room selectedRoom, Booking newBooking, SSK newSSK)
+        {
+            DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+            if (ds == null)
+                ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+            ds.RemoveBooking(selectedBooking);
+
+            SuggestBooking(newBooking, newSSK, false);
+
+            ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
+            ds.RemoveBooking(selectedBooking);
         }
 
         private void SuggestBooking(Booking booking, bool isNewBooking)
@@ -212,6 +249,20 @@ namespace BokningsProgram.Managers
             else
                 MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
 
+        }
+        public bool SuggestBookingForLunch(Booking booking, SSK ssk)
+        {
+            bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, false);
+            if (sskOK && ssk.HasSecondSchedule)
+                sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, true);
+            
+            if (sskOK)
+            {
+                _sskManager.AddBooking(booking, ssk, false, 1);
+                if (ssk.HasSecondSchedule)
+                    _sskManager.AddBooking(booking, ssk, true, 1);
+            }
+            return sskOK;
         }
         //Föreslår en bokning med medföljande ssk, om inte går körs vanliga suggestbooking
         public void SuggestBooking(Booking booking, SSK ssk, bool isNewBooking)

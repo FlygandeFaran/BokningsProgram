@@ -14,6 +14,7 @@ namespace BokningsProgram
         private DateTime _startOfDay;
         private DateTime _endOfDay;
         private bool _isFullDayBooked;
+        private bool _hasLunch;
 
         public bool IsFullDayBooked
         {
@@ -46,12 +47,13 @@ namespace BokningsProgram
             //_secondlistOfBookings = new List<Booking>();
         }
 
-		public DailySchedule(DateTime startOfDay, DateTime endOfDay) //Använd när jag har schema för SSK
+		public DailySchedule(DateTime startOfDay, DateTime endOfDay, bool HasLunch) //Använd när jag har schema för SSK
         {
             _firstlistOfBookings = new List<Booking>();
             _startOfDay = startOfDay;
             _endOfDay = endOfDay;
             _isFullDayBooked = false;
+            _hasLunch = HasLunch;
             LoadDay(startOfDay, false);
         }
 
@@ -60,7 +62,7 @@ namespace BokningsProgram
             DateTime lunch = new DateTime(startOfDay.Year, startOfDay.Month, startOfDay.Day, 11, 30, 00);
             AddBooking(new Booking(_startOfDay.AddHours(-startOfDay.Hour), _startOfDay, "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar starten av dagen
             AddBooking(new Booking(_endOfDay, _endOfDay.AddHours(23 - _endOfDay.Hour), "Stängt", RoomCategory.Dubbel, false), secondTrack, 0); //Spärrar slutet av dagen
-            if (StartOfDay.Hour < 16)
+            if (StartOfDay.Hour < 16 && _hasLunch)
                 AddBooking(new Booking(lunch, lunch.AddHours(1), "Lunch", RoomCategory.Dubbel, false), secondTrack, 1); //Spärrar lunch
         }
 
@@ -105,13 +107,16 @@ namespace BokningsProgram
         }
         public bool CheckAvailabilityForFullDay(bool secondTrack)
         {
-            if (_firstlistOfBookings.Count == 3 && !IsFullDayBooked && !secondTrack)
+            if (_startOfDay.Hour < 16)
             {
-                return true;
-            }
-            else if (_firstlistOfBookings.Count == 3 && _secondlistOfBookings.Count == 3 && !IsFullDayBooked && secondTrack)
-            {
-                return true;
+                if (_firstlistOfBookings.Count <= 3 && !IsFullDayBooked && !secondTrack)
+                {
+                    return true;
+                }
+                else if (_firstlistOfBookings.Count <= 3 && _secondlistOfBookings.Count <= 3 && !IsFullDayBooked && secondTrack)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -172,7 +177,7 @@ namespace BokningsProgram
 
         public void RemoveBooking(Booking booking)
         {
-            bool bookingExists = _firstlistOfBookings.Any(b => b.ID.Equals(booking.ID));
+            bool bookingExists = _firstlistOfBookings.Any(b => b.Equals(booking));
             if (bookingExists)
             {
                 _firstlistOfBookings.Remove(booking);
