@@ -42,11 +42,15 @@ namespace BokningsProgram
             lblWeekDay.Text = dtpScheduleDay.Value.DayOfWeek.ToString();
             CreateNewSeries();
 
-            cbDescription.Items.Add("Piccline");
-            cbDescription.Items.Add("Telefon");
-            cbDescription.Items.Add("Tablett");
-            cbDescription.Items.Add("Cytostatika");
-            cbDescription.Items.Add("Vanlig");
+            List<string> bookingNames = _cm.BookingDescriptions();
+            cbDescription.DataSource = bookingNames;
+            //cbDescription.Items.Add("Piccline");
+
+            //cbDescription.Items.Add("Piccline");
+            //cbDescription.Items.Add("Telefon");
+            //cbDescription.Items.Add("Tablett");
+            //cbDescription.Items.Add("Cytostatika");
+            //cbDescription.Items.Add("Vanlig");
 
             InitializeListBoxes();
 
@@ -58,43 +62,11 @@ namespace BokningsProgram
         }
         private void InitializeListBoxes()
         {
-            lbAvailableSSK.DataSource = _cm.SskManager.ListOfSSK;
-            lbAvailableRooms.DataSource = _cm.RoomManager.ListOfRooms;
-            lbAvailableRooms.DisplayMember = "RoomNumber";
-            lbAvailableSSK.SelectedIndex = -1;
-            lbAvailableRooms.SelectedIndex = -1;
-        }
-        private void InitializeBookings()
-        {
-            //UpdateBookings();
-        }
-        private void CreateFakeBookings()
-        {
-            int starttime = 10;
-            int duration = 1;
-            DateTime today = DateTime.Now;
-            DateTime start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            DateTime end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-
-            Booking newBooking = new Booking(start, end, "Piccline", RoomCategory.PicclineIn, false);
-            SSK ssk = lbAvailableSSK.SelectedItem as SSK;
-            _cm.SuggestBooking(newBooking, ssk, true);
-
-            starttime = 15;
-            duration = 1;
-            start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-
-            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking, ssk, true);
-
-            starttime = 14;
-            duration = 2;
-            start = new DateTime(today.Year, today.Month, today.Day, starttime, 0, 0);
-            end = new DateTime(today.Year, today.Month, today.Day, starttime + duration, 0, 0);
-            newBooking = new Booking(start, end, "Vanlig", RoomCategory.Dubbel, false);
-            _cm.SuggestBooking(newBooking, ssk, true);
-
+            //lbAvailableSSK.DataSource = _cm.SskManager.ListOfSSK;
+            //lbAvailableRooms.DataSource = _cm.RoomManager.ListOfRooms;
+            //lbAvailableRooms.DisplayMember = "RoomNumber";
+            //lbAvailableSSK.SelectedIndex = -1;
+            //lbAvailableRooms.SelectedIndex = -1;
         }
 
         private void UpdateChart()
@@ -449,6 +421,7 @@ namespace BokningsProgram
             _cm.UpdateID();
             _cm.exportStaff();
             _cm.exportRooms();
+            _cm.exportMeetings();
         }
 
         private void btnSickLeave_Click(object sender, EventArgs e)
@@ -530,8 +503,9 @@ namespace BokningsProgram
 
         private void återkommandeMötenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RecurringMeetings recurringMeetings = new RecurringMeetings(_cm.SskManager);
+            RecurringMeetings recurringMeetings = new RecurringMeetings(_cm.SskManager, _cm.MeetingManager);
             recurringMeetings.ShowDialog();
+            
         }
     }
 }

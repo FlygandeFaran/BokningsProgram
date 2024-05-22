@@ -47,7 +47,7 @@ namespace BokningsProgram
             //_secondlistOfBookings = new List<Booking>();
         }
 
-		public DailySchedule(DateTime startOfDay, DateTime endOfDay, bool HasLunch) //Använd när jag har schema för SSK
+		public DailySchedule(DateTime startOfDay, DateTime endOfDay, bool HasLunch)
         {
             _firstlistOfBookings = new List<Booking>();
             _startOfDay = startOfDay;

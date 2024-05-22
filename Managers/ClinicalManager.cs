@@ -11,17 +11,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace BokningsProgram.Managers
 {
     public class ClinicalManager
     {
         //private DateTime _endOfDay;
+        private MeetingManager _meetingManager;
         private SSKmanager _sskManager;
         private RoomManager _roomManager;
         private int _bookingID;
 
+        public MeetingManager MeetingManager
+        {
+            get { return _meetingManager; }
+            set { _meetingManager = value; }
+        }
         public RoomManager RoomManager
         {
             get { return _roomManager; }
@@ -35,6 +40,7 @@ namespace BokningsProgram.Managers
 
         public ClinicalManager()
         {
+            _meetingManager = new MeetingManager();
             _roomManager = new RoomManager();
             _sskManager = new SSKmanager();
             GetID();
@@ -43,6 +49,7 @@ namespace BokningsProgram.Managers
 
             InitializeStaff();
             InitializeRooms();
+            initializeMeetings();
         }
 
         private void RensaOchStartaOmDatabas()
@@ -53,6 +60,7 @@ namespace BokningsProgram.Managers
             CreateSSK();
             ImportSchedules();
 
+            exportMeetings();
             exportRooms();
             exportStaff();
         }
@@ -93,6 +101,14 @@ namespace BokningsProgram.Managers
         public void exportStaff()
         {
             _sskManager.ExportToXml();
+        }
+        private void initializeMeetings()
+        {
+            _meetingManager.ImportFromXml();
+        }
+        public void exportMeetings()
+        {
+            _meetingManager.ExportToXml();
         }
 
         private void InitializeRooms()
@@ -399,6 +415,44 @@ namespace BokningsProgram.Managers
         {
             _sskManager.ClearAllBookings();
             _roomManager.ClearAllBookings();
+        }
+        public List<string> BookingDescriptions()
+        {
+            List<string> bookingDescriptions = new List<string>
+            {
+                "Abraxane/Gemzar",
+                "CAPOX",
+                "Cemiplimab",
+                "Cisplatin",
+                "Docetaxel",
+                "EC",
+                "FLOT",
+                "FLV",
+                "FLV/Bevacizumab",
+                "FOLFIRI",
+                "FOLFOX",
+                "Gemcitabin",
+                "Gemcitabin/Nab-Paklitaxel",
+                "Gemzar",
+                "Ipilimumab/Nivolumab",
+                "Karboplatin/Etoposid",
+                "Karboplatin/Irinotekan",
+                "Karboplatin/Paklitaxel",
+                "Nivolumab",
+                "Paklitaxel",
+                "Piccline",
+                "R-CHOP",
+                "Rituximab",
+                "Rituximab/Bendamustin",
+                "Trastuzumab",
+                "",
+                "Telefon",
+                "Tablett",
+                "",
+                "Vanlig"
+            };
+
+            return bookingDescriptions;
         }
     }
 }
