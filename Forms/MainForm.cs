@@ -418,7 +418,6 @@ namespace BokningsProgram
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _cm.UpdateID();
             _cm.exportStaff();
             _cm.exportRooms();
             _cm.exportMeetings();
@@ -505,7 +504,9 @@ namespace BokningsProgram
         {
             RecurringMeetings recurringMeetings = new RecurringMeetings(_cm.SskManager, _cm.MeetingManager);
             recurringMeetings.ShowDialog();
-            
+            _cm.AddMeetingBookings();
+            UpdateChart();
+            UpdateChartDependingOnTab();
         }
     }
 }

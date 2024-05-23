@@ -73,13 +73,9 @@ namespace BokningsProgram.Managers
         {
             string filename = "bookingID.txt";
             _bookingID = int.Parse(File.ReadAllText(filename));
-
-        }
-        public void UpdateID()
-        {
-            string filename = "bookingID.txt";
             string content = (++_bookingID).ToString();
             File.WriteAllText(filename, content);
+
         }
         public void ImportSchedules()
         {
@@ -199,14 +195,53 @@ namespace BokningsProgram.Managers
                 ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
             }
-            bool ok = SuggestBookingForLunch(newBooking, selectedSSK);
+            bool ok = SuggestBookingForSpecificBooking(newBooking, selectedSSK, 1);
             if (!ok)
             {
-                SuggestBookingForLunch(selectedBooking, selectedSSK);
+                SuggestBookingForSpecificBooking(selectedBooking, selectedSSK, 1);
                 MessageBox.Show("Kunde inte flytta lunchen dit");
             }
         }
-
+        public void AddMeetingBookings()
+        {
+            int i;
+            foreach (Meeting meeting in _meetingManager.ListOfMeetings)
+            {
+                int interval = meeting.Intervall * 7;
+                foreach (string sskName in meeting.NamesOfSSK)
+                {
+                    bool intervalOK = true;
+                    i = 0;
+                    SSK ssk = _sskManager.GetSSKfromName(sskName);
+                    foreach (var days in ssk.ScheduledDays.Days)
+                    {
+                        if (days.StartOfDay > meeting.Time)
+                        {
+                            if (i == interval)
+                            {
+                                intervalOK = true;
+                            }
+                            bool dayOK = meeting.DayOfWeek.Any(d => d.Equals(days.StartOfDay.DayOfWeek));
+                            if (dayOK && intervalOK)
+                            {
+                                i = 0;
+                                DateTime start = new DateTime(days.StartOfDay.Year, days.StartOfDay.Month, days.StartOfDay.Day, meeting.Time.Hour, 0, 0);
+                                DateTime end = new DateTime(days.StartOfDay.Year, days.StartOfDay.Month, days.StartOfDay.Day, meeting.Time.Hour + 1, 0, 0);
+                                Booking booking = new Booking(start, end, meeting.NameOfMeeting, RoomCategory.Dubbel, false);
+                                GetID();
+                                bool bookingOK = SuggestBookingForSpecificBooking(booking, ssk, _bookingID);
+                                if (bookingOK)
+                                {
+                                    meeting.BookedMeetings.Add(booking);
+                                }
+                                intervalOK = false;
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
 
         private void EditBooking(SSK selectedSSK, Booking selectedBooking, Room selectedRoom, Booking newBooking, SSK newSSK)
         {
@@ -248,10 +283,8 @@ namespace BokningsProgram.Managers
                     if (booking.ID > 2 || isNewBooking)
                     {
                         GetID();
-                        _bookingID++;
                         _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, _bookingID);
                         _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
-                        UpdateID();
                     }
                     else
                     {
@@ -266,7 +299,7 @@ namespace BokningsProgram.Managers
                 MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
 
         }
-        public bool SuggestBookingForLunch(Booking booking, SSK ssk)
+        public bool SuggestBookingForSpecificBooking(Booking booking, SSK ssk, int bookingID)
         {
             bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, false);
             if (sskOK && ssk.HasSecondSchedule)
@@ -274,9 +307,9 @@ namespace BokningsProgram.Managers
             
             if (sskOK)
             {
-                _sskManager.AddBooking(booking, ssk, false, 1);
+                _sskManager.AddBooking(booking, ssk, false, bookingID);
                 if (ssk.HasSecondSchedule)
-                    _sskManager.AddBooking(booking, ssk, true, 1);
+                    _sskManager.AddBooking(booking, ssk, true, bookingID);
             }
             return sskOK;
         }
@@ -310,10 +343,8 @@ namespace BokningsProgram.Managers
                         if (booking.ID > 2 || isNewBooking)
                         {
                             GetID();
-                            _bookingID++;
                             _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
                             _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
-                            UpdateID();
                         }
                         else
                         {
@@ -405,8 +436,6 @@ namespace BokningsProgram.Managers
         public void AddSickBooking(SSK sickSSK, Booking sickBooking)
         {
             GetID();
-            _bookingID++;
-            UpdateID();
             _sskManager.AddBooking(sickBooking, sickSSK, false, _bookingID);
             if (sickSSK.HasSecondSchedule)
                 _sskManager.AddBooking(sickBooking, sickSSK, true, _bookingID);
