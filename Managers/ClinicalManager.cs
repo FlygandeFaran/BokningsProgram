@@ -261,7 +261,16 @@ namespace BokningsProgram.Managers
             //Check for ssk
             bool sskSecondTrackBooking = false;
             bool roomSecondTrackBooking = false;
-            bool sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out SSK availableSSK, false);
+            bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
+            if (!roomOK)
+            {
+                roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
+                roomSecondTrackBooking = roomOK;
+            }
+
+            if (roomOK)
+            {
+                bool sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out SSK availableSSK, false);
             if (!sskOK)
             {
                 sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, true);//check second track
@@ -270,15 +279,6 @@ namespace BokningsProgram.Managers
 
             if (sskOK)
             {
-                bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
-                if (!roomOK)
-                {
-                    roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
-                    roomSecondTrackBooking = roomOK;
-                }
-
-                if (roomOK)
-                {
                     //lägg till bekräftelse av användaren
                     if (booking.ID > 2 || isNewBooking)
                     {
