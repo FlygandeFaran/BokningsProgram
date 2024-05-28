@@ -84,7 +84,7 @@ namespace BokningsProgram
         }
         public override string ToString()
         {
-			string strOut = $"{_name}, {_HSAid}";//Ta bort kompetens när QA är klar
+			string strOut = $"{_name}";//Ta bort kompetens när QA är klar
 			return strOut;
         }
     }

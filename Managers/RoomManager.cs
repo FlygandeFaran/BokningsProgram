@@ -46,39 +46,34 @@ namespace BokningsProgram
             }
             return bookedRoom;
         }
-        public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom, bool secondTrack)
-        {
-            bool ok = true;
-            newBooking = new Booking(booking);
-            bool roomOK = false;
-            availableRoom = new Room();
+        //public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
+        //{
+        //    bool ok = true;
+        //    newBooking = new Booking(booking);
+        //    bool roomOK = false;
+        //    availableRoom = new Room();
 
-            while (ok)
-            {
-                availableRoom = CheckBookingForRoom(newBooking, out roomOK, secondTrack);
-                if (availableRoom is Room)
-                {
-                    if (roomOK)
-                        ok = false;
-                    else
-                        newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
+        //    while (ok)
+        //    {
+        //        availableRoom = CheckBookingForRoom(newBooking, out roomOK);
+        //        if (availableRoom is Room)
+        //        {
+        //            if (roomOK)
+        //                ok = false;
+        //            else
+        //                newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
 
-                    if (newBooking.EndTime.Hour > _endOfDay)
-                    {
-                        //if (!secondTrack)
-                        //{
-                        //MessageBox.Show("Hittade ingen ledig tid för bokningen");
-                        break;
-                        //}
-                        //newBooking = booking; // börjar om igen med ursprungliga bokningen
-                    }
-                }
-                else
-                    newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-            }
+        //            if (newBooking.EndTime.Hour > _endOfDay)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //        else
+        //            newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
+        //    }
 
-            return roomOK;
-        }
+        //    return roomOK;
+        //}
         public Room CheckBookingForRoom(Booking booking, out bool roomOK, bool secondTrack)
         {
             roomOK = false;

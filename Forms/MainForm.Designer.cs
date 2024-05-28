@@ -56,12 +56,11 @@
             this.btnClearSSK = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.lbAvailableRooms = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NySSKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importeraSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.återkommandeMötenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.rbChartSSK = new System.Windows.Forms.RadioButton();
             this.rbChartRoom = new System.Windows.Forms.RadioButton();
@@ -76,7 +75,6 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
@@ -106,10 +104,9 @@
             this.groupBox1.Controls.Add(this.groupBox5);
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 838);
+            this.groupBox1.Size = new System.Drawing.Size(154, 710);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bokning";
@@ -341,25 +338,6 @@
             this.lbAvailableSSK.Size = new System.Drawing.Size(120, 95);
             this.lbAvailableSSK.TabIndex = 0;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.lbAvailableRooms);
-            this.groupBox3.Location = new System.Drawing.Point(6, 780);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(148, 52);
-            this.groupBox3.TabIndex = 10;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Rum";
-            // 
-            // lbAvailableRooms
-            // 
-            this.lbAvailableRooms.Enabled = false;
-            this.lbAvailableRooms.FormattingEnabled = true;
-            this.lbAvailableRooms.Location = new System.Drawing.Point(6, 28);
-            this.lbAvailableRooms.Name = "lbAvailableRooms";
-            this.lbAvailableRooms.Size = new System.Drawing.Size(120, 108);
-            this.lbAvailableRooms.TabIndex = 0;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -374,7 +352,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NySSKToolStripMenuItem,
-            this.importeraSchemaToolStripMenuItem});
+            this.importeraSchemaToolStripMenuItem,
+            this.återkommandeMötenToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -382,16 +361,23 @@
             // NySSKToolStripMenuItem
             // 
             this.NySSKToolStripMenuItem.Name = "NySSKToolStripMenuItem";
-            this.NySSKToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.NySSKToolStripMenuItem.Text = "Hantera sköterskor";
+            this.NySSKToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.NySSKToolStripMenuItem.Text = "Hantera Sköterskor";
             this.NySSKToolStripMenuItem.Click += new System.EventHandler(this.NySSKToolStripMenuItem_Click);
             // 
             // importeraSchemaToolStripMenuItem
             // 
             this.importeraSchemaToolStripMenuItem.Name = "importeraSchemaToolStripMenuItem";
-            this.importeraSchemaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.importeraSchemaToolStripMenuItem.Text = "Importera schema";
+            this.importeraSchemaToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.importeraSchemaToolStripMenuItem.Text = "Importera Schema";
             this.importeraSchemaToolStripMenuItem.Click += new System.EventHandler(this.importeraSchemaToolStripMenuItem_Click);
+            // 
+            // återkommandeMötenToolStripMenuItem
+            // 
+            this.återkommandeMötenToolStripMenuItem.Name = "återkommandeMötenToolStripMenuItem";
+            this.återkommandeMötenToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.återkommandeMötenToolStripMenuItem.Text = "Återkommande Möten";
+            this.återkommandeMötenToolStripMenuItem.Click += new System.EventHandler(this.återkommandeMötenToolStripMenuItem_Click);
             // 
             // chart1
             // 
@@ -472,7 +458,7 @@
             // 
             this.lblWarning.AutoSize = true;
             this.lblWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblWarning.Location = new System.Drawing.Point(813, 32);
+            this.lblWarning.Location = new System.Drawing.Point(857, 91);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(65, 13);
             this.lblWarning.TabIndex = 30;
@@ -481,7 +467,7 @@
             // lblWeekDay
             // 
             this.lblWeekDay.AutoSize = true;
-            this.lblWeekDay.Location = new System.Drawing.Point(862, 91);
+            this.lblWeekDay.Location = new System.Drawing.Point(869, 39);
             this.lblWeekDay.Name = "lblWeekDay";
             this.lblWeekDay.Size = new System.Drawing.Size(35, 13);
             this.lblWeekDay.TabIndex = 31;
@@ -528,7 +514,6 @@
             this.groupBox4.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -548,8 +533,6 @@
         private System.Windows.Forms.DateTimePicker dtpStartDate;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListBox lbAvailableSSK;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ListBox lbAvailableRooms;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -578,6 +561,7 @@
         private System.Windows.Forms.Label lblWeekDay;
         private System.Windows.Forms.Button btnClearAllBookings;
         private System.Windows.Forms.ToolStripMenuItem importeraSchemaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem återkommandeMötenToolStripMenuItem;
     }
 }
 

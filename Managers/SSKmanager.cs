@@ -172,5 +172,10 @@ namespace BokningsProgram
                 ssk.ClearAllBookings();
             }
         }
+        public SSK GetSSKfromName(string sskName)
+        {
+            SSK ssk = _listOfSSK.FirstOrDefault(s => s.Name.Equals(sskName));
+            return ssk;
+        }
     }
 }

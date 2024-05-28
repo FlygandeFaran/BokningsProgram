@@ -62,10 +62,10 @@ namespace BokningsProgram
         }
         private void InitializeListBoxes()
         {
-            //lbAvailableSSK.DataSource = _cm.SskManager.ListOfSSK;
+            lbAvailableSSK.DataSource = _cm.SskManager.ListOfSSK;
+            lbAvailableSSK.SelectedIndex = -1;
             //lbAvailableRooms.DataSource = _cm.RoomManager.ListOfRooms;
             //lbAvailableRooms.DisplayMember = "RoomNumber";
-            //lbAvailableSSK.SelectedIndex = -1;
             //lbAvailableRooms.SelectedIndex = -1;
         }
 

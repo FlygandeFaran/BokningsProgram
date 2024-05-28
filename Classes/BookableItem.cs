@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BokningsProgram
 {
@@ -25,7 +26,6 @@ namespace BokningsProgram
         public BookableItem()
         {
             _scheduledDays = new ScheduledDays();
-            //_scheduledDays.GenerateSCheduleDays();
         }
         public bool IsItBooked(Booking newBooking, bool secondTrack)
         {
@@ -100,6 +100,28 @@ namespace BokningsProgram
                 {
                     day.SecondlistOfBookings.RemoveAll(b => b.ID > 2);
                 }
+            }
+        }
+        public void RemoveMeetingBooking(string meetingName)
+        {
+            List<Booking> meetingBookings = new List<Booking>();
+            DailySchedule ds = _scheduledDays.GetDailyScheduleOfBooking(meetingName);
+            while (ds is DailySchedule)
+            {
+                var booking = ds.FirstlistOfBookings.FirstOrDefault(b => b.Description.Equals(meetingName));
+                if (booking == null)
+                {
+                    booking = ds.SecondlistOfBookings.FirstOrDefault(b => b.Description.Equals(meetingName));
+                }
+                if (booking is Booking)
+                {
+                    ds.RemoveBooking(booking);
+                }
+                else
+                { 
+                    break; 
+                }
+                ds = _scheduledDays.GetDailyScheduleOfBooking(meetingName);
             }
         }
     }

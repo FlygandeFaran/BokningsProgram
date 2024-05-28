@@ -60,8 +60,6 @@ namespace BokningsProgram
             get { return _endTime; }
             set { _endTime = value; }
         }
-        //public SSK bookingSSK { get; set; }
-        //public Room bookingRoom { get; set; }
 
         public Booking() { }
         public Booking(DateTime start, DateTime end, string description, RoomCategory roomRequired, bool fullDay)
@@ -138,6 +136,102 @@ namespace BokningsProgram
                 case "Cytostatika":
                     hour = 1;
                     minutes = 30;
+                    break;
+                case "Abraxane/Gemzar":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "CAPOX":
+                    hour = 3;
+                    minutes = 0;
+                    break;
+                case "Cemiplimab":
+                    hour = 1;
+                    minutes = 0;
+                    break;
+                case "Cisplatin":
+                    hour = 5;
+                    minutes = 0;
+                    break;
+                case "Docetaxel":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "EC":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "FLOT":
+                    hour = 3;
+                    minutes = 0;
+                    break;
+                case "FLV":
+                    hour = 1;
+                    minutes = 0;
+                    break;
+                case "FLV/Bevacizumab":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "FOLFIRI":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "FOLFOX":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Gemcitabin":
+                    hour = 1;
+                    minutes = 0;
+                    break;
+                case "Gemcitabin/Nab-Paklitaxel":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Gemzar":
+                    hour = 1;
+                    minutes = 0;
+                    break;
+                case "Ipilimumab/Nivolumab":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Karboplatin/Etoposid":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Karboplatin/Irinotekan":
+                    hour = 2;
+                    minutes = 30;
+                    break;
+                case "Karboplatin/Paklitaxel":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Nivolumab":
+                    hour = 2;
+                    minutes = 0;
+                    break;
+                case "Paklitaxel":
+                    hour = 1;
+                    minutes = 30;
+                    break;
+                case "R-CHOP":
+                    hour = 3;
+                    minutes = 0;
+                    break;
+                case "Rituximab":
+                    hour = 2;
+                    minutes = 30;
+                    break;
+                case "Rituximab/Bendamustin":
+                    hour = 3;
+                    minutes = 0;
+                    break;
+                case "Trastuzumab":
+                    hour = 1;
+                    minutes = 0;
                     break;
                 default:
                     hour = 1;

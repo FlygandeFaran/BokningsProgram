@@ -31,6 +31,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lbCurrentSSK = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.clbKompetenser = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtHSAid = new System.Windows.Forms.TextBox();
             this.btnRemove = new System.Windows.Forms.Button();
@@ -39,7 +40,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.clbKompetenser = new System.Windows.Forms.CheckedListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +49,7 @@
             this.groupBox1.Controls.Add(this.lbCurrentSSK);
             this.groupBox1.Location = new System.Drawing.Point(143, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(143, 320);
+            this.groupBox1.Size = new System.Drawing.Size(204, 320);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Befintliga sköterskor";
@@ -59,7 +59,7 @@
             this.lbCurrentSSK.FormattingEnabled = true;
             this.lbCurrentSSK.Location = new System.Drawing.Point(7, 20);
             this.lbCurrentSSK.Name = "lbCurrentSSK";
-            this.lbCurrentSSK.Size = new System.Drawing.Size(120, 290);
+            this.lbCurrentSSK.Size = new System.Drawing.Size(181, 290);
             this.lbCurrentSSK.TabIndex = 0;
             this.lbCurrentSSK.SelectedIndexChanged += new System.EventHandler(this.lbCurrentSSK_SelectedIndexChanged);
             // 
@@ -80,6 +80,15 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Lägg till ny sköterska";
+            // 
+            // clbKompetenser
+            // 
+            this.clbKompetenser.CheckOnClick = true;
+            this.clbKompetenser.FormattingEnabled = true;
+            this.clbKompetenser.Location = new System.Drawing.Point(6, 126);
+            this.clbKompetenser.Name = "clbKompetenser";
+            this.clbKompetenser.Size = new System.Drawing.Size(100, 94);
+            this.clbKompetenser.TabIndex = 10;
             // 
             // label3
             // 
@@ -152,21 +161,14 @@
             this.txtName.Size = new System.Drawing.Size(100, 20);
             this.txtName.TabIndex = 0;
             // 
-            // clbKompetenser
-            // 
-            this.clbKompetenser.FormattingEnabled = true;
-            this.clbKompetenser.Location = new System.Drawing.Point(6, 126);
-            this.clbKompetenser.Name = "clbKompetenser";
-            this.clbKompetenser.Size = new System.Drawing.Size(100, 94);
-            this.clbKompetenser.TabIndex = 10;
-            // 
             // SSKform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(307, 340);
+            this.ClientSize = new System.Drawing.Size(359, 340);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SSKform";

@@ -27,7 +27,7 @@ namespace BokningsProgram.Managers
 
         public void ImportSchedules(SSKmanager sm, RoomManager rm)
         {
-            filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Pilot_schemaNy.xlsx";
+            filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Kopia av Pilot schema.xlsx";
             // Create an instance of Excel Application
             Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
 
@@ -94,6 +94,7 @@ namespace BokningsProgram.Managers
                 string error = ex.Message;
                 workbook.Close();
                 excelApp.Quit();
+                MessageBox.Show(error);
             }
             if (!msg.Equals(""))
             {

@@ -86,13 +86,48 @@ namespace BokningsProgram.Managers
         }
         private void CreateSSK()
         {
-            List<KompetensLevel> kompetensLevelsErik = new List<KompetensLevel>() { KompetensLevel.None };
-            List<KompetensLevel> kompetensLevelsMaiar = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett };
-            List<KompetensLevel> kompetensLevelsLinnea = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels1 = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels2 = new List<KompetensLevel>() { KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels3 = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels4 = new List<KompetensLevel>() { KompetensLevel.Piccline, KompetensLevel.Tablett, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels5 = new List<KompetensLevel>() { KompetensLevel.Tablett, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels6 = new List<KompetensLevel>() { KompetensLevel.Tablett, KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels7 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels8 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels9 = new List<KompetensLevel>() { KompetensLevel.Tablett };
+            List<KompetensLevel> kompetensLevels10 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels11 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels12 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels13 = new List<KompetensLevel>() { KompetensLevel.Telefon };
+            List<KompetensLevel> kompetensLevels14 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels15 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels16 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels17 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels18 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels19 = new List<KompetensLevel>() { KompetensLevel.None };
+            List<KompetensLevel> kompetensLevels20 = new List<KompetensLevel>() { KompetensLevel.None };
 
-            _sskManager.ListOfSSK.Add(new SSK("Erik", "34VB", kompetensLevelsErik));
-            _sskManager.ListOfSSK.Add(new SSK("Maiar", "56gh", kompetensLevelsMaiar));
-            _sskManager.ListOfSSK.Add(new SSK("Linnea", "16LL", kompetensLevelsLinnea));
+            _sskManager.ListOfSSK.Add(new SSK("Johanna Axelsson", "34VB", kompetensLevels1));
+            _sskManager.ListOfSSK.Add(new SSK("Anna Back", "56gh", kompetensLevels2));
+            _sskManager.ListOfSSK.Add(new SSK("Marie Högsberg", "16LL", kompetensLevels3));
+            _sskManager.ListOfSSK.Add(new SSK("Monica Kjellvén", "16LL", kompetensLevels3));
+            _sskManager.ListOfSSK.Add(new SSK("Maria Sihver", "16LL", kompetensLevels4));
+            _sskManager.ListOfSSK.Add(new SSK("Karin Svärd", "16LL", kompetensLevels5));
+            _sskManager.ListOfSSK.Add(new SSK("Gustaf Leonardsson", "16LL", kompetensLevels6));
+            _sskManager.ListOfSSK.Add(new SSK("Seiko Ishikawa", "16LL", kompetensLevels7));
+            _sskManager.ListOfSSK.Add(new SSK("Elaheh Esfandyari Kajouri Rad", "16LL", kompetensLevels8));
+            _sskManager.ListOfSSK.Add(new SSK("Liciane Carvalho", "16LL", kompetensLevels9));
+            _sskManager.ListOfSSK.Add(new SSK("Emily Eilertsen Eriksson", "16LL", kompetensLevels10));
+            _sskManager.ListOfSSK.Add(new SSK("Ann-Cathrine Malmberg", "16LL", kompetensLevels11));
+            _sskManager.ListOfSSK.Add(new SSK("Emma Briander", "16LL", kompetensLevels12));
+            _sskManager.ListOfSSK.Add(new SSK("Sara Perone", "16LL", kompetensLevels13));
+            _sskManager.ListOfSSK.Add(new SSK("Estela Panduro", "16LL", kompetensLevels14));
+            _sskManager.ListOfSSK.Add(new SSK("Dinh Hy", "16LL", kompetensLevels15));
+            _sskManager.ListOfSSK.Add(new SSK("Sagal Ali", "16LL", kompetensLevels16));
+            _sskManager.ListOfSSK.Add(new SSK("Maria Jonsson", "16LL", kompetensLevels17));
+            _sskManager.ListOfSSK.Add(new SSK("Elena Skaf", "16LL", kompetensLevels18));
+            _sskManager.ListOfSSK.Add(new SSK("Jenny Zwärd", "16LL", kompetensLevels19));
+            _sskManager.ListOfSSK.Add(new SSK("Jeanette Sparrenlöv", "16LL", kompetensLevels20));
         }
         public void exportStaff()
         {
@@ -259,41 +294,23 @@ namespace BokningsProgram.Managers
         private void SuggestBooking(Booking booking, bool isNewBooking)
         {
             //Check for ssk
-            bool sskSecondTrackBooking = false;
-            bool roomSecondTrackBooking = false;
-            bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, false);
-            if (!roomOK)
-            {
-                roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, true);//Check second track
-                roomSecondTrackBooking = roomOK;
-            }
 
-            if (roomOK)
-            {
-                bool sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out SSK availableSSK, false);
-            if (!sskOK)
-            {
-                sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, true);//check second track
-                sskSecondTrackBooking = sskOK;
-            }
+            FirstAvailableBooking(booking, out Booking modifiedBooking, out Room availableRoom, out SSK availableSSK, out bool sskSecondTrackBooking, out bool roomSecondTrackBooking);
 
-            if (sskOK)
+            if (availableRoom is Room && availableSSK is SSK)
             {
-                    //lägg till bekräftelse av användaren
-                    if (booking.ID > 2 || isNewBooking)
-                    {
-                        GetID();
-                        _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, _bookingID);
-                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
-                    }
-                    else
-                    {
-                        _sskManager.AddBooking(booking, availableSSK, sskSecondTrackBooking, booking.ID);
-                        _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
-                    }
+                //lägg till bekräftelse av användaren
+                if (booking.ID > 2 || isNewBooking)
+                {
+                    GetID();
+                    _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, _bookingID);
+                    _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, _bookingID);
                 }
                 else
-                    MessageBox.Show("Hittade inget ledigt rum för bokningen", "Hoppsan");
+                {
+                    _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, booking.ID);
+                    _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, booking.ID);
+                }
             }
             else
                 MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
@@ -316,10 +333,10 @@ namespace BokningsProgram.Managers
         //Föreslår en bokning med medföljande ssk, om inte går körs vanliga suggestbooking
         public void SuggestBooking(Booking booking, SSK ssk, bool isNewBooking)
         {
-            bool roomOK = false;
             //Check for ssk
             bool sskSecondTrackBooking = false;
             bool roomSecondTrackBooking = false;
+
             if (ssk is SSK)
             {
                 bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
@@ -330,11 +347,11 @@ namespace BokningsProgram.Managers
                 }
                 if (sskOK)
                 {
-                    roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out Room availableRoom, sskSecondTrackBooking);
+                    Room availableRoom = _roomManager.CheckBookingForRoom(booking, out bool roomOK, roomSecondTrackBooking);
                     if (!roomOK)
                     {
-                        sskSecondTrackBooking = true;
-                        roomOK = _roomManager.CheckAvailabilityForBooking(booking, out booking, out availableRoom, sskSecondTrackBooking);//Check second track
+                        roomSecondTrackBooking = true;
+                        availableRoom = _roomManager.CheckBookingForRoom(booking, out roomOK, roomSecondTrackBooking);//Check second track
                     }
                     if (roomOK)
                     {
@@ -366,6 +383,44 @@ namespace BokningsProgram.Managers
             else
             {
                 SuggestBooking(booking, isNewBooking);
+            }
+        }
+        private void FirstAvailableBooking(Booking booking, out Booking newBooking, out Room availableRoom, out SSK availableSSK, out bool secondTrackSSK, out bool secondTrackRoom)
+        {
+            bool bookingOK = false;
+            secondTrackSSK = false;
+            secondTrackRoom = false;
+            bool sskOK = false;
+            bool roomOK = false;
+            newBooking = null;
+            availableRoom = null;
+            availableSSK = null;
+
+            while (!bookingOK)
+            {
+                sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, secondTrackSSK);
+                secondTrackRoom = false;
+                Booking tempBooking = new Booking(booking);
+                availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
+                if (!roomOK)
+                {
+                    tempBooking = new Booking(booking);
+                    secondTrackRoom = true;
+                    availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
+                }
+
+                if (availableSSK == null)
+                {
+                    if (!secondTrackSSK)
+                        secondTrackSSK = true;
+                    else
+                        break;
+                }
+                else if (sskOK && roomOK)
+                {
+                    bookingOK = true;
+                    newBooking = booking;
+                }
             }
         }
         public void SuggestMultipleBookings(List<Booking> multipleBookings)
@@ -406,7 +461,7 @@ namespace BokningsProgram.Managers
                             {
                                 ok = _sskManager.CheckBookingForSelectedSSKWithVariableTime(newBooking, out newBooking, ssk);
                                 if (ok)
-                                    ok = CheckRoomWithSelectedBooking(newBooking, out newBooking);
+                                    ok = CheckRoomWithSelectedBooking(newBooking);
                                 if (ok)
                                 {
                                     count++;
@@ -423,12 +478,14 @@ namespace BokningsProgram.Managers
             return noSSK;
         }
 
-        private bool CheckRoomWithSelectedBooking(Booking booking, out Booking newBooking)
+        private bool CheckRoomWithSelectedBooking(Booking booking)
         {
-            bool roomOK = _roomManager.CheckAvailabilityForBooking(booking, out newBooking, out Room availableRoom, false);
+            bool secondTrack = false;
+            Room availableRoom = _roomManager.CheckBookingForRoom(booking, out bool roomOK, secondTrack);
             if (!roomOK)
             {
-                roomOK = _roomManager.CheckAvailabilityForBooking(newBooking, out newBooking, out availableRoom, true);//Check second track
+                secondTrack = true;
+                availableRoom = _roomManager.CheckBookingForRoom(booking, out roomOK, secondTrack);
             }
 
             return roomOK;
