@@ -33,7 +33,6 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnSickLeave = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.cbDescription = new System.Windows.Forms.ComboBox();
@@ -61,6 +60,7 @@
             this.NySSKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importeraSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.återkommandeMötenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.rbChartSSK = new System.Windows.Forms.RadioButton();
             this.rbChartRoom = new System.Windows.Forms.RadioButton();
@@ -70,7 +70,6 @@
             this.lblWarning = new System.Windows.Forms.Label();
             this.lblWeekDay = new System.Windows.Forms.Label();
             this.btnClearAllBookings = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -81,7 +80,7 @@
             // 
             // btnExecute
             // 
-            this.btnExecute.Location = new System.Drawing.Point(34, 103);
+            this.btnExecute.Location = new System.Drawing.Point(47, 98);
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.Size = new System.Drawing.Size(50, 23);
             this.btnExecute.TabIndex = 6;
@@ -97,23 +96,9 @@
             this.dtpBehTid.Size = new System.Drawing.Size(50, 20);
             this.dtpBehTid.TabIndex = 7;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnSickLeave);
-            this.groupBox1.Controls.Add(this.groupBox6);
-            this.groupBox1.Controls.Add(this.groupBox5);
-            this.groupBox1.Controls.Add(this.groupBox4);
-            this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 27);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 710);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Bokning";
-            // 
             // btnSickLeave
             // 
-            this.btnSickLeave.Location = new System.Drawing.Point(19, 671);
+            this.btnSickLeave.Location = new System.Drawing.Point(39, 680);
             this.btnSickLeave.Name = "btnSickLeave";
             this.btnSickLeave.Size = new System.Drawing.Size(93, 23);
             this.btnSickLeave.TabIndex = 31;
@@ -127,7 +112,7 @@
             this.groupBox6.Controls.Add(this.cbEntireDayBooking);
             this.groupBox6.Controls.Add(this.cbNystart);
             this.groupBox6.Controls.Add(this.btnExecute);
-            this.groupBox6.Location = new System.Drawing.Point(6, 333);
+            this.groupBox6.Location = new System.Drawing.Point(12, 341);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(148, 136);
             this.groupBox6.TabIndex = 26;
@@ -139,7 +124,7 @@
             this.cbDescription.FormattingEnabled = true;
             this.cbDescription.Location = new System.Drawing.Point(6, 19);
             this.cbDescription.Name = "cbDescription";
-            this.cbDescription.Size = new System.Drawing.Size(100, 21);
+            this.cbDescription.Size = new System.Drawing.Size(136, 21);
             this.cbDescription.TabIndex = 18;
             this.cbDescription.SelectedIndexChanged += new System.EventHandler(this.cbDescription_SelectedIndexChanged);
             // 
@@ -174,7 +159,7 @@
             this.groupBox5.Controls.Add(this.lblStartDate);
             this.groupBox5.Controls.Add(this.dtpStartDate);
             this.groupBox5.Controls.Add(this.lblEndDate);
-            this.groupBox5.Location = new System.Drawing.Point(6, 19);
+            this.groupBox5.Location = new System.Drawing.Point(12, 27);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(148, 167);
             this.groupBox5.TabIndex = 25;
@@ -263,7 +248,7 @@
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dtpStartTime);
             this.groupBox4.Controls.Add(this.dtpBehTid);
-            this.groupBox4.Location = new System.Drawing.Point(6, 192);
+            this.groupBox4.Location = new System.Drawing.Point(12, 200);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(148, 135);
             this.groupBox4.TabIndex = 24;
@@ -302,7 +287,7 @@
             this.groupBox2.Controls.Add(this.btnClearSSK);
             this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.lbAvailableSSK);
-            this.groupBox2.Location = new System.Drawing.Point(6, 475);
+            this.groupBox2.Location = new System.Drawing.Point(12, 483);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(148, 174);
             this.groupBox2.TabIndex = 9;
@@ -311,7 +296,7 @@
             // 
             // btnClearSSK
             // 
-            this.btnClearSSK.Location = new System.Drawing.Point(21, 142);
+            this.btnClearSSK.Location = new System.Drawing.Point(36, 142);
             this.btnClearSSK.Name = "btnClearSSK";
             this.btnClearSSK.Size = new System.Drawing.Size(71, 23);
             this.btnClearSSK.TabIndex = 32;
@@ -335,7 +320,7 @@
             this.lbAvailableSSK.FormattingEnabled = true;
             this.lbAvailableSSK.Location = new System.Drawing.Point(6, 41);
             this.lbAvailableSSK.Name = "lbAvailableSSK";
-            this.lbAvailableSSK.Size = new System.Drawing.Size(120, 95);
+            this.lbAvailableSSK.Size = new System.Drawing.Size(136, 95);
             this.lbAvailableSSK.TabIndex = 0;
             // 
             // menuStrip1
@@ -353,7 +338,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NySSKToolStripMenuItem,
             this.importeraSchemaToolStripMenuItem,
-            this.återkommandeMötenToolStripMenuItem});
+            this.återkommandeMötenToolStripMenuItem,
+            this.debugToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -379,6 +365,14 @@
             this.återkommandeMötenToolStripMenuItem.Text = "Återkommande Möten";
             this.återkommandeMötenToolStripMenuItem.Click += new System.EventHandler(this.återkommandeMötenToolStripMenuItem_Click);
             // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.debugToolStripMenuItem.Text = "Debug";
+            this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+            // 
             // chart1
             // 
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -388,7 +382,7 @@
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(172, 86);
+            this.chart1.Location = new System.Drawing.Point(166, 62);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
@@ -397,7 +391,7 @@
             series1.Name = "Series1";
             series1.YValuesPerPoint = 2;
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(982, 779);
+            this.chart1.Size = new System.Drawing.Size(988, 803);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
             this.chart1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseClick);
@@ -406,7 +400,7 @@
             // 
             this.rbChartSSK.AutoSize = true;
             this.rbChartSSK.Checked = true;
-            this.rbChartSSK.Location = new System.Drawing.Point(1082, 62);
+            this.rbChartSSK.Location = new System.Drawing.Point(1079, 39);
             this.rbChartSSK.Name = "rbChartSSK";
             this.rbChartSSK.Size = new System.Drawing.Size(46, 17);
             this.rbChartSSK.TabIndex = 16;
@@ -417,7 +411,7 @@
             // rbChartRoom
             // 
             this.rbChartRoom.AutoSize = true;
-            this.rbChartRoom.Location = new System.Drawing.Point(1018, 62);
+            this.rbChartRoom.Location = new System.Drawing.Point(1015, 39);
             this.rbChartRoom.Name = "rbChartRoom";
             this.rbChartRoom.Size = new System.Drawing.Size(47, 17);
             this.rbChartRoom.TabIndex = 17;
@@ -428,7 +422,7 @@
             // dtpScheduleDay
             // 
             this.dtpScheduleDay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpScheduleDay.Location = new System.Drawing.Point(845, 60);
+            this.dtpScheduleDay.Location = new System.Drawing.Point(842, 37);
             this.dtpScheduleDay.Name = "dtpScheduleDay";
             this.dtpScheduleDay.Size = new System.Drawing.Size(93, 20);
             this.dtpScheduleDay.TabIndex = 28;
@@ -436,7 +430,7 @@
             // 
             // btnNextDay
             // 
-            this.btnNextDay.Location = new System.Drawing.Point(944, 60);
+            this.btnNextDay.Location = new System.Drawing.Point(941, 37);
             this.btnNextDay.Name = "btnNextDay";
             this.btnNextDay.Size = new System.Drawing.Size(28, 20);
             this.btnNextDay.TabIndex = 27;
@@ -446,7 +440,7 @@
             // 
             // btnPrevDay
             // 
-            this.btnPrevDay.Location = new System.Drawing.Point(811, 60);
+            this.btnPrevDay.Location = new System.Drawing.Point(808, 37);
             this.btnPrevDay.Name = "btnPrevDay";
             this.btnPrevDay.Size = new System.Drawing.Size(28, 20);
             this.btnPrevDay.TabIndex = 29;
@@ -458,7 +452,7 @@
             // 
             this.lblWarning.AutoSize = true;
             this.lblWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblWarning.Location = new System.Drawing.Point(857, 91);
+            this.lblWarning.Location = new System.Drawing.Point(853, 66);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(65, 13);
             this.lblWarning.TabIndex = 30;
@@ -467,7 +461,7 @@
             // lblWeekDay
             // 
             this.lblWeekDay.AutoSize = true;
-            this.lblWeekDay.Location = new System.Drawing.Point(869, 39);
+            this.lblWeekDay.Location = new System.Drawing.Point(866, 16);
             this.lblWeekDay.Name = "lblWeekDay";
             this.lblWeekDay.Size = new System.Drawing.Size(35, 13);
             this.lblWeekDay.TabIndex = 31;
@@ -475,12 +469,14 @@
             // 
             // btnClearAllBookings
             // 
-            this.btnClearAllBookings.Location = new System.Drawing.Point(364, 60);
+            this.btnClearAllBookings.Enabled = false;
+            this.btnClearAllBookings.Location = new System.Drawing.Point(365, 27);
             this.btnClearAllBookings.Name = "btnClearAllBookings";
             this.btnClearAllBookings.Size = new System.Drawing.Size(119, 23);
             this.btnClearAllBookings.TabIndex = 32;
             this.btnClearAllBookings.Text = "Clear all bookings";
             this.btnClearAllBookings.UseVisualStyleBackColor = true;
+            this.btnClearAllBookings.Visible = false;
             this.btnClearAllBookings.Click += new System.EventHandler(this.btnClearAllBookings_Click);
             // 
             // MainForm
@@ -488,16 +484,20 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 877);
+            this.Controls.Add(this.btnSickLeave);
             this.Controls.Add(this.btnClearAllBookings);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.lblWeekDay);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.lblWarning);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btnPrevDay);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnNextDay);
             this.Controls.Add(this.dtpScheduleDay);
             this.Controls.Add(this.rbChartRoom);
             this.Controls.Add(this.rbChartSSK);
             this.Controls.Add(this.chart1);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -505,7 +505,6 @@
             this.Text = "Bokningssystem Dagvård av Erik Fura";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.groupBox1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -525,7 +524,6 @@
         #endregion
         private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.DateTimePicker dtpBehTid;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox cbFlerdagsbeh;
         private System.Windows.Forms.DateTimePicker dtpEndDate;
         private System.Windows.Forms.Label lblStartDate;
@@ -562,6 +560,7 @@
         private System.Windows.Forms.Button btnClearAllBookings;
         private System.Windows.Forms.ToolStripMenuItem importeraSchemaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem återkommandeMötenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
     }
 }
 

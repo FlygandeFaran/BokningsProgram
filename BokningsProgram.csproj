@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -55,6 +55,7 @@
     <Reference Include="System">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
@@ -76,6 +77,7 @@
     <Compile Include="Classes\BookableItem.cs" />
     <Compile Include="Classes\Booking.cs" />
     <Compile Include="Classes\DailySchedule.cs" />
+    <Compile Include="Classes\SQLdata.cs" />
     <Compile Include="Enums\KompetensLevel.cs" />
     <Compile Include="Forms\ChangeBooking.cs">
       <SubType>Form</SubType>
@@ -90,6 +92,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\Meeting.cs" />
+    <Compile Include="Forms\ConfirmBooking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConfirmBooking.Designer.cs">
+      <DependentUpon>ConfirmBooking.cs</DependentUpon>
+    </Compile>
     <Compile Include="Managers\MeetingManager.cs" />
     <Compile Include="Forms\RecurringMeetings.cs">
       <SubType>Form</SubType>
@@ -140,6 +148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SickLeave.resx">
       <DependentUpon>SickLeave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConfirmBooking.resx">
+      <DependentUpon>ConfirmBooking.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

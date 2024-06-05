@@ -1,4 +1,5 @@
-﻿using BokningsProgram.Forms;
+﻿using BokningsProgram.Classes;
+using BokningsProgram.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,6 +48,7 @@ namespace BokningsProgram.Managers
             //ska tas bort innan klar
             //RensaOchStartaOmDatabas();
 
+
             InitializeStaff();
             InitializeRooms();
             initializeMeetings();
@@ -54,8 +56,8 @@ namespace BokningsProgram.Managers
 
         private void RensaOchStartaOmDatabas()
         {
-            File.Delete("SSK.xml");
-            File.Delete("Rooms.xml");
+            File.Delete(@"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\SSK.xml");
+            File.Delete(@"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml");
             CreateRooms();
             CreateSSK();
             ImportSchedules();
@@ -71,7 +73,7 @@ namespace BokningsProgram.Managers
         }
         private void GetID()
         {
-            string filename = "bookingID.txt";
+            string filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\bookingID.txt";
             _bookingID = int.Parse(File.ReadAllText(filename));
             string content = (++_bookingID).ToString();
             File.WriteAllText(filename, content);
@@ -210,7 +212,7 @@ namespace BokningsProgram.Managers
                 ds.RemoveBooking(selectedBooking);
                 if (selectedRoom is Room)
                     ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
-                if (ds == null)
+                else if (ds == null)
                     ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
             }
@@ -299,17 +301,22 @@ namespace BokningsProgram.Managers
 
             if (availableRoom is Room && availableSSK is SSK)
             {
-                //lägg till bekräftelse av användaren
-                if (booking.ID > 2 || isNewBooking)
+                ConfirmBooking confirmBooking = new ConfirmBooking(availableSSK.Name, availableRoom.RoomNumber, booking);
+                DialogResult result = confirmBooking.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    GetID();
-                    _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, _bookingID);
-                    _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, _bookingID);
-                }
-                else
-                {
-                    _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, booking.ID);
-                    _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, booking.ID);
+                    //lägg till bekräftelse av användaren
+                    if (booking.ID > 2 || isNewBooking)
+                    {
+                        GetID();
+                        _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, _bookingID);
+                        _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, _bookingID);
+                    }
+                    else
+                    {
+                        _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, booking.ID);
+                        _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, booking.ID);
+                    }
                 }
             }
             else
@@ -356,17 +363,21 @@ namespace BokningsProgram.Managers
                     if (roomOK)
                     {
                         //lägg till bekräftelse av användaren
-
-                        if (booking.ID > 2 || isNewBooking)
+                        ConfirmBooking confirmBooking = new ConfirmBooking(ssk.Name, availableRoom.RoomNumber, booking);
+                        DialogResult result = confirmBooking.ShowDialog();
+                        if (result == DialogResult.OK)
                         {
-                            GetID();
-                            _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
-                            _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
-                        }
-                        else
-                        {
-                            _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, booking.ID);
-                            _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
+                            if (booking.ID > 2 || isNewBooking)
+                            {
+                                GetID();
+                                _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
+                                _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
+                            }
+                            else
+                            {
+                                _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, booking.ID);
+                                _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
+                            }
                         }
                     }
                 }

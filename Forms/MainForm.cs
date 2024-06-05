@@ -1,4 +1,5 @@
-﻿using BokningsProgram.Forms;
+﻿using BokningsProgram.Classes;
+using BokningsProgram.Forms;
 using BokningsProgram.Managers;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,19 @@ namespace BokningsProgram
         {
             InitializeComponent();
             _cm = new ClinicalManager();
+
+
+            SQLdata sqlData = new SQLdata(_cm);
+            //sqlData.SQLtest();
+            //sqlData.InsertSSK();
             InitializeGUI();
         }
         private void InitializeGUI()
         {
+            ChartArea ca = chart1.ChartAreas[0];
+            ca.Position = new ElementPosition(0, 0, 100, 100);
+            ca.InnerPlotPosition = new ElementPosition(8, 2, 90, 90);
+
             lblWarning.Text = "";
 
             dtpBehTid.CustomFormat = "HH:mm";
@@ -507,6 +517,20 @@ namespace BokningsProgram
             _cm.AddMeetingBookings();
             UpdateChart();
             UpdateChartDependingOnTab();
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (btnClearAllBookings.Enabled == false)
+            {
+                btnClearAllBookings.Enabled = true;
+                btnClearAllBookings.Visible = true;
+            }
+            else
+            {
+                btnClearAllBookings.Enabled = false;
+                btnClearAllBookings.Visible = false;
+            }
         }
     }
 }
