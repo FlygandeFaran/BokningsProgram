@@ -17,7 +17,6 @@ namespace BokningsProgram.Managers
 {
     public class ClinicalManager
     {
-        //private DateTime _endOfDay;
         private MeetingManager _meetingManager;
         private SSKmanager _sskManager;
         private RoomManager _roomManager;
@@ -172,32 +171,48 @@ namespace BokningsProgram.Managers
             _roomManager.ExportToXml();
         }
         //Öppnar en ny ruta med möjlighet att uppdatera bookning genom att ta bort och lägga till uppdaterade bookning
-        public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking, string description, bool secondTrack)
+        public bool ChangeBooking(int index, DateTime startOfBooking, DateTime endOfBooking, string description, bool secondTrack, bool isSSK)
         {
             bool ok = false;
-            var selectedSSK = _sskManager.ListOfSSK[index];
-
-            Booking selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedSSK, secondTrack);
-
-            if (selectedBooking is Booking)
+            SSK selectedSSK = null;
+            Room selectedRoom = null;
+            Booking selectedBooking = null;
+            if (isSSK)
             {
-                ok = UpdateBooking(selectedSSK, selectedBooking);
+                selectedSSK = _sskManager.ListOfSSK[index];
+                selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedSSK, secondTrack);
+                if (selectedBooking is Booking)
+                {
+                    ok = UpdateBooking(selectedBooking);
+                }
+                else
+                    MessageBox.Show("Kunde inte hitta någon bokning", "Hoppsan");
             }
             else
-                MessageBox.Show("Kunde inte hitta någon bokning", "Hoppsan");
+            {
+                selectedRoom = _roomManager.ListOfRooms[index];
+                selectedBooking = ScheduledDays.GetBooking(startOfBooking, endOfBooking, description, selectedRoom, secondTrack);
+                if (selectedBooking is Booking)
+                {
+                    ok = UpdateBooking(selectedBooking);
+                }
+                else
+                    MessageBox.Show("Kunde inte hitta någon bokning", "Hoppsan");
+            }
             return ok;
         }
 
-        public bool UpdateBooking(SSK selectedSSK, Booking selectedBooking)
+        public bool UpdateBooking(Booking selectedBooking)
         {
             bool ok = false;
             Room selectedRoom = _roomManager.GetRoomFromBooking(selectedBooking);
+            SSK selectedSSK = _sskManager.GetSSKFromBooking(selectedBooking);
             Booking newBooking = new Booking(selectedBooking);
-            ChangeBooking changeBooking = new ChangeBooking(newBooking, selectedSSK, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
+            ChangeBooking changeBooking = new ChangeBooking(newBooking, _roomManager.ListOfRooms, _sskManager.ListOfSSK);
             DialogResult dlgResult = changeBooking.ShowDialog();
             if (dlgResult == DialogResult.OK)
             {
-                if (selectedBooking.Description.Equals("Lunch"))
+                if (selectedBooking.Description.Equals("Lunch") && selectedSSK is SSK)
                 {
                     EditLunchBooking(selectedSSK, selectedBooking, newBooking);
                 }
@@ -301,7 +316,7 @@ namespace BokningsProgram.Managers
 
             if (availableRoom is Room && availableSSK is SSK)
             {
-                ConfirmBooking confirmBooking = new ConfirmBooking(availableSSK.Name, availableRoom.RoomNumber, booking);
+                ConfirmBooking confirmBooking = new ConfirmBooking(availableSSK.Name, availableRoom.RoomNumber, modifiedBooking);
                 DialogResult result = confirmBooking.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -415,9 +430,12 @@ namespace BokningsProgram.Managers
                 availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
                 if (!roomOK)
                 {
-                    tempBooking = new Booking(booking);
                     secondTrackRoom = true;
                     availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
+                    if (!roomOK && booking.EndTime.Hour < 16)
+                    {
+                        booking = tempBooking.GenerateNewBookingSuggestion(tempBooking);
+                    }
                 }
 
                 if (availableSSK == null)
@@ -517,6 +535,9 @@ namespace BokningsProgram.Managers
         {
             List<string> bookingDescriptions = new List<string>
             {
+                "Piccline Inlägg",
+                "Piccline Omlägg",
+                "",
                 "Abraxane/Gemzar",
                 "CAPOX",
                 "Cemiplimab",
@@ -537,7 +558,7 @@ namespace BokningsProgram.Managers
                 "Karboplatin/Paklitaxel",
                 "Nivolumab",
                 "Paklitaxel",
-                "Piccline",
+                "Pembrolizumab",
                 "R-CHOP",
                 "Rituximab",
                 "Rituximab/Bendamustin",
@@ -546,7 +567,7 @@ namespace BokningsProgram.Managers
                 "Telefon",
                 "Tablett",
                 "",
-                "Vanlig"
+                "Övrig"
             };
 
             return bookingDescriptions;

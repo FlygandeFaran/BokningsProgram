@@ -54,13 +54,6 @@ namespace BokningsProgram
 
             List<string> bookingNames = _cm.BookingDescriptions();
             cbDescription.DataSource = bookingNames;
-            //cbDescription.Items.Add("Piccline");
-
-            //cbDescription.Items.Add("Piccline");
-            //cbDescription.Items.Add("Telefon");
-            //cbDescription.Items.Add("Tablett");
-            //cbDescription.Items.Add("Cytostatika");
-            //cbDescription.Items.Add("Vanlig");
 
             InitializeListBoxes();
 
@@ -241,15 +234,6 @@ namespace BokningsProgram
                 newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
             }
             return newBookings;
-
-            //var days = (dtpEndDate.Value.DayOfYear - dtpStartDate.Value.DayOfYear) + 1;
-            //DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
-            //for (int i = 0; i < days; i++)
-            //{
-            //    GetBookingTime(out DateTime start, out DateTime end, date);
-            //    date = date.AddDays(1);
-            //    newBookings.Add(new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked));
-            //}
         }
         private List<DateTime> GenerateDaysForMultipleBookings()
         {
@@ -309,8 +293,10 @@ namespace BokningsProgram
 
             if (cbNystart.Checked)
                 roomRequired = RoomCategory.Enkel;
-            else if (cbDescription.Text.Equals("Piccline"))
+            else if (cbDescription.Text.Equals("Piccline Inlägg"))
                 roomRequired = RoomCategory.PicclineIn;
+            else if (cbDescription.Text.Equals("Piccline Omlägg"))
+                roomRequired = RoomCategory.PicclineOm;
             else
                 roomRequired = RoomCategory.Dubbel;
             return roomRequired;
@@ -452,7 +438,7 @@ namespace BokningsProgram
                     {
                         if (booking.ID > 2)
                         {
-                            _cm.UpdateBooking(sickSSK, booking);
+                            _cm.UpdateBooking(booking);
                             UpdateChartDependingOnTab();
                         }
                     }
@@ -476,7 +462,12 @@ namespace BokningsProgram
                     secondTrack = true;
 
                 if (description != "Stängt")
-                    _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack);
+                {
+                    if (rbChartRoom.Checked)
+                        _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack, false);
+                    else
+                        _cm.ChangeBooking(index, startOfBooking, endOfBooking, description, secondTrack, true);
+                }
                 UpdateChartDependingOnTab();
 
                 //MessageBox.Show(ssk.Name + " " + startOfBooking.ToString() + " - " + endOfBooking.ToString());
