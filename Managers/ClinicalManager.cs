@@ -306,7 +306,7 @@ namespace BokningsProgram.Managers
             SuggestBooking(newBooking, newSSK, newRoom, false);
         }
 
-        private void SuggestBooking(Booking booking, bool isNewBooking)
+        public void SuggestBooking(Booking booking, bool isNewBooking)
         {
             //Check for ssk
 
@@ -329,6 +329,34 @@ namespace BokningsProgram.Managers
                     {
                         _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, booking.ID);
                         _roomManager.AddBooking(modifiedBooking, availableRoom, roomSecondTrackBooking, booking.ID);
+                    }
+                }
+            }
+            else
+                MessageBox.Show("Hittade ingen ledig tid för bokningen", "Hoppsan");
+
+        }
+        public void SuggestBookingForSSKOnly(Booking booking, bool isNewBooking)
+        {
+            //Check for ssk
+
+            FirstAvailableBookingSSKOnly(booking, out Booking modifiedBooking, out SSK availableSSK, out bool sskSecondTrackBooking);
+
+            if (availableSSK is SSK)
+            {
+                ConfirmBooking confirmBooking = new ConfirmBooking(availableSSK.Name, modifiedBooking);
+                DialogResult result = confirmBooking.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    //lägg till bekräftelse av användaren
+                    if (booking.ID > 2 || isNewBooking)
+                    {
+                        GetID();
+                        _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, _bookingID);
+                    }
+                    else
+                    {
+                        _sskManager.AddBooking(modifiedBooking, availableSSK, sskSecondTrackBooking, booking.ID);
                     }
                 }
             }
@@ -421,6 +449,36 @@ namespace BokningsProgram.Managers
                         break;
                 }
                 else if (sskOK && roomOK)
+                {
+                    bookingOK = true;
+                    newBooking = booking;
+                }
+            }
+        }
+        private void FirstAvailableBookingSSKOnly(Booking booking, out Booking newBooking, out SSK availableSSK, out bool secondTrackSSK)
+        {
+            bool bookingOK = false;
+            secondTrackSSK = false;
+            bool sskOK = false;
+            newBooking = null;
+            availableSSK = null;
+
+            while (!bookingOK)
+            {
+                sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, secondTrackSSK);
+                Booking tempBooking = new Booking(booking);
+                if (booking.EndTime.TimeOfDay < _endOfDay.TimeOfDay)
+                {
+                    booking = tempBooking.GenerateNewBookingSuggestion(tempBooking);
+                }
+                if (availableSSK == null)
+                {
+                    if (!secondTrackSSK)
+                        secondTrackSSK = true;
+                    else
+                        break;
+                }
+                else if (sskOK)
                 {
                     bookingOK = true;
                     newBooking = booking;

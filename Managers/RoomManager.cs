@@ -74,18 +74,19 @@ namespace BokningsProgram
         }
         public Room CheckBookingForAnyRoom(Booking booking, out bool roomOK, bool secondTrack)
         {
+            Booking tempBooking = new Booking(booking);
             roomOK = false;
             int j = 0;
-            RoomCategory originalRoomCategory = booking.RoomRequired;
+            RoomCategory originalRoomCategory = tempBooking.RoomRequired;
             Room tempRoom = _listOfRooms[j];
             while (!roomOK)
             {
                 tempRoom = _listOfRooms[j];
                 if ((secondTrack && tempRoom.HasSecondSchedule) || !secondTrack)
                 {
-                    if (booking.RoomRequired.Equals(tempRoom.RoomType))
+                    if (tempBooking.RoomRequired.Equals(tempRoom.RoomType))
                     {
-                        if (!tempRoom.IsItBooked(booking, secondTrack))
+                        if (!tempRoom.IsItBooked(tempBooking, secondTrack))
                         {
                             roomOK = true;
                             return tempRoom;
@@ -98,20 +99,20 @@ namespace BokningsProgram
                 {
                     if (originalRoomCategory == RoomCategory.Enkel)
                     {
-                        booking = SingleRoomQueue(booking);
+                        tempBooking = SingleRoomQueue(tempBooking);
                     }
-                    else if (originalRoomCategory == RoomCategory.Dubbel || originalRoomCategory == RoomCategory.Quad)
-                    {
-                        booking = DoubleRoomQueue(booking);
-                    }
-                    else if (originalRoomCategory == RoomCategory.PicclineOm)
-                    {
-                        booking = PiccOmQueue(booking);
-                    }
-                    else if (booking.RoomRequired == RoomCategory.Quad)
+                    else if (tempBooking.RoomRequired == RoomCategory.Quad)
                     {
                         roomOK = false;
                         break;
+                    }
+                    else if (originalRoomCategory == RoomCategory.Dubbel || originalRoomCategory == RoomCategory.Quad)
+                    {
+                        tempBooking = DoubleRoomQueue(tempBooking);
+                    }
+                    else if (originalRoomCategory == RoomCategory.PicclineOm)
+                    {
+                        tempBooking = PiccOmQueue(tempBooking);
                     }
                     else
                     {
@@ -121,7 +122,6 @@ namespace BokningsProgram
                     j = 0;
                 }
             }
-            
             return tempRoom;
         }
         public bool CheckBookingForSelectedRoom(Booking booking, Room room, bool secondTrack)
@@ -130,8 +130,12 @@ namespace BokningsProgram
 
             if (!room.IsItBooked(booking, secondTrack))
             {
-                if (booking.RoomRequired.Equals(room.RoomType))
+                if (booking.RoomRequired.Equals(RoomCategory.PicclineIn) && room.RoomType.Equals(RoomCategory.PicclineIn))
                     return true;
+                else if (booking.RoomRequired != RoomCategory.PicclineIn)
+                    return true;
+                else
+                    return false;
             }
             return roomOK;
         }

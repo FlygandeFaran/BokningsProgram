@@ -219,7 +219,12 @@ namespace BokningsProgram
             {
                 GetBookingTime(out DateTime start, out DateTime end, dtpScheduleDay.Value);
                 Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked);
-                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK, lbAvailableRooms.SelectedItem as Room, true);
+                if (newBooking.Description.Equals("Telefon") || newBooking.Description.Equals("Tablett"))
+                    _cm.SuggestBookingForSSKOnly(newBooking, true);
+                else if (lbAvailableSSK.SelectedIndex == -1 && lbAvailableRooms.SelectedIndex == -1)
+                    _cm.SuggestBooking(newBooking, true);
+                else
+                    _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK, lbAvailableRooms.SelectedItem as Room, true);
             }
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");
@@ -245,8 +250,9 @@ namespace BokningsProgram
             DateTime date = new DateTime(dtpStartDate.Value.Year, dtpStartDate.Value.Month, dtpStartDate.Value.Day, dtpStartTime.Value.Hour, dtpStartTime.Value.Minute, 0);
             for ( int i = 0; treatmentDays >= i; i++)
             {
-                date = date.AddDays(i * interval * 7);
-                dateTimes.Add(date);
+                int finalInterval = i * interval * 7;
+                DateTime tempDate = date.AddDays(finalInterval);
+                dateTimes.Add(tempDate);
             }
             return dateTimes;
         }
