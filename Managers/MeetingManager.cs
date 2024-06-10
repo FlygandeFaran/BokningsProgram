@@ -55,5 +55,14 @@ namespace BokningsProgram.Forms
                 _listOfMeetings = (List<Meeting>)serializer.Deserialize(fileStream);
             }
         }
+        public void RemoveSSKfromMeeting(Meeting meeting, SSKmanager sm)
+        {
+            foreach (var sskName in meeting.NamesOfSSK)
+            {
+                var ssk = sm.GetSSKfromName(sskName);
+                ssk.RemoveMeetingBooking(meeting.NameOfMeeting);
+            }
+            RemoveMeeting(meeting);
+        }
     }
 }

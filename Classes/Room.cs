@@ -9,15 +9,9 @@ namespace BokningsProgram
 {
     public class Room : BookableItem
     {
-        //private ScheduledDays _scheduledDays;
         private RoomCategory _roomType;
         private string _roomNumber;
 
-        //public ScheduledDays ScheduledDays
-        //{
-        //    get { return _scheduledDays; }
-        //    set { _scheduledDays = value; }
-        //}
         public RoomCategory RoomType
         {
             get { return _roomType; }
@@ -33,8 +27,6 @@ namespace BokningsProgram
         {
             _roomType = roomType;
             _roomNumber = roomNumber;
-            //CreateAllBeds();
-            //_scheduledDays = new ScheduledDays(_roomNumber);
         }
         public Room() { }
         public void CreateAllBeds()

@@ -241,6 +241,7 @@ namespace BokningsProgram.Forms
             if (oldMeeting is Meeting)
             {
                 CreateMeeting();
+                _mm.RemoveSSKfromMeeting(oldMeeting, _sm);
                 _mm.EditMeeting(_newMeeting, oldMeeting);
             }
             UpdateMeetings();
@@ -251,10 +252,11 @@ namespace BokningsProgram.Forms
             _newMeeting = lbMeetings.SelectedItem as Meeting;
             if (_newMeeting is Meeting)
             {
-                _mm.RemoveMeeting(_newMeeting);
+                _mm.RemoveSSKfromMeeting(_newMeeting, _sm);
             }
             UpdateMeetings();
         }
+
         private DateTime RoundToNearest30Minutes(DateTime dateTime)
         {
             int minutes = dateTime.Minute;

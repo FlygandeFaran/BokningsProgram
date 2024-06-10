@@ -16,7 +16,7 @@ namespace BokningsProgram.Forms
         public SSK Ssk { get; set; }
         public Room Room { get; set; }
 
-        public ChangeBooking(Booking booking, SSK ssk, List<Room> rooms, List<SSK> ssks)
+        public ChangeBooking(Booking booking, List<Room> rooms, List<SSK> ssks)
         {
             InitializeComponent();
             lbAvailableRoom.DataSource = rooms;

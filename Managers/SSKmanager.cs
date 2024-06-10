@@ -15,7 +15,7 @@ namespace BokningsProgram
 {
     public class SSKmanager
     {
-        private double _endOfDay;
+        private DateTime _endOfDay;
         private string filename;
         private List<SSK> _listOfSSK;
 
@@ -27,9 +27,9 @@ namespace BokningsProgram
         public SSKmanager()
         {
             _listOfSSK = new List<SSK>();
-            filename = "SSK.xml"; //Updatera efter dagvårdens IT-miljö
+            filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\SSK.xml"; //Updatera efter dagvårdens IT-miljö
             //ImportSSKschedule();
-            _endOfDay = 16;
+            _endOfDay = new DateTime(1900, 1, 1, 16, 0, 0);
         }
         public void ImportFromXml()
         {
@@ -56,7 +56,7 @@ namespace BokningsProgram
 
             while (ok)
             {
-                if (newBooking.EndTime.Hour > _endOfDay)
+                if (newBooking.EndTime.TimeOfDay > _endOfDay.TimeOfDay)
                 {
                     {
                         newBooking = booking;
@@ -133,7 +133,7 @@ namespace BokningsProgram
 
             while (ok)
             {
-                if (newBooking.EndTime.Hour > _endOfDay)
+                if (newBooking.EndTime.TimeOfDay > _endOfDay.TimeOfDay)
                 {
                     {
                         newBooking = booking;
@@ -176,6 +176,21 @@ namespace BokningsProgram
         {
             SSK ssk = _listOfSSK.FirstOrDefault(s => s.Name.Equals(sskName));
             return ssk;
+        }
+        public SSK GetSSKFromBooking(Booking booking)
+        {
+            SSK bookedSSK = _listOfSSK.FirstOrDefault(room =>
+                                                            room.ScheduledDays.Days.Any(s => s.FirstlistOfBookings.Any(booked =>
+                                                            booked == booking)));
+            if (bookedSSK is SSK)
+                return bookedSSK;
+            else
+            {
+                bookedSSK = _listOfSSK.FirstOrDefault(room =>
+                                                            room.ScheduledDays.Days.Any(s => s.SecondlistOfBookings.Any(booked =>
+                                                            booked == booking)));
+            }
+            return bookedSSK;
         }
     }
 }

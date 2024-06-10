@@ -34,12 +34,12 @@ namespace BokningsProgram
         //    _dagar = new List<DailySchedule>();
         //    GenerateSCheduleDays();
         //}
-        public static Booking GetBooking(DateTime start, DateTime end, string description, SSK ssk, bool secondTrack)
+        public static Booking GetBooking(DateTime start, DateTime end, string description, BookableItem bi, bool secondTrack)
         {
             Booking booking;
             if (secondTrack)
             {
-                booking = ssk.ScheduledDays.Days.SelectMany(ds =>
+                booking = bi.ScheduledDays.Days.SelectMany(ds =>
                                                                 ds.SecondlistOfBookings).FirstOrDefault(booked =>
                                                                 booked.StartTime == start &&
                                                                 booked.EndTime == end &&
@@ -47,7 +47,7 @@ namespace BokningsProgram
             }
             else
             {
-                booking = ssk.ScheduledDays.Days.SelectMany(ds =>
+                booking = bi.ScheduledDays.Days.SelectMany(ds =>
                                                                 ds.FirstlistOfBookings).FirstOrDefault(booked =>
                                                                 booked.StartTime == start &&
                                                                 booked.EndTime == end &&

@@ -29,7 +29,7 @@ namespace BokningsProgram
         {
             _endOfDay = 16; //Dagen slutar kl 16 för rummen
             _listOfRooms = new List<Room>();
-            filename = "Rooms.xml"; //Updatera efter dagvårdens IT-miljö
+            filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml"; //Updatera efter dagvårdens IT-miljö
         }
         public Room GetRoomFromBooking(Booking booking)
         {
@@ -46,34 +46,6 @@ namespace BokningsProgram
             }
             return bookedRoom;
         }
-        //public bool CheckAvailabilityForBooking(Booking booking, out Booking newBooking, out Room availableRoom)
-        //{
-        //    bool ok = true;
-        //    newBooking = new Booking(booking);
-        //    bool roomOK = false;
-        //    availableRoom = new Room();
-
-        //    while (ok)
-        //    {
-        //        availableRoom = CheckBookingForRoom(newBooking, out roomOK);
-        //        if (availableRoom is Room)
-        //        {
-        //            if (roomOK)
-        //                ok = false;
-        //            else
-        //                newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-
-        //            if (newBooking.EndTime.Hour > _endOfDay)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //        else
-        //            newBooking = newBooking.GenerateNewBookingSuggestion(newBooking);
-        //    }
-
-        //    return roomOK;
-        //}
         public Room CheckBookingForRoom(Booking booking, out bool roomOK, bool secondTrack)
         {
             roomOK = false;
@@ -96,20 +68,29 @@ namespace BokningsProgram
                 }
                 j++;
 
-                if (j == _listOfRooms.Count && booking.RoomRequired == RoomCategory.PicclineOm)
+                if (j == _listOfRooms.Count && !roomOK)
                 {
-                    roomOK = false;
-                    break;
-                }
-                else if (j == _listOfRooms.Count && !roomOK)
-                {
-                    if (originalRoomCategory == RoomCategory.Enkel || originalRoomCategory == RoomCategory.PicclineIn)
+                    if (originalRoomCategory == RoomCategory.Enkel)
                     {
                         booking = SingleRoomQueue(booking);
                     }
                     else if (originalRoomCategory == RoomCategory.Dubbel || originalRoomCategory == RoomCategory.Quad)
                     {
                         booking = DoubleRoomQueue(booking);
+                    }
+                    else if (originalRoomCategory == RoomCategory.PicclineOm)
+                    {
+                        booking = PiccOmQueue(booking);
+                    }
+                    else if (booking.RoomRequired == RoomCategory.Quad)
+                    {
+                        roomOK = false;
+                        break;
+                    }
+                    else
+                    {
+                        roomOK = false;
+                        break;
                     }
                     j = 0;
                 }
@@ -132,12 +113,6 @@ namespace BokningsProgram
                 case RoomCategory.Dubbel:
                     booking.RoomRequired = RoomCategory.Quad;
                     break;
-                case RoomCategory.Quad:
-                    booking.RoomRequired = RoomCategory.PicclineIn;
-                    break;
-                case RoomCategory.PicclineIn:
-                    booking.RoomRequired = RoomCategory.PicclineOm;
-                    break;
             }
             return booking;
         }
@@ -146,16 +121,26 @@ namespace BokningsProgram
             switch (booking.RoomRequired)
             {
                 case RoomCategory.Dubbel:
-                    booking.RoomRequired = RoomCategory.Quad;
-                    break;
-                case RoomCategory.Quad:
                     booking.RoomRequired = RoomCategory.Enkel;
                     break;
                 case RoomCategory.Enkel:
-                    booking.RoomRequired = RoomCategory.PicclineIn;
+                    booking.RoomRequired = RoomCategory.Quad;
                     break;
-                case RoomCategory.PicclineIn:
-                    booking.RoomRequired = RoomCategory.PicclineOm;
+            }
+            return booking;
+        }
+        private Booking PiccOmQueue(Booking booking)
+        {
+            switch (booking.RoomRequired)
+            {
+                case RoomCategory.PicclineOm:
+                    booking.RoomRequired = RoomCategory.Dubbel;
+                    break;
+                case RoomCategory.Dubbel:
+                    booking.RoomRequired = RoomCategory.Enkel;
+                    break;
+                case RoomCategory.Enkel:
+                    booking.RoomRequired = RoomCategory.Quad;
                     break;
             }
             return booking;

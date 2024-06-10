@@ -101,11 +101,11 @@ namespace BokningsProgram
             _taskTextColor = Color.Black;
             switch (_description)
             {
-                case "Piccline":
+                case "Piccline Inlägg":
                     _taskColor = Color.LightGreen;
                     break;
-                case "Cytostatika":
-                    _taskColor = Color.LightSalmon;
+                case "Piccline Omlägg":
+                    _taskColor = Color.DarkSeaGreen;
                     break;
                 case "Stängt":
                     _taskColor = Color.LightGray;
@@ -118,6 +118,81 @@ namespace BokningsProgram
                 case "Sjuk":
                     _taskColor = Color.LightCoral;
                     break;
+                case "Abraxane/Gemzar":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "CAPOX":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Cemiplimab":
+                    _taskColor = Color.LightPink;
+                    break;
+                case "Cisplatin":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Docetaxel":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "EC":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "FLOT":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "FLV":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "FLV/Bevacizumab":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "FOLFIRI":
+                    _taskColor = Color.LightPink;
+                    break;
+                case "FOLFOX":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Gemcitabin":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Gemcitabin/Nab-Paklitaxel":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Gemzar":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Ipilimumab/Nivolumab":
+                    _taskColor = Color.LightPink;
+                    break;
+                case "Karboplatin/Etoposid":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Karboplatin/Irinotekan":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Karboplatin/Paklitaxel":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Nivolumab":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Paklitaxel":
+                    _taskColor = Color.LightBlue;
+                    break;
+                case "Pembrolizumab":
+                    _taskColor = Color.LightPink;
+                    break;
+                case "R-CHOP":
+                    _taskColor = Color.Plum;
+                    break;
+                case "Rituximab":
+                    _taskColor = Color.LightPink;
+                    break;
+                case "Rituximab/Bendamustin":
+                    _taskColor = Color.Plum;
+                    break;
+                case "Trastuzumab":
+                    _taskColor = Color.LightPink;
+                    break;
                 default:
                     _taskColor = Color.LightPink;
                     break;
@@ -129,7 +204,11 @@ namespace BokningsProgram
             minutes = 0;
             switch (description)
             {
-                case "Piccline":
+                case "Piccline Inlägg":
+                    hour = 1;
+                    minutes = 30;
+                    break;
+                case "Piccline Omlägg":
                     hour = 1;
                     minutes = 30;
                     break;
@@ -216,6 +295,10 @@ namespace BokningsProgram
                 case "Paklitaxel":
                     hour = 1;
                     minutes = 30;
+                    break;
+                case "Pembrolizumab":
+                    hour = 2;
+                    minutes = 0;
                     break;
                 case "R-CHOP":
                     hour = 3;

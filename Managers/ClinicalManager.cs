@@ -217,7 +217,7 @@ namespace BokningsProgram.Managers
                     EditLunchBooking(selectedSSK, selectedBooking, newBooking);
                 }
                 else
-                    EditBooking(selectedSSK, selectedBooking, selectedRoom, newBooking, changeBooking.Ssk);
+                    EditBooking(selectedSSK, changeBooking.Ssk, selectedRoom, changeBooking.Room, selectedBooking, newBooking);
 
                 ok = true;
             }
@@ -295,7 +295,7 @@ namespace BokningsProgram.Managers
             }
         }
 
-        private void EditBooking(SSK selectedSSK, Booking selectedBooking, Room selectedRoom, Booking newBooking, SSK newSSK)
+        private void EditBooking(SSK selectedSSK, SSK newSSK, Room selectedRoom, Room newRoom, Booking selectedBooking, Booking newBooking)
         {
             DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
             if (ds == null)
@@ -358,7 +358,7 @@ namespace BokningsProgram.Managers
             //Check for ssk
             bool sskSecondTrackBooking = false;
             bool roomSecondTrackBooking = false;
-
+            
             if (ssk is SSK)
             {
                 bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
