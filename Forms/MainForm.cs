@@ -67,9 +67,9 @@ namespace BokningsProgram
         {
             lbAvailableSSK.DataSource = _cm.SskManager.ListOfSSK;
             lbAvailableSSK.SelectedIndex = -1;
-            //lbAvailableRooms.DataSource = _cm.RoomManager.ListOfRooms;
-            //lbAvailableRooms.DisplayMember = "RoomNumber";
-            //lbAvailableRooms.SelectedIndex = -1;
+            lbAvailableRooms.DataSource = _cm.RoomManager.ListOfRooms;
+            lbAvailableRooms.DisplayMember = "RoomNumber";
+            lbAvailableRooms.SelectedIndex = -1;
         }
 
         private void UpdateChart()
@@ -219,7 +219,7 @@ namespace BokningsProgram
             {
                 GetBookingTime(out DateTime start, out DateTime end, dtpScheduleDay.Value);
                 Booking newBooking = new Booking(start, end, cbDescription.Text, roomRequired, cbEntireDayBooking.Checked);
-                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK, true);
+                _cm.SuggestBooking(newBooking, lbAvailableSSK.SelectedItem as SSK, lbAvailableRooms.SelectedItem as Room, true);
             }
             UpdateChartDependingOnTab();
             //MessageBox.Show($"Bokning har skapats för rum  med SSK ");

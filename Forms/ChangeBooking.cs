@@ -44,9 +44,11 @@ namespace BokningsProgram.Forms
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            Booking.StartTime = dtpStartTime.Value;
-            DateTime date = dtpStartTime.Value;
-            Booking.EndTime = new DateTime(date.Year, date.Month, date.Day, date.AddHours(dtpBehTid.Value.Hour).Hour, date.AddMinutes(dtpBehTid.Value.Minute).Minute, 0);
+            //Booking.StartTime = dtpStartTime.Value;
+            //DateTime date = dtpStartTime.Value;
+            TimeSpan timespan = dtpBehTid.Value.TimeOfDay;
+            Booking.EndTime.Add(timespan);
+            //Booking.EndTime = new DateTime(date.Year, date.Month, date.Day, date.AddHours(dtpBehTid.Value.Hour).Hour, date.AddMinutes(dtpBehTid.Value.Minute).Minute, 0);
 
             Ssk = lbAvailableSSK.SelectedItem as SSK;
             Room = lbAvailableRoom.SelectedItem as Room;

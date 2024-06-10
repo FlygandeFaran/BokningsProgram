@@ -13,7 +13,6 @@ namespace BokningsProgram
     public class RoomManager
     {
         private string filename;
-        private double _endOfDay;
         private List<Room> _listOfRooms;
         //private List<Room> _singleRoomList;
         //private List<Room> _doubleRoomList;
@@ -27,26 +26,53 @@ namespace BokningsProgram
 
         public RoomManager()
         {
-            _endOfDay = 16; //Dagen slutar kl 16 för rummen
             _listOfRooms = new List<Room>();
             filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml"; //Updatera efter dagvårdens IT-miljö
         }
         public Room GetRoomFromBooking(Booking booking)
         {
             Room bookedRoom = _listOfRooms.FirstOrDefault(room =>
-                                                            room.ScheduledDays.Days.Any(s => s.FirstlistOfBookings.Any(booked =>
-                                                            booked.ID == booking.ID)));
-            if (bookedRoom is Room)
-                return bookedRoom;
-            else
-            {
-                bookedRoom = _listOfRooms.FirstOrDefault(room =>
-                                                            room.ScheduledDays.Days.Any(s => s.SecondlistOfBookings.Any(booked =>
-                                                            booked.ID == booking.ID)));
-            }
+                                                            room.ScheduledDays.Days.Any(ds =>
+                                                            ds.FirstlistOfBookings.Any(booked => booked.ID == booking.ID) ||
+                                                            ds.SecondlistOfBookings.Any(booked => booked.ID == booking.ID)));
             return bookedRoom;
         }
-        public Room CheckBookingForRoom(Booking booking, out bool roomOK, bool secondTrack)
+        public Room CheckBookingForRoom(Booking booking, Room room, out bool secondTrack)
+        {
+            secondTrack = false;
+            bool roomOK = false;
+            if (room is Room)
+            {
+                roomOK = CheckBookingForSelectedRoom(booking, room, secondTrack);
+                if (!roomOK)
+                {
+                    secondTrack = true;
+                    roomOK = CheckBookingForSelectedRoom(booking, room, secondTrack);
+                    if (roomOK)
+                        return room;
+                    else
+                        MessageBox.Show("Finns inget tillgängligt rum med rätt utrsutning");
+                }
+                else
+                    return room;
+            }
+            else
+            {
+                room = CheckBookingForAnyRoom(booking, out roomOK, secondTrack);
+                if (!roomOK)
+                {
+                    secondTrack = true;
+                    room = CheckBookingForAnyRoom(booking, out roomOK, secondTrack);
+                    if (roomOK)
+                        return room;
+                }
+                else
+                    return room;
+            }
+            room = null; //Fanns inget ledigt rum
+            return room;
+        }
+        public Room CheckBookingForAnyRoom(Booking booking, out bool roomOK, bool secondTrack)
         {
             roomOK = false;
             int j = 0;
@@ -97,6 +123,17 @@ namespace BokningsProgram
             }
             
             return tempRoom;
+        }
+        public bool CheckBookingForSelectedRoom(Booking booking, Room room, bool secondTrack)
+        {
+            bool roomOK = false;
+
+            if (!room.IsItBooked(booking, secondTrack))
+            {
+                if (booking.RoomRequired.Equals(room.RoomType))
+                    return true;
+            }
+            return roomOK;
         }
         public void AddBooking(Booking booking, Room newRoom, bool secondRoomTrack, int bookingID)
         {

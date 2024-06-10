@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnExecute = new System.Windows.Forms.Button();
             this.dtpBehTid = new System.Windows.Forms.DateTimePicker();
             this.btnSickLeave = new System.Windows.Forms.Button();
@@ -53,7 +53,6 @@
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnClearSSK = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.lbAvailableSSK = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,12 +69,16 @@
             this.lblWarning = new System.Windows.Forms.Label();
             this.lblWeekDay = new System.Windows.Forms.Label();
             this.btnClearAllBookings = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.lbAvailableRooms = new System.Windows.Forms.ListBox();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnExecute
@@ -98,7 +101,7 @@
             // 
             // btnSickLeave
             // 
-            this.btnSickLeave.Location = new System.Drawing.Point(39, 680);
+            this.btnSickLeave.Location = new System.Drawing.Point(39, 807);
             this.btnSickLeave.Name = "btnSickLeave";
             this.btnSickLeave.Size = new System.Drawing.Size(93, 23);
             this.btnSickLeave.TabIndex = 31;
@@ -285,18 +288,17 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnClearSSK);
-            this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.lbAvailableSSK);
             this.groupBox2.Location = new System.Drawing.Point(12, 483);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(148, 174);
+            this.groupBox2.Size = new System.Drawing.Size(148, 155);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sköterskor";
             // 
             // btnClearSSK
             // 
-            this.btnClearSSK.Location = new System.Drawing.Point(36, 142);
+            this.btnClearSSK.Location = new System.Drawing.Point(36, 120);
             this.btnClearSSK.Name = "btnClearSSK";
             this.btnClearSSK.Size = new System.Drawing.Size(71, 23);
             this.btnClearSSK.TabIndex = 32;
@@ -304,21 +306,10 @@
             this.btnClearSSK.UseVisualStyleBackColor = true;
             this.btnClearSSK.Click += new System.EventHandler(this.btnClearSSK_Click);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Enabled = false;
-            this.checkBox1.Location = new System.Drawing.Point(6, 20);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(86, 17);
-            this.checkBox1.TabIndex = 21;
-            this.checkBox1.Text = "Andra spåret";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // lbAvailableSSK
             // 
             this.lbAvailableSSK.FormattingEnabled = true;
-            this.lbAvailableSSK.Location = new System.Drawing.Point(6, 41);
+            this.lbAvailableSSK.Location = new System.Drawing.Point(6, 19);
             this.lbAvailableSSK.Name = "lbAvailableSSK";
             this.lbAvailableSSK.Size = new System.Drawing.Size(136, 95);
             this.lbAvailableSSK.TabIndex = 0;
@@ -378,19 +369,19 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(166, 62);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
-            series1.IsVisibleInLegend = false;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series1.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.RangeBar;
+            series2.IsVisibleInLegend = false;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            series2.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(988, 803);
             this.chart1.TabIndex = 12;
             this.chart1.Text = "chart1";
@@ -479,11 +470,40 @@
             this.btnClearAllBookings.Visible = false;
             this.btnClearAllBookings.Click += new System.EventHandler(this.btnClearAllBookings_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.lbAvailableRooms);
+            this.groupBox1.Location = new System.Drawing.Point(12, 644);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(148, 153);
+            this.groupBox1.TabIndex = 33;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Rum";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(36, 120);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(71, 23);
+            this.button1.TabIndex = 32;
+            this.button1.Text = "Rensa val";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // lbAvailableRooms
+            // 
+            this.lbAvailableRooms.FormattingEnabled = true;
+            this.lbAvailableRooms.Location = new System.Drawing.Point(6, 19);
+            this.lbAvailableRooms.Name = "lbAvailableRooms";
+            this.lbAvailableRooms.Size = new System.Drawing.Size(136, 95);
+            this.lbAvailableRooms.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 877);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSickLeave);
             this.Controls.Add(this.btnClearAllBookings);
             this.Controls.Add(this.groupBox6);
@@ -512,10 +532,10 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -531,7 +551,6 @@
         private System.Windows.Forms.DateTimePicker dtpStartDate;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListBox lbAvailableSSK;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NySSKToolStripMenuItem;
@@ -561,6 +580,9 @@
         private System.Windows.Forms.ToolStripMenuItem importeraSchemaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem återkommandeMötenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox lbAvailableRooms;
     }
 }
 

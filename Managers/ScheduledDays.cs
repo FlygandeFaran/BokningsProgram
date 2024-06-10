@@ -93,9 +93,8 @@ namespace BokningsProgram
         {
             DailySchedule ds = null;
             ds = _dagar.FirstOrDefault(dailySchedule =>
-                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.Equals(booking)) ||
-                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.Equals(booking)));
-
+                                    dailySchedule.FirstlistOfBookings.Any(booked => booked.ID.Equals(booking.ID)) ||
+                                    dailySchedule.SecondlistOfBookings.Any(booked => booked.ID.Equals(booking.ID)));
             return ds;
         }
         public DailySchedule GetDailyScheduleOfBooking(string meetingName)
@@ -104,7 +103,6 @@ namespace BokningsProgram
             ds = _dagar.FirstOrDefault(dailySchedule =>
                                     dailySchedule.FirstlistOfBookings.Any(booked => booked.Description.Equals(meetingName)) ||
                                     dailySchedule.SecondlistOfBookings.Any(booked => booked.Description.Equals(meetingName)));
-
             return ds;
         }
     }

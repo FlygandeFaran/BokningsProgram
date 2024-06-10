@@ -63,7 +63,7 @@ namespace BokningsProgram
                         break;
                     }
                 }
-                availableSSK = CheckBookingForSSK(newBooking, out sskOK, secondTrack);
+                availableSSK = CheckBookingForAnySSK(newBooking, out sskOK, secondTrack);
                 if (availableSSK is SSK)
                 {
                     if (sskOK)
@@ -80,7 +80,40 @@ namespace BokningsProgram
         {
             newSSK.AddBooking(booking, secondTrack, bookingID);//bokar SSK
         }
-        private SSK CheckBookingForSSK(Booking booking, out bool sskOK, bool secondTrack)
+        public SSK CheckBookingForSSK(Booking booking, SSK ssk, out bool secondTrack)
+        {
+            bool sskOK = false;
+            secondTrack = false;
+            if (ssk is SSK)
+            {
+                sskOK = CheckBookingForSelectedSSK(booking, ssk, secondTrack);
+                if (!sskOK)
+                {
+                    secondTrack = true;
+                    sskOK = CheckBookingForSelectedSSK(booking, ssk, secondTrack);
+                    if (sskOK)
+                        return ssk;
+                }
+                else
+                    return ssk;
+            }
+            else
+            {
+                ssk = CheckBookingForAnySSK(booking, out sskOK, secondTrack);
+                if (!sskOK)
+                {
+                    secondTrack = true;
+                    ssk = CheckBookingForAnySSK(booking, out sskOK, secondTrack);
+                    if (sskOK)
+                        return ssk;
+                }
+                else
+                    return ssk;
+            }
+            ssk = null; //Fanns ingen ledig ssk
+            return ssk;
+        }
+        public SSK CheckBookingForAnySSK(Booking booking, out bool sskOK, bool secondTrack)
         {
             SSK availableSSK = null;
             sskOK = false;
@@ -179,16 +212,20 @@ namespace BokningsProgram
         }
         public SSK GetSSKFromBooking(Booking booking)
         {
-            SSK bookedSSK = _listOfSSK.FirstOrDefault(room =>
-                                                            room.ScheduledDays.Days.Any(s => s.FirstlistOfBookings.Any(booked =>
-                                                            booked == booking)));
-            if (bookedSSK is SSK)
-                return bookedSSK;
+            SSK bookedSSK = null;
+            if (booking.Description != "Lunch")
+            {
+                bookedSSK = _listOfSSK.FirstOrDefault(ssk =>
+                                                            ssk.ScheduledDays.Days.Any(ds => 
+                                                            ds.FirstlistOfBookings.Any(booked => booked.ID == booking.ID) ||
+                                                            ds.SecondlistOfBookings.Any(booked => booked.ID == booking.ID)));
+            }
             else
             {
-                bookedSSK = _listOfSSK.FirstOrDefault(room =>
-                                                            room.ScheduledDays.Days.Any(s => s.SecondlistOfBookings.Any(booked =>
-                                                            booked == booking)));
+                bookedSSK = _listOfSSK.FirstOrDefault(ssk =>
+                                                            ssk.ScheduledDays.Days.Any(ds => 
+                                                            ds.FirstlistOfBookings.Any(booked => booked == booking) ||
+                                                            ds.FirstlistOfBookings.Any(booked => booked == booking)));
             }
             return bookedSSK;
         }

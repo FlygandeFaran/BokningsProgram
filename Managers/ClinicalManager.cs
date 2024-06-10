@@ -21,6 +21,7 @@ namespace BokningsProgram.Managers
         private SSKmanager _sskManager;
         private RoomManager _roomManager;
         private int _bookingID;
+        private DateTime _endOfDay;
 
         public MeetingManager MeetingManager
         {
@@ -44,6 +45,7 @@ namespace BokningsProgram.Managers
             _roomManager = new RoomManager();
             _sskManager = new SSKmanager();
             GetID();
+            _endOfDay = new DateTime(1900, 1, 1, 16, 0, 0);
             //ska tas bort innan klar
             //RensaOchStartaOmDatabas();
 
@@ -225,10 +227,8 @@ namespace BokningsProgram.Managers
             {
                 DailySchedule ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
-                if (selectedRoom is Room)
-                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
-                else if (ds == null)
-                    ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
+                
+                ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
                 ds.RemoveBooking(selectedBooking);
             }
 
@@ -298,14 +298,12 @@ namespace BokningsProgram.Managers
         private void EditBooking(SSK selectedSSK, SSK newSSK, Room selectedRoom, Room newRoom, Booking selectedBooking, Booking newBooking)
         {
             DailySchedule ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
-            if (ds == null)
-                ds = selectedRoom.GetDailyScheduleOfBooking(selectedBooking);
             ds.RemoveBooking(selectedBooking);
-
-            SuggestBooking(newBooking, newSSK, false);
 
             ds = selectedSSK.GetDailyScheduleOfBooking(selectedBooking);
             ds.RemoveBooking(selectedBooking);
+
+            SuggestBooking(newBooking, newSSK, newRoom, false);
         }
 
         private void SuggestBooking(Booking booking, bool isNewBooking)
@@ -353,62 +351,39 @@ namespace BokningsProgram.Managers
             return sskOK;
         }
         //Föreslår en bokning med medföljande ssk, om inte går körs vanliga suggestbooking
-        public void SuggestBooking(Booking booking, SSK ssk, bool isNewBooking)
+        public void SuggestBooking(Booking booking, SSK ssk, Room room, bool isNewBooking)
         {
             //Check for ssk
-            bool sskSecondTrackBooking = false;
-            bool roomSecondTrackBooking = false;
-            
-            if (ssk is SSK)
+
+            ssk = _sskManager.CheckBookingForSSK(booking, ssk, out bool sskSecondTrackBooking);
+            room = _roomManager.CheckBookingForRoom(booking, room, out bool roomSecondTrackBooking);
+            if (ssk is SSK && room is Room)
             {
-                bool sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
-                if (!sskOK)
+                ConfirmBooking confirmBooking = new ConfirmBooking(ssk.Name, room.RoomNumber, booking);
+                DialogResult result = confirmBooking.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    sskSecondTrackBooking = true;
-                    sskOK = _sskManager.CheckBookingForSelectedSSK(booking, ssk, sskSecondTrackBooking);
-                }
-                if (sskOK)
-                {
-                    Room availableRoom = _roomManager.CheckBookingForRoom(booking, out bool roomOK, roomSecondTrackBooking);
-                    if (!roomOK)
+                    if (booking.ID > 2 || isNewBooking)
                     {
-                        roomSecondTrackBooking = true;
-                        availableRoom = _roomManager.CheckBookingForRoom(booking, out roomOK, roomSecondTrackBooking);//Check second track
+                        GetID();
+                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
+                        _roomManager.AddBooking(booking, room, roomSecondTrackBooking, _bookingID);
                     }
-                    if (roomOK)
+                    else
                     {
-                        //lägg till bekräftelse av användaren
-                        ConfirmBooking confirmBooking = new ConfirmBooking(ssk.Name, availableRoom.RoomNumber, booking);
-                        DialogResult result = confirmBooking.ShowDialog();
-                        if (result == DialogResult.OK)
-                        {
-                            if (booking.ID > 2 || isNewBooking)
-                            {
-                                GetID();
-                                _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, _bookingID);
-                                _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, _bookingID);
-                            }
-                            else
-                            {
-                                _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, booking.ID);
-                                _roomManager.AddBooking(booking, availableRoom, roomSecondTrackBooking, booking.ID);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    ContinueToSearchForSlotDialog continueToSearchForSlotDialog = new ContinueToSearchForSlotDialog();
-                    DialogResult result = continueToSearchForSlotDialog.ShowDialog();
-                    if (result == DialogResult.Yes)
-                    {
-                        SuggestBooking(booking, isNewBooking);
+                        _sskManager.AddBooking(booking, ssk, sskSecondTrackBooking, booking.ID);
+                        _roomManager.AddBooking(booking, room, roomSecondTrackBooking, booking.ID);
                     }
                 }
             }
             else
             {
-                SuggestBooking(booking, isNewBooking);
+                ContinueToSearchForSlotDialog continueToSearchForSlotDialog = new ContinueToSearchForSlotDialog();
+                DialogResult result = continueToSearchForSlotDialog.ShowDialog();
+                if (result == DialogResult.Yes)
+                {
+                    SuggestBooking(booking, isNewBooking);
+                }
             }
         }
         private void FirstAvailableBooking(Booking booking, out Booking newBooking, out Room availableRoom, out SSK availableSSK, out bool secondTrackSSK, out bool secondTrackRoom)
@@ -427,12 +402,12 @@ namespace BokningsProgram.Managers
                 sskOK = _sskManager.CheckAvailabilityForBooking(booking, out booking, out availableSSK, secondTrackSSK);
                 secondTrackRoom = false;
                 Booking tempBooking = new Booking(booking);
-                availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
+                availableRoom = _roomManager.CheckBookingForAnyRoom(tempBooking, out roomOK, secondTrackRoom);
                 if (!roomOK)
                 {
                     secondTrackRoom = true;
-                    availableRoom = _roomManager.CheckBookingForRoom(tempBooking, out roomOK, secondTrackRoom);
-                    if (!roomOK && booking.EndTime.Hour < 16)
+                    availableRoom = _roomManager.CheckBookingForAnyRoom(tempBooking, out roomOK, secondTrackRoom);
+                    if (!roomOK && booking.EndTime.TimeOfDay < _endOfDay.TimeOfDay)
                     {
                         booking = tempBooking.GenerateNewBookingSuggestion(tempBooking);
                     }
@@ -459,7 +434,7 @@ namespace BokningsProgram.Managers
             {
                 foreach (var booking in bookings)
                 {
-                    SuggestBooking(booking, ssk, true);
+                    SuggestBooking(booking, ssk, null, true);
                 }
             }
             else
@@ -510,11 +485,11 @@ namespace BokningsProgram.Managers
         private bool CheckRoomWithSelectedBooking(Booking booking)
         {
             bool secondTrack = false;
-            Room availableRoom = _roomManager.CheckBookingForRoom(booking, out bool roomOK, secondTrack);
+            Room availableRoom = _roomManager.CheckBookingForAnyRoom(booking, out bool roomOK, secondTrack);
             if (!roomOK)
             {
                 secondTrack = true;
-                availableRoom = _roomManager.CheckBookingForRoom(booking, out roomOK, secondTrack);
+                availableRoom = _roomManager.CheckBookingForAnyRoom(booking, out roomOK, secondTrack);
             }
 
             return roomOK;
