@@ -61,7 +61,8 @@ namespace BokningsProgram.Managers
             File.Delete(@"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml");
             CreateRooms();
             CreateSSK();
-            ImportSchedules();
+            string filename = @"S:\RADIOFYSIK NYSTART\Ö_Erik\02 Programmering\C# scripting\03 Github\BokningsProgram\BokningsProgram\bin\Debug\Kopia av Pilot schema.xlsx";
+            ImportSchedules(filename);
 
             exportMeetings();
             exportRooms();
@@ -80,10 +81,10 @@ namespace BokningsProgram.Managers
             File.WriteAllText(filename, content);
 
         }
-        public void ImportSchedules()
+        public void ImportSchedules(string filePath)
         {
             ExcelImport excelImport = new ExcelImport();
-            excelImport.ImportSchedules(_sskManager, _roomManager);
+            excelImport.ImportSchedules(_sskManager, _roomManager, filePath);
             _sskManager.GenerateSecondSchedule();
             _roomManager.CreateAllBeds();
         }

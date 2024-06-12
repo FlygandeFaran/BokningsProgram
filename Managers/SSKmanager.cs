@@ -27,8 +27,8 @@ namespace BokningsProgram
         public SSKmanager()
         {
             _listOfSSK = new List<SSK>();
-            filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\SSK.xml"; //Updatera efter dagvårdens IT-miljö
-            //ImportSSKschedule();
+            //filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\SSK.xml"; //Updatera efter dagvårdens IT-miljö
+            filename = "SSK.xml";
             _endOfDay = new DateTime(1900, 1, 1, 16, 0, 0);
         }
         public void ImportFromXml()

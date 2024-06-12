@@ -177,13 +177,16 @@ namespace BokningsProgram
 
         public void RemoveBooking(Booking booking)
         {
-            bool bookingExists = _firstlistOfBookings.Any(b => b.Equals(booking));
-            if (bookingExists)
+            Booking selectedBooking = _firstlistOfBookings.Find(b => b.ID.Equals(booking.ID));
+            if (selectedBooking is Booking)
             {
-                _firstlistOfBookings.Remove(booking);
+                _firstlistOfBookings.Remove(selectedBooking);
             }
             else
-                _secondlistOfBookings.Remove(booking);
+            {
+                selectedBooking = _secondlistOfBookings.Find(b => b.ID.Equals(booking.ID));
+                _secondlistOfBookings.Remove(selectedBooking);
+            }
             if (booking.FullDay)
                 _isFullDayBooked = false;
             SortBookings();

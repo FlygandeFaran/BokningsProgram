@@ -102,6 +102,8 @@ namespace BokningsProgram
         private void addTaskSSK(Series s, int who, Booking booking)
         {
             int pt = s.Points.AddXY(who, booking.StartTime, booking.EndTime);
+            //s.BorderColor = Color.Black; 
+            //s.BorderWidth = 1;
             s.Points[pt].AxisLabel = _cm.SskManager.ListOfSSK[who].Name;
             s.Points[pt].Label = booking.Description;
             s.Points[pt].Color = booking.TaskColor;
@@ -504,7 +506,14 @@ namespace BokningsProgram
 
         private void importeraSchemaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _cm.ImportSchedules();
+            ofdImportSchedule.InitialDirectory = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\SSKSchema\";
+            ofdImportSchedule.Filter = "Excelfiler (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+
+            if (ofdImportSchedule.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = ofdImportSchedule.FileName;
+                _cm.ImportSchedules(filePath);
+            }
         }
 
         private void återkommandeMötenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -528,6 +537,11 @@ namespace BokningsProgram
                 btnClearAllBookings.Enabled = false;
                 btnClearAllBookings.Visible = false;
             }
+        }
+
+        private void btnClearRoom_Click(object sender, EventArgs e)
+        {
+            lbAvailableRooms.SelectedIndex = -1;
         }
     }
 }

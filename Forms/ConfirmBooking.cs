@@ -18,6 +18,17 @@ namespace BokningsProgram.Managers
             lblBeh.Text = booking.Description;
             lblRoom.Text = roomNumber;
             lblTime.Text = booking.StartTime.ToString("HH:mm") + " - " + booking.EndTime.ToString("HH:mm");
+            lblDate.Text = booking.StartTime.ToString("yyyy-MM-dd");
+            lblSSK.Text = sskName;
+            lblBeh.BackColor = booking.TaskColor;
+        }
+        public ConfirmBooking(string sskName, Booking booking)
+        {
+            InitializeComponent();
+            lblBeh.Text = booking.Description;
+            lblRoom.Text = "Inget rum behövs";
+            lblTime.Text = booking.StartTime.ToString("HH:mm") + " - " + booking.EndTime.ToString("HH:mm");
+            lblDate.Text = booking.StartTime.ToString("yyyy-MM-dd");
             lblSSK.Text = sskName;
             lblBeh.BackColor = booking.TaskColor;
         }

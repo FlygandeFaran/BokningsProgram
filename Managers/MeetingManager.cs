@@ -22,7 +22,8 @@ namespace BokningsProgram.Forms
 		public MeetingManager()
 		{
 			_listOfMeetings = new List<Meeting>();
-            filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Meetings.xml"; //Updatera efter dagvårdens IT-miljö
+            //filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Meetings.xml"; //Updatera efter dagvårdens IT-miljö
+            filename = "Meetings.xml";
         }
         public void AddMeeting(Meeting meeting)
         {

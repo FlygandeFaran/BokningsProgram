@@ -38,6 +38,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblTime
@@ -115,7 +117,7 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(126, 174);
+            this.button1.Location = new System.Drawing.Point(126, 198);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -125,7 +127,7 @@
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(18, 174);
+            this.btnOK.Location = new System.Drawing.Point(18, 198);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -133,11 +135,31 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnOK_KeyDown);
             // 
+            // lblDate
+            // 
+            this.lblDate.AutoSize = true;
+            this.lblDate.Location = new System.Drawing.Point(123, 162);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(63, 13);
+            this.lblDate.TabIndex = 11;
+            this.lblDate.Text = "Behandling:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(25, 162);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(41, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Datum:";
+            // 
             // ConfirmBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 216);
+            this.ClientSize = new System.Drawing.Size(243, 242);
+            this.Controls.Add(this.lblDate);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.lblSSK);
             this.Controls.Add(this.lblRoom);
@@ -170,5 +192,7 @@
         private System.Windows.Forms.Label lblSSK;
         private System.Windows.Forms.Label lblRoom;
         private System.Windows.Forms.Label lblBeh;
+        private System.Windows.Forms.Label lblDate;
+        private System.Windows.Forms.Label label6;
     }
 }

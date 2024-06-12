@@ -89,6 +89,7 @@
             this.clbKompetenser.Name = "clbKompetenser";
             this.clbKompetenser.Size = new System.Drawing.Size(100, 94);
             this.clbKompetenser.TabIndex = 10;
+            this.clbKompetenser.SelectedIndexChanged += new System.EventHandler(this.clbKompetenser_SelectedIndexChanged);
             // 
             // label3
             // 

@@ -27,7 +27,8 @@ namespace BokningsProgram
         public RoomManager()
         {
             _listOfRooms = new List<Room>();
-            filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml"; //Updatera efter dagvårdens IT-miljö
+            //filename = @"\\ltvastmanland.se\ltv\shares\rhosonk\Strålbehandling\Bookning\xml\Rooms.xml"; //Updatera efter dagvårdens IT-miljö
+            filename = "Rooms.xml";
         }
         public Room GetRoomFromBooking(Booking booking)
         {

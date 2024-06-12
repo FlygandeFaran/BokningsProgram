@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace BokningsProgram
 {
@@ -38,6 +39,54 @@ namespace BokningsProgram
                 clbKompetenser.Items.Add(enumValue);
             }
             UpdateCurrentSSKlistBox();
+            InitializeCustomComponents();
+        }
+        private void InitializeCustomComponents()
+        {
+            clbKompetenser.ItemCheck += CheckedListBox_ItemCheck;
+        }
+        private void CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (e.Index == 0 && e.NewValue == CheckState.Checked)
+            {
+                // Disable other items if the first item is checked
+                for (int i = 1; i < clbKompetenser.Items.Count; i++)
+                {
+                    clbKompetenser.SetItemChecked(i, false);
+                    clbKompetenser.SetItemCheckState(i, CheckState.Indeterminate);
+                }
+            }
+            else if (e.Index == 0 && e.NewValue == CheckState.Unchecked)
+            {
+                // Enable other items if the first item is unchecked
+                for (int i = 1; i < clbKompetenser.Items.Count; i++)
+                {
+                    clbKompetenser.SetItemCheckState(i, CheckState.Unchecked);
+                }
+            }
+            else if (e.Index > 0 && e.NewValue == CheckState.Checked)
+            {
+                // Disable the first item if any other item is checked
+                clbKompetenser.SetItemChecked(0, false);
+                clbKompetenser.SetItemCheckState(0, CheckState.Indeterminate);
+            }
+            else if (e.Index > 0 && e.NewValue == CheckState.Unchecked)
+            {
+                // Enable the first item if all other items are unchecked
+                bool anyChecked = false;
+                for (int i = 1; i < clbKompetenser.Items.Count; i++)
+                {
+                    if (clbKompetenser.GetItemChecked(i))
+                    {
+                        anyChecked = true;
+                        break;
+                    }
+                }
+                if (!anyChecked)
+                {
+                    clbKompetenser.SetItemCheckState(0, CheckState.Unchecked);
+                }
+            }
         }
         private void UpdateCurrentSSKlistBox()
         {
@@ -189,6 +238,11 @@ namespace BokningsProgram
                         break;
                 }
             }
+        }
+
+        private void clbKompetenser_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var checkItem = clbKompetenser.Items[0];
         }
     }
 }
